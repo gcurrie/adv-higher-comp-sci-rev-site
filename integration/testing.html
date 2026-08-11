@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing — Integration — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Integration</a><span class="sep">›</span>
+    <span class="current">Testing</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-int">
+  <div class="inner">
+    <div class="hero-badge">Integration — SDD, DDD &amp; WDD</div>
+    <h1>Testing</h1>
+    <p>Component, integrative, usability, final and end-user testing — the five named stages of testing at Advanced Higher, and the area-specific tests that sit inside them.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🔗 Integration Topics</div>
+        <ul>
+          <li><a href="analysis.html"><span class="sn-icon">🔍</span>Analysis</a></li>
+          <li><a href="testing.html" class="active"><span class="sn-icon">🧪</span>Testing</a></li>
+          <li><a href="evaluation.html"><span class="sn-icon">✅</span>Evaluation</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#component">Component Testing</a></li>
+          <li><a href="#integrative">Integrative Testing</a></li>
+          <li><a href="#usability">Usability Testing &amp; Personas</a></li>
+          <li><a href="#final">Final Testing</a></li>
+          <li><a href="#end-user">End-User Testing</a></li>
+          <li><a href="#area-specific">Area-Specific Testing</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Testing at Advanced Higher</h2>
+      <p>At Higher, testing meant a <strong>comprehensive final test plan</strong> with normal, extreme and exceptional data, plus debugging techniques. All of that still applies — but Advanced Higher names <strong>five distinct stages</strong> of testing and expects you to know <em>when</em> each happens, <em>who</em> carries it out and <em>why</em>. The order matters: testing moves outwards, from individual modules, to connected components, to the whole solution, to real users.</p>
+      <p>Testing is worth <strong>15 marks</strong> of the project and between <strong>2 and 8 marks</strong> of the question paper.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Component Testing</div><div class="def">Testing individual modules (functions, procedures, queries) as they are developed. SDD-specific in the course spec.</div></div>
+        <div class="key-term"><div class="term">Integrative Testing</div><div class="def">Testing that independently developed components work correctly when connected to each other — verifies the interfaces between them.</div></div>
+        <div class="key-term"><div class="term">Usability Testing</div><div class="def">Testing based on prototypes, using personas, test cases and scenarios, to find interface problems early.</div></div>
+        <div class="key-term"><div class="term">Persona</div><div class="def">A fictional but realistic profile of a target user, used to focus usability testing on real user needs.</div></div>
+        <div class="key-term"><div class="term">Final Testing</div><div class="def">Testing the finished solution against the functional requirements before hand-over.</div></div>
+        <div class="key-term"><div class="term">End-User Testing</div><div class="def">Representative end users test the finished solution to confirm it meets their needs.</div></div>
+        <div class="key-term"><div class="term">Temporary Code</div><div class="def">Extra code added purely to prove an integrative test worked (e.g. displaying a "connection successful" message), removed once the test passes.</div></div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>The order of the stages:</strong> component testing happens <em>during</em> development → integrative testing happens once separate components are connected → usability testing happens on <em>prototypes</em> (so it can start early) → final testing and end-user testing happen on the <em>finished</em> solution.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="component">Component Testing <span style="font-size:.75em;color:var(--text-muted);">(SDD)</span></h2>
+      <p><strong>Component testing</strong> takes place <strong>during the development</strong> of the solution, as individual functions or modules are created. Each module is tested on its own, before it is connected to anything else, so that errors are found while they are still cheap to fix.</p>
+      <p>Because a module under test may depend on other modules that don't exist yet, programmers use:</p>
+      <ul>
+        <li>a <strong>stub</strong> — a dummy function or procedure that stands in for a module that has not been written yet (it might simply return a fixed value);</li>
+        <li>a <strong>driver</strong> — code written purely to <em>call</em> the module being tested with known test data and display the result.</li>
+      </ul>
+      <div class="example-block">
+        <div class="example-label">Example — component testing a validation function</div>
+        <p>A program includes a function <code>validate_input(min, max)</code>. Before the rest of the program exists, the developer writes a short driver that calls the function with normal (15), extreme (10, 20) and exceptional (9, 21, "ten") values and checks the function only returns values in range. The function is proven correct <em>in isolation</em> before it is used anywhere.</p>
+      </div>
+      <p>All your Higher debugging techniques — <strong>dry runs</strong>, <strong>trace tables</strong>, <strong>breakpoints</strong> and <strong>watchpoints</strong> — are the tools used to find errors during component testing.</p>
+    </article>
+
+    <article>
+      <h2 id="integrative">Integrative Testing</h2>
+      <p><strong>Integrative testing</strong> is the second level of testing, and it takes place <strong>after component testing</strong>. It is needed whenever a project connects separately developed components — which every Advanced Higher project does, because your project must integrate two technologies. Its purpose is to <strong>verify the interaction between components</strong> and to <strong>detect interface defects</strong>: do independently developed units of software work correctly when connected to each other?</p>
+
+      <h3>Temporary code</h3>
+      <p>This is the detail examiners love. Some integrative test cases require <strong>temporary code</strong> — code that generates results not mentioned anywhere in the requirements specification, added purely to prove that a connection or transfer worked. Once the test passes, the temporary code is <strong>removed</strong>.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — integrative tests for a diary app (SDD + DDD)</div>
+        <p>A personal diary program stores its entries in a database. Three integrative tests (* = requires temporary code):</p>
+        <table>
+          <thead><tr><th>Test case objective</th><th>Description</th><th>Expected result</th></tr></thead>
+          <tbody>
+            <tr><td>Check communication from the program to the database server*</td><td>Use program code to connect to the database server</td><td>A message is displayed confirming a successful connection</td></tr>
+            <tr><td>Check all diary entries are selected from the database and stored in the array of records*</td><td>Execute the SQL query, store the results in the array of records, then display the array's contents</td><td>All diary entries in the database are stored in the array and displayed successfully</td></tr>
+            <tr><td>Check a new diary entry has been added to the database</td><td>Enter a new entry and execute the SQL INSERT</td><td>A new record appears in the database table (check the table's contents)</td></tr>
+          </tbody>
+        </table>
+        <p>The "connection successful" message and the code that dumps the whole array to the screen are <strong>temporary code</strong> — neither appears in the functional requirements, and both are deleted once the tests pass.</p>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>In your project</strong>, integrative testing is where you prove the two technologies actually talk to each other: program ↔ database, web page ↔ database, form ↔ PHP. Plan at least one integrative test per integration functional requirement — and say explicitly which tests used temporary code and that it was removed.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="usability">Usability Testing Based on Prototypes</h2>
+      <p><strong>Usability testing</strong> does not wait for the finished product. It is carried out on <strong>prototypes</strong> — early versions or even paper mock-ups of the interface — so that layout and navigation problems are found before they are expensive to fix. The results of testing one prototype feed into the next.</p>
+      <p>Usability testing is structured around three things:</p>
+      <ul>
+        <li><strong>Personas</strong> — fictional but realistic profiles of target users (name, age, experience, goals, frustrations). Testing "as" a persona keeps the focus on real users rather than on the developer's own habits;</li>
+        <li><strong>Test cases</strong> — specific tasks the tester attempts ("add a new diary entry", "find last Tuesday's entry"), each with an expected outcome;</li>
+        <li><strong>Scenarios</strong> — the realistic context wrapped around a test case ("you are a first-time user who wants to…").</li>
+      </ul>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Personas are examinable — and required in your project.</strong> Persona-based usability testing is listed at Higher level under Web Design &amp; Development, but it applies to <em>every</em> Advanced Higher project regardless of which technologies you integrate. Write one or two short personas during analysis and test your prototypes against them.</div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example — a persona</div>
+        <p><strong>Morag, 67, retired teacher.</strong> Uses a tablet daily for email and news but has never used a booking app. Wants to book a fitness class in under two minutes without creating an account. Frustrated by small text and jargon.</p>
+        <p>A test case for Morag: "Book a Tuesday yoga class" — expected outcome: completed within two minutes with no assistance. If Morag's persona can't complete it, the prototype's navigation needs revised <em>before</em> implementation.</p>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="final">Final Testing</h2>
+      <p><strong>Final testing</strong> is carried out on the <strong>finished solution</strong>, before it is handed over. It is the Advanced Higher version of the comprehensive testing you did at Higher: the complete solution is tested against <strong>every functional requirement</strong> in the requirements specification, using a planned test table of <strong>normal</strong>, <strong>extreme</strong> and <strong>exceptional</strong> data with expected and actual results.</p>
+      <p>The results of final testing are the evidence you cite when evaluating <a href="evaluation.html">fitness for purpose</a> — if every functional requirement passes its tests, the solution is fit for purpose.</p>
+    </article>
+
+    <article>
+      <h2 id="end-user">End-User Testing</h2>
+      <p><strong>End-user testing</strong> puts the finished solution in front of <strong>representative end users</strong> — people who match the intended audience, not the developer. They attempt realistic tasks and report whether the solution meets their needs. Where usability testing on prototypes found <em>design</em> problems early, end-user testing confirms (or denies) that the <em>finished</em> product actually works for its audience.</p>
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Don't confuse the two "user" tests:</strong> <em>usability testing</em> happens on <strong>prototypes</strong>, early, using personas and scenarios; <em>end-user testing</em> happens on the <strong>finished solution</strong>, at the end, using real representative users.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="area-specific">Area-Specific Testing</h2>
+      <p>On top of the five stages, the course spec adds tests specific to each optional area:</p>
+      <table>
+        <thead><tr><th>Area</th><th>Test</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SDD</strong></td><td>Component testing during development</td><td>As described above — each module tested as it is written.</td></tr>
+          <tr><td rowspan="2"><strong>DDD</strong></td><td>SQL-implemented tables match design</td><td>Compare every CREATE TABLE against the <a href="../ddd/data-dictionaries.html">data dictionary</a>: field names, data types, sizes, keys and validation must all match. A field created as <code>varchar(20)</code> when the dictionary says <code>varchar(40)</code> is a failed test.</td></tr>
+          <tr><td>SQL operations work correctly</td><td>Run each query against data with a <em>known</em> expected answer table, and compare actual output against expected output — including checking that searches, sorts, groupings and calculations return exactly the right rows.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div>A classic DDD exam task: you're shown an SQL statement and its <em>incorrect</em> output alongside the expected output, and asked to identify how to correct the statement. Practise this on the <a href="../ddd/sql-practice.html">SQL Practice Questions</a> page.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Integrative Testing &amp; Temporary Code — 2 marks</div>
+        <p>A student's project is a recipe manager program that stores recipes in a database. One of their test cases is: "Use program code to connect to the database server — expected result: a message is displayed confirming a successful connection."</p>
+        <p>(a) State the type of testing being carried out. <strong>(1 mark)</strong><br />
+        (b) Explain why the code that displays the confirmation message should not appear in the finished program. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) <strong>Integrative testing</strong> — it verifies the interaction between the program and the database components. <strong>(1 mark)</strong></li>
+              <li>(b) It is <strong>temporary code</strong> — the confirmation message is not part of the functional requirements; it exists only to prove the test, so it is removed once the test is successful. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Ordering the Stages — 2 marks</div>
+        <p>A development team carries out the following tests on a database-driven website:</p>
+        <ul>
+          <li>A — representative customers use the finished website to place orders</li>
+          <li>B — each PHP function is tested with a driver as it is written</li>
+          <li>C — a paper prototype of the checkout page is tested against a persona</li>
+          <li>D — the form submission is checked to confirm data reaches the database</li>
+        </ul>
+        <p>Name the type of testing used in each of B and D. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>B — <strong>component testing</strong>: an individual module is tested during development. <strong>(1 mark)</strong></li>
+              <li>D — <strong>integrative testing</strong>: it verifies that two separately developed components (form and database) work when connected. <strong>(1 mark)</strong></li>
+            </ul>
+            <p style="font-size:.9rem;color:var(--text-muted);">(For reference: A is end-user testing; C is usability testing based on a prototype.)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">DDD Testing — 1 mark</div>
+        <p>A candidate has implemented their database using SQL CREATE TABLE statements. Describe <strong>one</strong> test they should carry out on the implemented tables before entering any data. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Check that the <strong>implemented tables match the design</strong> — compare the tables against the data dictionary to confirm field names, data types, sizes, primary/foreign keys and validation are all as designed. <strong>(1 mark)</strong></p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

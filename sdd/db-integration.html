@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Integration — SDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Software Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Database Integration</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-sdd">
+  <div class="inner">
+    <div class="hero-badge">Software Design &amp; Development</div>
+    <h1>Database Integration</h1>
+    <p>Connecting a program to a database server, executing SQL queries from code, and formatting the results.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">💻 SDD Topics</div>
+        <ul>
+          <li><a href="design.html"><span class="sn-icon">📐</span>Design</a></li>
+          <li><a href="data-structures.html"><span class="sn-icon">🗂️</span>Data Structures</a></li>
+          <li><a href="oop.html"><span class="sn-icon">🧩</span>Object-Oriented Programming</a></li>
+          <li><a href="standard-algorithms.html"><span class="sn-icon">🔎</span>Standard Algorithms</a></li>
+          <li><a href="db-integration.html" class="active"><span class="sn-icon">🔌</span>Database Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#steps">The Four Steps</a></li>
+          <li><a href="#examples">Worked Examples</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Connecting Programs to Databases</h2>
+      <p>This topic is where SDD and DDD meet — the <strong>integration</strong> at the heart of most Advanced Higher projects. You must be able to <strong>describe, exemplify and implement</strong> code that can:</p>
+      <ul>
+        <li><strong>open and close a connection</strong> to a database server;</li>
+        <li><strong>execute an SQL query</strong> from within a program;</li>
+        <li><strong>format the query results</strong> for display.</li>
+      </ul>
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>The question paper only uses <strong>SQA reference language</strong>, so language-specific connection code (Python's <code>mysql-connector</code>, Java's JDBC, VB's OleDb) will <strong>not</strong> appear in the exam — but you need it for your <strong>project</strong>, and you may be asked to describe the <em>steps</em> or design them in pseudocode.</div>
+      </div>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Database Server</div><div class="def">The software (e.g. MySQL) that stores the database and answers SQL requests from programs.</div></div>
+        <div class="key-term"><div class="term">Connection</div><div class="def">The live link between your program and the database server, opened with credentials (host, user, password, database) and closed when finished.</div></div>
+        <div class="key-term"><div class="term">Cursor</div><div class="def">The object a program uses to execute SQL statements and step through the results.</div></div>
+        <div class="key-term"><div class="term">Query Results</div><div class="def">The rows returned by a SELECT — retrieved into a program structure (e.g. a list of tuples) and then formatted for output.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="steps">The Four Steps</h2>
+      <p>Whatever the language, the pattern is identical — learn it as a sequence you can write in pseudocode:</p>
+      <div class="code-block">
+        <div class="code-label">Pseudocode — the universal pattern</div>
+        <pre><code>1. assign server connection variables (host, user, password, database)
+2. open connection to the database server
+3. execute SQL query
+4. process the results
+   4.1 if rows returned, fetch each row in turn
+   4.2 format and display each row
+5. close connection to the database server</code></pre>
+      </div>
+      <p>Wrapping the connection in a <code>try</code> structure keeps the program <strong>robust</strong>: if the connection fails, an error message is displayed instead of the program crashing — a point worth making in your project evaluation.</p>
+      <div class="code-block">
+        <div class="code-label">Python — connect, query, display, close</div>
+        <pre><code>import mysql.connector
+
+try:
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="StudentData")
+except:
+    print("Could not connect to database")
+else:
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Student")
+    results = cursor.fetchall()
+    for row in results:
+        print(str(row[0]) + " - " + row[1] + " " + row[2])
+    conn.close()</code></pre>
+      </div>
+      <p>Line by line: the <code>cursor</code> object executes the SQL; <code>fetchall()</code> returns the results as a list of tuples; the loop formats each tuple into readable output; and the connection is closed at the end of the script.</p>
+    </article>
+
+    <article>
+      <h2 id="examples">Worked Examples</h2>
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🚧</div>
+        <div class="placeholder-text">Worked examples coming soon</div>
+        <div class="placeholder-sub">Class-specific examples of connecting to a database, executing INSERT/SELECT queries from code and formatting results will be added here.</div>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

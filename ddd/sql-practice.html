@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Practice Questions — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">SQL Practice Questions</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>SQL Practice Questions</h1>
+    <p>Full multi-part past-paper questions — because in the real exam, query design and SQL writing arrive mixed together in one scenario.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html" class="active"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">How to Use This Page</a></li>
+          <li><a href="#q8">2022 Question 8</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">How to Use This Page</h2>
+      <p>The DDD section of the paper ends with a large context question — usually a <strong>database-driven website</strong> — whose parts jump between ER diagrams, query design, SQL writing, error-spotting and a couple of marks of <a href="web-integration.html">web-form integration</a>. That mix is the skill being tested: reading a scenario and deciding <em>which tool</em> each part needs.</p>
+      <p>Work each part on paper first, in exam conditions if you can. Then expand the part to check the marking instructions. The design pages (<a href="query-design.html">Query Design</a>, <a href="sql-dml.html">SQL — DML</a>) cover any technique you get stuck on.</p>
+    </article>
+
+    <article>
+      <h2 id="q8">2022 Question 8 — Database-Driven Website</h2>
+      <p>First, study the database structure this whole question uses — keep it beside you for every part:</p>
+      <img src="../resources/ddd/questions/ddd_structure for q8.png" class="zoomable" alt="Database structure for 2022 Question 8." style="display:block;max-width:100%;height:auto;margin:.2rem 0 1rem;" />
+
+      <div class="q-parts-heading">Question parts</div>
+
+      <details class="q-part">
+        <summary>
+          <span class="qp-letter">b</span>
+          <span class="qp-title">ER diagram — entity type &amp; participation</span>
+          <span class="qp-marks">Design</span>
+          <span class="qp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="qp-body">
+          <img src="../resources/ddd/questions/ddd_er_2022_q8b.png" alt="2022 Question 8 part b." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+          <p>Covered in full, with method, on the <a href="er-diagrams.html#together">ER Diagrams</a> page.</p>
+          <details class="q-answer">
+            <summary>Marking Instructions</summary>
+            <div class="answer-body">
+              <img src="../resources/ddd/questions/ddd_er_2022_q8b_ans.png" alt="Marking instructions for 2022 Question 8 part b." style="display:block;max-width:100%;height:auto;" />
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="q-part">
+        <summary>
+          <span class="qp-letter">c</span>
+          <span class="qp-title">Writing SQL</span>
+          <span class="qp-marks">Implementation</span>
+          <span class="qp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="qp-body">
+          <img src="../resources/ddd/questions/ddd_sql_2022_q8c.png" alt="2022 Question 8 part c." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+          <p><strong>Before writing:</strong> sketch the query design in your head — fields, tables (follow the foreign keys), criteria, grouping, having, sort. Then translate row by row into SQL.</p>
+          <details class="q-answer">
+            <summary>Marking Instructions</summary>
+            <div class="answer-body">
+              <img src="../resources/ddd/questions/ddd_sql_2022_q8c_ans.png" alt="Marking instructions for 2022 Question 8 part c." style="display:block;max-width:100%;height:auto;" />
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="q-part">
+        <summary>
+          <span class="qp-letter">d</span>
+          <span class="qp-title">Writing SQL</span>
+          <span class="qp-marks">Implementation</span>
+          <span class="qp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="qp-body">
+          <img src="../resources/ddd/questions/ddd_sql_2022_q8d.png" alt="2022 Question 8 part d." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+          <details class="q-answer">
+            <summary>Marking Instructions</summary>
+            <div class="answer-body">
+              <img src="../resources/ddd/questions/ddd_sql_2022_q8d_ans.png" alt="Marking instructions for 2022 Question 8 part d." style="display:block;max-width:100%;height:auto;" />
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="q-part">
+        <summary>
+          <span class="qp-letter">e</span>
+          <span class="qp-title">Writing SQL</span>
+          <span class="qp-marks">Implementation</span>
+          <span class="qp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="qp-body">
+          <img src="../resources/ddd/questions/ddd_sql_2022_q8e.png" alt="2022 Question 8 part e." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+          <details class="q-answer">
+            <summary>Marking Instructions</summary>
+            <div class="answer-body">
+              <img src="../resources/ddd/questions/ddd_sql_2022_q8e_ans.png" alt="Marking instructions for 2022 Question 8 part e." style="display:block;max-width:100%;height:auto;" />
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="q-part">
+        <summary>
+          <span class="qp-letter">f</span>
+          <span class="qp-title">Web integration — the form question</span>
+          <span class="qp-marks">Integration</span>
+          <span class="qp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="qp-body">
+          <img src="../resources/ddd/questions/ddd_web_2022_q8f.png" alt="2022 Question 8 part f." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+          <p>This is the couple of marks of web knowledge every DDD candidate needs — the theory is on the <a href="web-integration.html">Web Integration</a> page.</p>
+          <details class="q-answer">
+            <summary>Marking Instructions</summary>
+            <div class="answer-body">
+              <img src="../resources/ddd/questions/ddd_web_2022_q8f_ans.png" alt="Marking instructions for 2022 Question 8 part f." style="display:block;max-width:100%;height:auto;" />
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <div class="callout callout-tip mt-3">
+        <div class="callout-icon">💡</div>
+        <div><strong>More questions will be added here</strong> as further past papers are worked through — check back, and use the <a href="../resources/index.html">Resources</a> page for links to the full SQA papers and marking instructions in the meantime.</div>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

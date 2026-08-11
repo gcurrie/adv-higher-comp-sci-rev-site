@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis — Integration — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Integration</a><span class="sep">›</span>
+    <span class="current">Analysis</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-int">
+  <div class="inner">
+    <div class="hero-badge">Integration — SDD, DDD &amp; WDD</div>
+    <h1>Analysis</h1>
+    <p>Producing a requirements specification, researching feasibility, planning the development, and modelling the system with UML use case diagrams.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🔗 Integration Topics</div>
+        <ul>
+          <li><a href="analysis.html" class="active"><span class="sn-icon">🔍</span>Analysis</a></li>
+          <li><a href="testing.html"><span class="sn-icon">🧪</span>Testing</a></li>
+          <li><a href="evaluation.html"><span class="sn-icon">✅</span>Evaluation</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#requirements-spec">Requirements Specification</a></li>
+          <li><a href="#feasibility">Feasibility Studies</a></li>
+          <li><a href="#planning">Planning</a></li>
+          <li><a href="#use-case">UML Use Case Diagrams</a></li>
+          <li><a href="#worked-example">Worked Example</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Analysis at Advanced Higher</h2>
+      <p><strong>Analysis</strong> is the process of understanding exactly what the client and end users want from the system being developed — <em>before</em> any design work starts. At Higher you identified the <strong>purpose</strong>, <strong>scope</strong>, <strong>boundaries</strong> and <strong>functional requirements</strong> of a problem. At Advanced Higher, analysis grows into a full <strong>requirements specification</strong>, supported by <strong>research</strong> (feasibility studies and user surveys), <strong>planning</strong> (scheduling, resources and Gantt charts) and a new design notation — the <strong>UML use case diagram</strong>.</p>
+      <p>This content applies equally to <strong>SDD</strong>, <strong>DDD</strong> and <strong>WDD</strong> problems, and to problems that integrate them — which is exactly what your project requires. Analysis is worth <strong>10 marks</strong> of the project and between <strong>3 and 8 marks</strong> of the question paper.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Requirements Specification</div><div class="def">The document produced at the end of analysis — end-user requirements, scope, boundaries, constraints and functional requirements. Often forms the basis of a legally binding contract.</div></div>
+        <div class="key-term"><div class="term">End-User Requirements</div><div class="def">What the people using the solution expect it to let them do.</div></div>
+        <div class="key-term"><div class="term">Scope</div><div class="def">What the project must cover, including its deliverables.</div></div>
+        <div class="key-term"><div class="term">Boundaries</div><div class="def">What the project will <em>not</em> cover — the limits of the development.</div></div>
+        <div class="key-term"><div class="term">Constraints</div><div class="def">Restrictions on the development — e.g. the language, platform, budget or timescale that must be used.</div></div>
+        <div class="key-term"><div class="term">Functional Requirements</div><div class="def">What the solution must do, defined in terms of inputs, processes and outputs.</div></div>
+        <div class="key-term"><div class="term">Feasibility Study</div><div class="def">Research to determine whether the project can actually be achieved — economically, technically, legally and in the time available.</div></div>
+        <div class="key-term"><div class="term">Use Case Diagram</div><div class="def">A UML diagram capturing the dynamic behaviour of a system: actors, use cases and the relationships between them.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="requirements-spec">The Requirements Specification</h2>
+      <p>The <strong>requirements specification</strong> pulls the whole of analysis together into one document. It details the <strong>scope</strong>, <strong>boundaries</strong> and <strong>constraints</strong> of the intended solution, and sets out how the software will be designed, tested and evaluated before hand-over. Because the client agrees to pay for what it describes, it is often the basis of a <strong>legally binding contract</strong> between the client and the developer — a favourite exam fact.</p>
+
+      <h3>Purpose and functional requirements</h3>
+      <p>As at Higher, the <strong>purpose</strong> is a plain-language statement of what the solution will do, and the <strong>functional requirements</strong> are defined in terms of:</p>
+      <ul>
+        <li><strong>Inputs</strong> — the data the solution receives (from the user, a file, a form or a database);</li>
+        <li><strong>Processes</strong> — what is done with that data (each process often becoming a separate procedure, function or query);</li>
+        <li><strong>Outputs</strong> — the results displayed, stored or confirmed to the user.</li>
+      </ul>
+
+      <div class="example-block">
+        <div class="example-label">Example — functional requirements for a stock search program (SDD)</div>
+        <p><strong>Inputs:</strong> itemID, price and number in stock, read from a sequential file; an itemID entered by the end user.</p>
+        <p><strong>Processes:</strong> read the file data into a <strong>2D array</strong>; sort the data in order of itemID (low to high); search the 2D array for the itemID entered by the end user.</p>
+        <p><strong>Outputs:</strong> if a match is found, display the itemID, price and number in stock; if not, display a suitable "not found" message.</p>
+        <p>Notice how the processes name Advanced Higher concepts (2D array, sort, search) — in your project, four of your functional requirements must relate to Advanced Higher concepts in exactly this way.</p>
+      </div>
+
+      <h3>Scope and boundaries</h3>
+      <p><strong>Scope</strong> and <strong>boundaries</strong> are opposite sides of the same coin. Between them they give a precise description of the extent of the project:</p>
+      <ul>
+        <li>the <strong>scope</strong> clarifies what the project <em>must</em> cover — including its <strong>deliverables</strong> (e.g. a detailed design, a test plan with completed test table, a working program, the results of testing and an evaluation report);</li>
+        <li>the <strong>boundaries</strong> clarify what the project will <em>not</em> cover (e.g. "the program will read data from a sequential file — since the data is accurate, input validation is not required").</li>
+      </ul>
+
+      <h3>Constraints</h3>
+      <p><strong>Constraints</strong> are new at Advanced Higher. They are the restrictions that apply to the development, limiting the design decisions that can be made. The main project-management constraints are <strong>time</strong>, <strong>scope</strong> and <strong>cost</strong>, but others include:</p>
+      <table>
+        <thead><tr><th>Type</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Technical constraints</strong></td><td>Knowledge or availability of development tools and programming languages; the operating system or platform the solution must run on; hardware capacity; performance requirements.</td></tr>
+          <tr><td><strong>Business constraints</strong></td><td>Deadlines and timescales that must be met; the available budget; the make-up of the development team; software licensing restrictions.</td></tr>
+          <tr><td><strong>Further constraints</strong></td><td>Economic considerations; political issues.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Exam technique:</strong> a constraint is always phrased as a <em>restriction on the development</em>, not a feature of the solution. "The program must be written in Python" is a constraint; "the program must validate input" is a functional requirement.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="feasibility">Research — Feasibility Studies &amp; User Surveys</h2>
+      <p>Before committing time and money, a development team carries out a <strong>feasibility study</strong>: is the proposed expenditure of time and money likely to be worthwhile, and can the project's objectives actually be achieved? You need to be able to <strong>describe, exemplify and implement</strong> research for four types of feasibility, plus user surveys.</p>
+
+      <h3>The four types of feasibility</h3>
+      <table>
+        <thead><tr><th>Type</th><th>The question it answers</th><th>Example issue</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Economic</strong></td><td>Can the project be completed within the available budget — and is the cost justified by the benefit? A <strong>cost-benefit analysis</strong> compares the costs of acquiring, installing and maintaining the system against tangible benefits such as reduced running costs and increased throughput.</td><td>The project cannot afford to hire the extra developers needed to finish on time.</td></tr>
+          <tr><td><strong>Time</strong></td><td>Can the project be delivered within the required timescale, with the right people and resources available when needed? (Sometimes called <em>schedule</em> feasibility.)</td><td>The system is needed for the new financial year but development would take 14 months.</td></tr>
+          <tr><td><strong>Legal</strong></td><td>Can the solution be created and operated without breaking the law — data protection (GDPR), health and safety, and software licensing?</td><td>A system that profiles customers' spending habits would breach data-protection law.</td></tr>
+          <tr><td><strong>Technical</strong></td><td>Does the technology needed for the solution exist, and does the organisation have (or can it acquire) the necessary hardware, software and expertise?</td><td>The software needed to link two data sources into the project is not available.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>User surveys</h3>
+      <p>The users of an existing system are the best people to identify its problems and how it could be improved. When the opinion of many users is needed, a <strong>survey</strong> or questionnaire captures the information the project team requires. Even for a brand-new system, surveying the target user group reveals how they currently carry out the process the software will replace — for example, interviewing librarians before replacing a card-index system.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">📊</div>
+        <div class="placeholder-text">Diagram placeholder — Feasibility study overview</div>
+        <div class="placeholder-sub">Planned: a four-quadrant diagram summarising economic, time, legal and technical feasibility with an example question for each.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="planning">Planning — Scheduling, Resources &amp; Gantt Charts</h2>
+      <p><strong>Project management</strong> is the process of planning and controlling the activities of a project so that it is delivered <strong>on time</strong>, with the <strong>required features</strong>, within <strong>budget</strong>, to the required <strong>quality</strong>. A project plan is more than a list of tasks — it details:</p>
+      <ul>
+        <li><strong>Scheduling</strong> — when each task happens, in what order, and which tasks depend on others finishing first;</li>
+        <li><strong>Resources</strong> — the people, hardware and software available to complete the work, and who is responsible for each task;</li>
+        <li><strong>Milestones</strong> — the key points at which progress is measured.</li>
+      </ul>
+
+      <h3>Gantt charts</h3>
+      <p>A <strong>Gantt chart</strong> is like a horizontal bar graph used to plan and schedule a project involving several concurrent tasks. The horizontal axis represents the <strong>time scale</strong>; each bar shows the <strong>start and finish</strong> of one task. Its big advantage is that it shows, at a glance, the progress of the whole project — including which tasks overlap and which cannot start until another finishes.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">📅</div>
+        <div class="placeholder-text">Diagram placeholder — Example Gantt chart</div>
+        <div class="placeholder-sub">Planned: a Gantt chart for a 40-hour Advanced Higher project (Analysis 5h, Design 10h, Implementation 15h, Testing 8h, Evaluation 2h) showing overlapping tasks and milestones.</div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>Changes to any one of <strong>time</strong>, <strong>cost</strong>, <strong>scope</strong> or <strong>quality</strong> have an immediate impact on the others — this is often drawn as the <strong>project management triangle</strong>. Increase the scope, and either the time or the cost must grow to keep the same quality.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="use-case">UML Use Case Diagrams</h2>
+      <p><strong>Unified Modelling Language (UML)</strong> provides a standard way to visualise the analysis and design of a software system. To model a system fully we need to capture its <strong>dynamic behaviour</strong> — what happens when the system is running — and that is the job of the <strong>use case diagram</strong>. (Its partner, the <strong>class diagram</strong>, captures the <em>static</em> structure and is covered in <a href="../sdd/design.html">SDD Design</a>.)</p>
+      <p>A use case diagram is used to gather the requirements of the system, get an outside view of it, and aid communication between the client and the developer. It has four components:</p>
+
+      <h3>1 — System boundary</h3>
+      <p>A <strong>rectangle</strong> that represents the limits of the system being developed. Every use case sits <em>inside</em> the boundary; every actor sits <em>outside</em> it.</p>
+
+      <h3>2 — Actors</h3>
+      <p>An <strong>actor</strong> is a person <em>or external entity</em> (another system, a server, even a scheduled timer) that interacts with the system. Actors are drawn as stick figures with the actor type written underneath, and each actor must be associated with at least one use case.</p>
+      <ul>
+        <li>A <strong>primary actor</strong> uses the system to achieve a goal (e.g. a customer buying an item) — placed on the <strong>left</strong> of the system boundary.</li>
+        <li>A <strong>secondary actor</strong> supports the system in delivering that goal (e.g. the bank that processes the payment) — placed on the <strong>right</strong>.</li>
+      </ul>
+
+      <h3>3 — Use cases</h3>
+      <p>A <strong>use case</strong> is an action or sequence of actions that the system must perform — drawn as an <strong>ellipse</strong> with the name written inside. The name should describe an observable, useful result for an actor: <em>Place Order</em>, <em>Manage Account</em>, <em>Update Subscription</em>.</p>
+
+      <h3>4 — Relationships</h3>
+      <p>Five types of relationship can appear on a use case diagram — learn the <strong>notation</strong> for each, because drawing them correctly is where the marks are:</p>
+      <table>
+        <thead><tr><th>Relationship</th><th>Notation</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Association</strong></td><td>Solid line, no arrowhead</td><td>Basic communication between an actor and a use case.</td></tr>
+          <tr><td><strong>Include</strong></td><td>Dashed line, arrowhead pointing at the <em>included</em> use case, labelled <code>&lt;&lt;include&gt;&gt;</code></td><td>A <strong>mandatory</strong> part of the base use case — the base use case is incomplete without it, so it <em>always</em> runs. E.g. <em>Login</em> includes <em>Authentication</em>.</td></tr>
+          <tr><td><strong>Extend</strong></td><td>Dashed line, arrowhead pointing at the <em>base</em> use case, labelled <code>&lt;&lt;extend&gt;&gt;</code></td><td><strong>Optional</strong> additional functionality — only runs when certain criteria are met. E.g. <em>Search Articles</em> is extended by <em>Help on Search</em>.</td></tr>
+          <tr><td><strong>Generalisation of an actor</strong></td><td>Solid line, solid arrowhead pointing at the <em>ancestor</em> actor</td><td>One actor inherits all the use cases of another, then adds its own. E.g. <em>Registered User</em> inherits from <em>User</em>.</td></tr>
+          <tr><td><strong>Generalisation of a use case</strong></td><td>Solid line, solid arrowhead pointing at the <em>general</em> use case</td><td>Specialised versions of a general action. E.g. <em>Card Payment</em>, <em>Cash Payment</em> and <em>Bank Transfer</em> generalise to <em>Make Payment</em>.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Include vs extend trips everyone up.</strong> Ask: <em>does the base use case always need it?</em> If yes → <code>&lt;&lt;include&gt;&gt;</code>, and the arrow points at the included (dependent) use case. If it only sometimes happens → <code>&lt;&lt;extend&gt;&gt;</code>, and the arrow points back at the base use case. The arrows point in <em>opposite</em> directions — examiners check this.</div>
+      </div>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Use case notation reference</div>
+        <div class="placeholder-sub">Planned: one diagram showing all five relationships in a single online-shop system — actors User/Registered User/Bank, use cases with include (Authentication), extend (Help on Search) and generalisation (payment types).</div>
+      </div>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">Use Case Diagram Builder</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for an interactive trainer: drag actors and use cases onto a system boundary, then choose the correct relationship notation for each link and get instant feedback.</p>
+        </div>
+      </div>
+
+      <h3 id="worked-example">Worked Example</h3>
+      <p>Use case questions in the question paper usually give you a scenario and either ask you to <strong>draw</strong> the diagram or <strong>complete/identify</strong> parts of one. Attempt this one yourself before expanding it.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Use Case Diagram — 2023 Question 3</div>
+        <img src="../resources/integrated/questions/int_use-case_2023_q3.png" alt="2023 Question 3: a use case diagram question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Work through the scenario methodically:</strong></p>
+        <ul>
+          <li><strong>Step 1 — identify the actors.</strong> Who (or what) interacts with the system from outside? Remember non-human actors — a server, a payment system, a database.</li>
+          <li><strong>Step 2 — identify the use cases.</strong> Each individual action a user can perform gets its own ellipse, inside the system boundary.</li>
+          <li><strong>Step 3 — add the relationships.</strong> Solid lines for associations; then check for anything that <em>always</em> happens as part of another action (<code>&lt;&lt;include&gt;&gt;</code>) or <em>only sometimes</em> happens (<code>&lt;&lt;extend&gt;&gt;</code>); finally look for actors or use cases that inherit from another (generalisation).</li>
+        </ul>
+        <img src="../resources/integrated/questions/int_use-case_2023_q3_ans.png" alt="Marking instructions for 2023 Question 3." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Types of Feasibility — 2 marks</div>
+        <p>A software company is asked to develop a booking system for a chain of dental surgeries. The system must be ready before a new surgery opens in three months, and must store patient medical records.</p>
+        <p>Describe <strong>two</strong> types of feasibility the company should research before accepting the contract, with reference to this scenario. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Any two from, <strong>1 mark</strong> each (must reference the scenario):</p>
+            <ul>
+              <li><strong>Time feasibility</strong> — can the system be developed and installed before the new surgery opens in three months?</li>
+              <li><strong>Legal feasibility</strong> — patient medical records are sensitive personal data, so the system must comply with data-protection law (GDPR).</li>
+              <li><strong>Technical feasibility</strong> — does the company have the tools/expertise to build a system of this kind?</li>
+              <li><strong>Economic feasibility</strong> — can the system be produced within the surgery chain's budget / will the benefit justify the cost?</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Include or Extend? — 2 marks</div>
+        <p>A cinema website allows customers to book tickets. Booking a ticket always requires the customer's card to be authorised by a payment provider. Customers may optionally add snacks to their booking.</p>
+        <p>State the relationship that should be used to connect each of the following to the <em>Book Ticket</em> use case, and justify each choice. <strong>(2 marks)</strong></p>
+        <ul>
+          <li><em>Authorise Card</em></li>
+          <li><em>Add Snacks</em></li>
+        </ul>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Authorise Card — <code>&lt;&lt;include&gt;&gt;</code></strong>: it is mandatory — every booking must authorise the card, so <em>Book Ticket</em> is incomplete without it. <strong>(1 mark)</strong></li>
+              <li><strong>Add Snacks — <code>&lt;&lt;extend&gt;&gt;</code></strong>: it is optional — it only runs when the customer chooses to add snacks. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Constraints — 1 mark</div>
+        <p>A requirements specification for a school app states: "The app must be developed in Python and run on the school's Windows 10 network."</p>
+        <p>State the term used to describe this part of the requirements specification. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p><strong>Constraints</strong> — restrictions that apply to the development (development language and delivery platform). <strong>(1 mark)</strong></p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

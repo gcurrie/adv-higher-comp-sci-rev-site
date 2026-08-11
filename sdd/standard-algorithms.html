@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Standard Algorithms — SDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Software Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Standard Algorithms</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-sdd">
+  <div class="inner">
+    <div class="hero-badge">Software Design &amp; Development</div>
+    <h1>Standard Algorithms</h1>
+    <p>Binary search, bubble sort and insertion sort — implementing them, and arguing their advantages, disadvantages and efficiency.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">💻 SDD Topics</div>
+        <ul>
+          <li><a href="design.html"><span class="sn-icon">📐</span>Design</a></li>
+          <li><a href="data-structures.html"><span class="sn-icon">🗂️</span>Data Structures</a></li>
+          <li><a href="oop.html"><span class="sn-icon">🧩</span>Object-Oriented Programming</a></li>
+          <li><a href="standard-algorithms.html" class="active"><span class="sn-icon">🔎</span>Standard Algorithms</a></li>
+          <li><a href="db-integration.html"><span class="sn-icon">🔌</span>Database Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#binary-search">Binary Search</a></li>
+          <li><a href="#bubble-sort">Bubble Sort</a></li>
+          <li><a href="#insertion-sort">Insertion Sort</a></li>
+          <li><a href="#comparison">Comparing the Algorithms</a></li>
+          <li><a href="#worked-example">Worked Examples</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Standard Algorithms at Advanced Higher</h2>
+      <p>The three Higher algorithms (linear search, find min/max, count occurrences) are replaced by three new ones: <strong>binary search</strong>, <strong>bubble sort</strong> and <strong>insertion sort</strong>. You must be able to <strong>describe, exemplify and implement</strong> all three — and just as importantly, discuss their <strong>advantages, disadvantages and efficiency</strong>. Exam questions regularly show you a garbled version and ask you to spot the error, or ask <em>why</em> one algorithm beats another for a given problem, so understanding <em>how</em> they work matters more than memorising lines.</p>
+      <p>Both sorts below sort into <strong>ascending</strong> order; with small changes (flip the comparison) they sort descending.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Binary Search</div><div class="def">Finds a value by repeatedly halving a <em>sorted</em> list until the target is, or is not, found.</div></div>
+        <div class="key-term"><div class="term">Bubble Sort</div><div class="def">Repeatedly swaps adjacent values that are out of order; the largest value "bubbles" to the end each pass.</div></div>
+        <div class="key-term"><div class="term">Insertion Sort</div><div class="def">Takes each value in turn and inserts it into its correct position among the already-sorted values to its left.</div></div>
+        <div class="key-term"><div class="term">Pass</div><div class="def">One complete traversal of the array by a sorting algorithm.</div></div>
+        <div class="key-term"><div class="term">Swapped Flag</div><div class="def">Boolean in bubble sort — if a whole pass makes no swaps, the list is sorted and the algorithm stops early.</div></div>
+        <div class="key-term"><div class="term">Efficiency</div><div class="def">How the number of comparisons/swaps grows with the size of the list — the basis for comparing algorithms.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="binary-search">Binary Search</h2>
+      <p>A <strong>binary search</strong> finds a value by continually <strong>halving a sorted list</strong> until the target is, or is not, found. It keeps three markers: <strong>low</strong>, <strong>high</strong> and <strong>mid</strong> — initially the first element, the last element, and the midpoint between them. Each iteration makes one of three decisions:</p>
+      <ol>
+        <li>If the middle value <strong>equals</strong> the target — found, stop;</li>
+        <li>If the middle value is <strong>larger</strong> than the target — the target must be in the lower half, so <code>high = mid − 1</code>;</li>
+        <li>If the middle value is <strong>smaller</strong> — the target must be in the upper half, so <code>low = mid + 1</code>.</li>
+      </ol>
+      <p>The loop repeats while the target is not found <strong>and</strong> <code>low &lt;= high</code> — if low passes high, the target is not in the list.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — binary search (function version)</div>
+        <pre><code>FUNCTION binary_search(list, target) RETURNS BOOLEAN
+    DECLARE low INITIALLY 0
+    DECLARE high INITIALLY length(list) - 1
+    DECLARE mid INITIALLY 0
+    DECLARE found INITIALLY FALSE
+    WHILE NOT found AND low &lt;= high
+        SET mid TO (low + high) / 2
+        IF target = list[mid] THEN
+            SET found TO TRUE
+        ELSE IF target &gt; list[mid] THEN
+            SET low TO mid + 1
+        ELSE
+            SET high TO mid - 1
+        END IF
+    END WHILE
+    RETURN found
+END FUNCTION</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>def binary_search(items, target):
+    low = 0
+    high = len(items) - 1
+    found = False
+    while not found and low &lt;= high:
+        mid = (low + high) // 2
+        if target == items[mid]:
+            found = True
+        elif target &gt; items[mid]:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return found</code></pre>
+      </div>
+
+      <h3>Efficiency of binary search</h3>
+      <ul>
+        <li>✅ Each comparison <strong>halves</strong> the remaining search area — 1&nbsp;000 items need at most ~10 comparisons; 1&nbsp;000&nbsp;000 need at most ~20. A linear search averages half the list every time.</li>
+        <li>❌ The list <strong>must already be sorted</strong> — if it isn't, the cost of sorting first must be counted. For a single search of unsorted data, a linear search is actually the better choice.</li>
+        <li>❌ For very short lists the overhead isn't worth it — a linear search is simpler and just as fast.</li>
+      </ul>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">Binary Search Visualiser</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for a visualiser: choose a target, then step through low/mid/high moving across a sorted bar of values, with a live comparison counter next to a linear search doing the same job.</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="bubble-sort">Bubble Sort</h2>
+      <p>A <strong>bubble sort</strong> continually swaps values in <strong>adjacent</strong> elements until the entire list is in order. After one pass through the array, the largest value has always "bubbled" to the end; after two passes the second-largest is in place, and so on. Two refinements make it respectable:</p>
+      <ul>
+        <li>the <strong>swapped flag</strong> — if a whole pass completes with no swaps, the list is sorted and the outer loop stops early;</li>
+        <li>shrinking the pass — each pass fixes one more value at the end, so the inner loop can run one element shorter each time (<code>n = n − 1</code>).</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — bubble sort</div>
+        <pre><code>PROCEDURE bubble_sort(list)
+    DECLARE n INITIALLY length(list)
+    DECLARE swapped INITIALLY TRUE
+    WHILE swapped
+        SET swapped TO FALSE
+        FOR i = 0 TO n - 2 DO
+            IF list[i] &gt; list[i+1] THEN
+                SET temp TO list[i]
+                SET list[i] TO list[i+1]
+                SET list[i+1] TO temp
+                SET swapped TO TRUE
+            END IF
+        END FOR
+        SET n TO n - 1
+    END WHILE
+END PROCEDURE</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>def bubble_sort(items):
+    n = len(items)
+    swapped = True
+    while swapped:
+        swapped = False
+        for i in range(n - 1):
+            if items[i] &gt; items[i + 1]:
+                items[i], items[i + 1] = items[i + 1], items[i]
+                swapped = True
+        n = n - 1</code></pre>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Trace — first pass over [45, 23, 99, 7]</div>
+        <p>Compare 45 &amp; 23 → swap → [23, 45, 99, 7]. Compare 45 &amp; 99 → no swap. Compare 99 &amp; 7 → swap → [23, 45, 7, <strong>99</strong>]. The largest value (99) has bubbled to the end after one pass — and <code>swapped</code> is TRUE, so another pass is needed.</p>
+      </div>
+
+      <h3>Efficiency of bubble sort</h3>
+      <ul>
+        <li>✅ Simple to implement and to trace — and with the swapped flag, an <strong>already-sorted list is detected in a single pass</strong> (its best case).</li>
+        <li>❌ In general it is <strong>inefficient</strong>: values move only <strong>one position per pass</strong>, so a value far from its final place needs many passes, and nearly every pass re-compares the whole unsorted region. For n items the worst case is roughly n passes of n comparisons.</li>
+      </ul>
+    </article>
+
+    <article>
+      <h2 id="insertion-sort">Insertion Sort</h2>
+      <p>An <strong>insertion sort</strong> traverses the array from the <strong>second element to the last</strong>. Each element is stored in a temporary variable, then compared against the elements before it, working <strong>backwards</strong>: every larger value is <strong>copied one place to the right</strong>, and when a smaller value (or the start of the list) is reached, the temporary value is copied into the gap. Everything to the left of the current element is always <em>already sorted</em> — think of how you sort playing cards in your hand.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — insertion sort</div>
+        <pre><code>PROCEDURE insertion_sort(list)
+    DECLARE value INITIALLY 0
+    DECLARE index INITIALLY 0
+    FOR i = 1 TO length(list) - 1 DO
+        SET value TO list[i]
+        SET index TO i
+        WHILE (index &gt; 0) AND (value &lt; list[index - 1]) DO
+            SET list[index] TO list[index - 1]
+            SET index TO index - 1
+        END WHILE
+        SET list[index] TO value
+    END FOR
+END PROCEDURE</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>def insertion_sort(items):
+    for i in range(1, len(items)):
+        value = items[i]
+        index = i
+        while index &gt; 0 and value &lt; items[index - 1]:
+            items[index] = items[index - 1]
+            index = index - 1
+        items[index] = value</code></pre>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Trace — [45, 23, 99, 7]</div>
+        <p><strong>i = 1:</strong> temp = 23. 45 &gt; 23 so 45 copies right → [45, 45, 99, 7]; start reached, 23 drops in → [<strong>23, 45</strong>, 99, 7].<br />
+        <strong>i = 2:</strong> temp = 99. 45 &lt; 99 — already in place, no copies → [<strong>23, 45, 99</strong>, 7].<br />
+        <strong>i = 3:</strong> temp = 7. 99, 45, 23 all copy right; start reached, 7 drops into index 0 → [<strong>7, 23, 45, 99</strong>]. Sorted.</p>
+      </div>
+
+      <h3>Efficiency of insertion sort</h3>
+      <ul>
+        <li>✅ Generally <strong>more efficient than bubble sort</strong>: values <strong>shift</strong> (one copy) rather than <strong>swap</strong> (three assignments), and the inner loop stops as soon as the insertion point is found rather than comparing the whole region.</li>
+        <li>✅ Excellent on <strong>nearly-sorted</strong> data — each element barely moves.</li>
+        <li>❌ Still a comparison sort with roughly n²-style growth on random data — for very large lists, neither of the Advanced Higher sorts is what real systems use.</li>
+      </ul>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">Sort Race — Bubble vs Insertion</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for an animation: the same shuffled list sorted side by side by bubble sort and insertion sort, with live counters for comparisons and swaps/shifts — and a "nearly sorted" preset to show why the swapped flag and early-exit inner loop matter.</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="comparison">Comparing the Algorithms</h2>
+      <table>
+        <thead><tr><th>Algorithm</th><th>Advantages</th><th>Disadvantages / inefficiencies</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Binary search</strong></td>
+            <td>Halves the search area each comparison — dramatically fewer comparisons than linear search on large lists</td>
+            <td>Requires the list to be <strong>sorted first</strong>; overkill for small lists</td>
+          </tr>
+          <tr>
+            <td><strong>Bubble sort</strong></td>
+            <td>Simple; swapped flag detects an already-sorted list in one pass</td>
+            <td>Values move one position per pass — many passes and many swaps on random data; each swap is three assignments</td>
+          </tr>
+          <tr>
+            <td><strong>Insertion sort</strong></td>
+            <td>Shifts instead of swaps; inner loop exits early; very fast on nearly-sorted data</td>
+            <td>Still compares against many elements on random data; shifting is costly when elements belong near the start</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>The exam's favourite combination:</strong> "the program sorts the data then searches it repeatedly — justify the design." Answer: sorting once (insertion sort) makes every subsequent search a <strong>binary search</strong>, and the cost of the single sort is repaid by the huge saving on every search that follows.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="worked-example">Worked Examples</h2>
+      <p>Attempt each question yourself first, then expand to check your reasoning against the marking instructions.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — 2024 Question 1</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q1.png" alt="2024 Question 1 — standard algorithms." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> identify which algorithm the code implements from its shape — low/high/mid markers mean binary search; adjacent comparisons with a temp swap mean bubble sort; a backwards inner while-loop means insertion sort. Then trace with the values given.</p>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q1_ans.png" alt="Marking instructions for 2024 Question 1." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — 2024 Question 6 (a)</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-1.png" alt="2024 Question 6 part a." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-1_ans.png" alt="Marking instructions for 2024 Question 6 part a." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — 2024 Question 6 (b)</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-2.png" alt="2024 Question 6 part b." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-2_ans.png" alt="Marking instructions for 2024 Question 6 part b." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — 2024 Question 6 (c)</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-3.png" alt="2024 Question 6 part c." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-3_ans.png" alt="Marking instructions for 2024 Question 6 part c." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — 2024 Question 6 (d)</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-4.png" alt="2024 Question 6 part d." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-4_ans.png" alt="Marking instructions for 2024 Question 6 part d." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Standard Algorithms — Specimen Question 2</div>
+        <img src="../resources/sdd/questions/sdd_stnd_algo_specimen_q2.png" alt="Specimen paper Question 2 — standard algorithms." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_stnd_algo_specimen_q2_ans.png" alt="Marking instructions for specimen Question 2." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Binary Search Trace — 2 marks</div>
+        <p>A sorted array holds: <code>[2, 5, 8, 10, 11, 14, 17, 25, 30]</code> (indices 0–8). A binary search looks for the target <strong>8</strong>.</p>
+        <p>State the values of <code>mid</code> checked, in order, until the target is found. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>First check: low = 0, high = 8 → mid = 4 → value 11. 11 &gt; 8 so high = 3. <strong>(1 mark)</strong></li>
+              <li>Second check: low = 0, high = 3 → mid = 1 → value 5. 5 &lt; 8 so low = 2. Third check: mid = 2 → value <strong>8</strong> — found. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Why the Swapped Flag? — 2 marks</div>
+        <p>Explain the purpose of the boolean variable <code>swapped</code> in the bubble sort algorithm, and describe the situation in which it improves efficiency the most. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>If a complete pass makes <strong>no swaps</strong>, the list must already be in order, so the flag ends the conditional loop without further passes. <strong>(1 mark)</strong></li>
+              <li>Greatest benefit when the list is <strong>already sorted (or nearly sorted)</strong> — the sort finishes after a single pass instead of continuing pointlessly. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Choosing an Algorithm — 2 marks</div>
+        <p>A program stores 500&nbsp;000 sorted membership numbers and must check thousands of numbers against the list every day. Justify which search algorithm should be used. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Binary search</strong> — the data is already sorted, which is its precondition. <strong>(1 mark)</strong></li>
+              <li>Each comparison halves the search area, so each lookup takes at most ~19 comparisons instead of up to 500&nbsp;000 with a linear search — a huge saving repeated thousands of times a day. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

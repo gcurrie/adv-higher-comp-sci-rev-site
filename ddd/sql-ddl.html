@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL — DDL — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">SQL — DDL</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>SQL — Data Definition Language</h1>
+    <p>Building the database yourself: CREATE DATABASE, CREATE TABLE with constraints, and the destructive power of DROP.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html" class="active"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#create-database">CREATE DATABASE</a></li>
+          <li><a href="#create-table">CREATE TABLE &amp; Constraints</a></li>
+          <li><a href="#full-example">Full Example</a></li>
+          <li><a href="#drop">DROP</a></li>
+          <li><a href="#worked-example">Worked Example</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">DDL — Defining the Structure</h2>
+      <p>SQL statements divide into two families. <strong>Data Manipulation Language (DML)</strong> works with the data itself — SELECT, INSERT, UPDATE, DELETE, which you have used since National 5. <strong>Data Definition Language (DDL)</strong> is new at Advanced Higher: it creates and removes the database <em>structure</em> itself. At Higher you were always handed a pre-populated database; now you build it — implementing your <a href="data-dictionaries.html">data dictionary</a>, constraint by constraint.</p>
+      <p>Exam questions go both directions: <strong>write</strong> a CREATE statement from a description or data dictionary, or <strong>identify the errors</strong> in a statement you're shown. Both need the same thing — fluency in the constraint syntax below.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">DDL</div><div class="def">Data Definition Language — CREATE and DROP: statements that define or remove structure.</div></div>
+        <div class="key-term"><div class="term">DML</div><div class="def">Data Manipulation Language — SELECT, INSERT, UPDATE, DELETE: statements that work with data.</div></div>
+        <div class="key-term"><div class="term">Constraint</div><div class="def">A rule attached to a field in CREATE TABLE: PRIMARY KEY, FOREIGN KEY, NOT NULL, CHECK, AUTO_INCREMENT.</div></div>
+        <div class="key-term"><div class="term">NOT NULL</div><div class="def">The field must always contain a value — SQL's presence check.</div></div>
+        <div class="key-term"><div class="term">CHECK</div><div class="def">All values in the field must satisfy a condition — implements range and restricted-choice validation.</div></div>
+        <div class="key-term"><div class="term">AUTO_INCREMENT</div><div class="def">Automatically generates the next unique number when a record is inserted — how surrogate keys are implemented.</div></div>
+        <div class="key-term"><div class="term">REFERENCES</div><div class="def">The keyword linking a foreign key to the primary key of another table.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="create-database">CREATE DATABASE</h2>
+      <p>A database is a structured set of data — and the first step is creating the (empty) database itself:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL</div>
+        <pre><code>CREATE DATABASE TravelAgency;</code></pre>
+      </div>
+      <p>That's the whole statement. The marks are in what comes next.</p>
+    </article>
+
+    <article>
+      <h2 id="create-table">CREATE TABLE &amp; Its Constraints</h2>
+      <p>Once the database exists, each table's structure is built with <strong>CREATE TABLE</strong> — a list of field names, each with its <strong>SQL data type</strong> and any <strong>constraints</strong>:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — general form</div>
+        <pre><code>CREATE TABLE tableName (
+    fieldName1 dataType constraint(s),
+    fieldName2 dataType constraint(s),
+    ...
+);</code></pre>
+      </div>
+
+      <h3>The five constraints</h3>
+      <table>
+        <thead><tr><th>Constraint</th><th>Purpose</th><th>Syntax</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PRIMARY KEY</strong></td><td>Uniquely identifies each record</td><td><code>fieldName dataType PRIMARY KEY</code><br />or, for a compound key, a separate clause at the end:<br /><code>PRIMARY KEY (field1, field2, ...)</code></td></tr>
+          <tr><td><strong>FOREIGN KEY</strong></td><td>Links two tables by referencing another table's primary key</td><td><code>FOREIGN KEY (fieldName) REFERENCES tableName(fieldName)</code></td></tr>
+          <tr><td><strong>NOT NULL</strong></td><td>Field must always contain a value (presence check)</td><td><code>fieldName dataType NOT NULL</code></td></tr>
+          <tr><td><strong>CHECK</strong></td><td>All values must satisfy a condition (range / restricted choice)</td><td><code>fieldName dataType CHECK(condition)</code></td></tr>
+          <tr><td><strong>AUTO_INCREMENT</strong></td><td>Generates the next unique number automatically (surrogate keys)</td><td><code>fieldName dataType AUTO_INCREMENT</code></td></tr>
+        </tbody>
+      </table>
+
+      <p>Constraints stack — several can apply to one field: <code>resortID int NOT NULL PRIMARY KEY</code>. And notice how each constraint implements a validation column from the <a href="data-dictionaries.html">data dictionary</a>: <em>required</em> → NOT NULL; <em>range</em> → CHECK with comparisons; <em>restricted choice</em> → CHECK … IN(list); <em>auto increment</em> → AUTO_INCREMENT.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Dialect note:</strong> some SQL dialects attach PRIMARY/FOREIGN KEY to the field's own clause, others require a separate clause at the end. A <strong>compound</strong> primary key (or any multi-column key) <em>must</em> use the separate clause. Also note MySQL historically ignored CHECK — implemented instead with triggers or views, which are <em>not</em> assessed.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="full-example">Full Example — Building the Travel Agency Database</h2>
+      <p>These statements implement the <a href="data-dictionaries.html#full-example">travel agency data dictionary</a> exactly — compare them side by side and you can see every dictionary row become a line of SQL:</p>
+
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — Resort (restricted choice via CHECK … IN)</div>
+        <pre><code>CREATE TABLE Resort (
+    resortID int NOT NULL PRIMARY KEY,
+    resortName varchar(20) NOT NULL,
+    resortType varchar(20) NOT NULL CHECK (resortType IN
+        ('coastal', 'city', 'island', 'country'))
+);</code></pre>
+      </div>
+
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — Hotel (range CHECKs, foreign key)</div>
+        <pre><code>CREATE TABLE Hotel (
+    hotelRef varchar(4) NOT NULL PRIMARY KEY,
+    hotelName varchar(20) NOT NULL,
+    resortID int NOT NULL,
+    starRating int NOT NULL CHECK(starRating &gt;= 1 AND starRating &lt;= 5),
+    seasonStartDate date,
+    mealPlan varchar(17) NOT NULL CHECK(mealPlan IN('Room Only',
+        'Bed and Breakfast', 'Half Board', 'Full Board')),
+    checkInTime time NOT NULL,
+    pricePersonNight float(6,2) NOT NULL CHECK(pricePersonNight &gt;= 50
+        AND pricePersonNight &lt;= 250),
+    FOREIGN KEY (resortID) REFERENCES Resort(resortID)
+);</code></pre>
+      </div>
+
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — Customer (auto-increment surrogate key)</div>
+        <pre><code>CREATE TABLE Customer (
+    customerNo int AUTO_INCREMENT PRIMARY KEY,
+    firstname varchar(20) NOT NULL,
+    surname varchar(20) NOT NULL,
+    address varchar(40) NOT NULL,
+    town varchar(20) NOT NULL,
+    postcode varchar(8) NOT NULL
+);</code></pre>
+      </div>
+
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — Booking (compound primary key, two foreign keys)</div>
+        <pre><code>CREATE TABLE Booking (
+    hotelRef varchar(4) NOT NULL,
+    customerNo int NOT NULL,
+    startDate date NOT NULL,
+    numberNights int NOT NULL CHECK(numberNights &gt;= 1),
+    numberInParty int NOT NULL CHECK(numberInParty &gt;= 1),
+    PRIMARY KEY (customerNo, hotelRef, startDate),
+    FOREIGN KEY (customerNo) REFERENCES Customer(customerNo),
+    FOREIGN KEY (hotelRef) REFERENCES Hotel(hotelRef)
+);</code></pre>
+      </div>
+
+      <p>Booking shows why the order of the tables matters: its foreign keys <strong>reference</strong> Customer and Hotel, so those tables must be created <em>first</em>. Notice too how the <a href="er-diagrams.html#strong-weak">weak entity</a> shows up in the SQL — the compound primary key in its separate clause, built from the owners' keys.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Error-spotting checklist</strong> for "identify the issues with this CREATE statement" questions: missing/wrong data types ✔ varchar without a size ✔ missing NOT NULL where the dictionary says required ✔ CHECK condition not matching the validation ✔ compound key declared on a single field ✔ FOREIGN KEY referencing the wrong table/field ✔ missing commas or brackets ✔.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="drop">DROP — Handle With Care</h2>
+      <p>The <strong>DROP</strong> statement permanently removes structure:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL</div>
+        <pre><code>DROP TABLE tableName;
+
+DROP DATABASE databaseName;</code></pre>
+      </div>
+      <p><code>DROP TABLE</code> deletes the named table and <strong>all the data stored in it</strong>; <code>DROP DATABASE</code> removes the entire database. Neither can be undone — which is why the DROP statement is often exploited by cyber criminals in <strong>SQL injection</strong> attacks.</p>
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>DROP vs DELETE:</strong> <code>DELETE FROM Booking;</code> removes the <em>records</em> but the empty table remains. <code>DROP TABLE Booking;</code> removes the table structure itself. Exam questions love this distinction.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="worked-example">Worked Example</h2>
+      <div class="worked-example">
+        <div class="q-label">CREATE TABLE — 2022 Question 6</div>
+        <img src="../resources/ddd/questions/ddd_createTable_2022_q6.png" alt="2022 Question 6 — CREATE TABLE question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> work field by field against the description or data dictionary — name, SQL data type (with size for varchar/float), then the constraints. Save the key clauses for last: is the primary key single or compound? Which fields reference other tables?</p>
+        <img src="../resources/ddd/questions/ddd_createTable_2022_q6_ans.png" alt="Marking instructions for 2022 Question 6." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Spot the Errors — 3 marks</div>
+        <p>A candidate writes the following statement to implement a Member table (memberID: auto-incrementing primary key; name: text up to 30 characters, required; age: whole number that must be at least 16):</p>
+        <div class="code-block code-sql"><pre><code>CREATE TABLE Member (
+    memberID int PRIMARY KEY,
+    name varchar,
+    age int CHECK(age &gt; 16)
+);</code></pre></div>
+        <p>Identify <strong>three</strong> errors in this statement. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><code>memberID</code> is missing <strong>AUTO_INCREMENT</strong>. <strong>(1 mark)</strong></li>
+              <li><code>varchar</code> has <strong>no size</strong> — it must be <code>varchar(30)</code> — and <code>name</code> is missing <strong>NOT NULL</strong> (either error acceptable). <strong>(1 mark)</strong></li>
+              <li>The CHECK should be <code>age &gt;= 16</code> — <code>age &gt; 16</code> wrongly rejects 16-year-olds. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Write a CREATE Statement — 4 marks</div>
+        <p>Using the data dictionary below, write the SQL statement to create the Screening table. The Film table already exists with primary key <code>filmID</code>.</p>
+        <table>
+          <thead><tr><th>Attribute</th><th>Key</th><th>Type</th><th>Size</th><th>Required</th><th>Validation</th></tr></thead>
+          <tbody>
+            <tr><td>screeningID</td><td>PK</td><td>integer</td><td></td><td>yes</td><td>Auto increment</td></tr>
+            <tr><td>filmID</td><td>FK</td><td>integer</td><td></td><td>yes</td><td>Existing filmID from Film</td></tr>
+            <tr><td>screenNo</td><td></td><td>integer</td><td></td><td>yes</td><td>Range: &gt;=1 and &lt;=9</td></tr>
+            <tr><td>startTime</td><td></td><td>time</td><td></td><td>yes</td><td></td></tr>
+          </tbody>
+        </table>
+        <p><strong>(4 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <div class="code-block code-sql"><pre><code>CREATE TABLE Screening (
+    screeningID int AUTO_INCREMENT PRIMARY KEY,
+    filmID int NOT NULL,
+    screenNo int NOT NULL CHECK(screenNo &gt;= 1 AND screenNo &lt;= 9),
+    startTime time NOT NULL,
+    FOREIGN KEY (filmID) REFERENCES Film(filmID)
+);</code></pre></div>
+            <p>Award <strong>1 mark</strong> each for: correct CREATE TABLE structure with field names and types; primary key with auto increment; the CHECK range constraint (with NOT NULLs); the foreign key clause referencing Film(filmID).</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

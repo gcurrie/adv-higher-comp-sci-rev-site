@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Object-Oriented Programming — SDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Software Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Object-Oriented Programming</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-sdd">
+  <div class="inner">
+    <div class="hero-badge">Software Design &amp; Development</div>
+    <h1>Object-Oriented Programming</h1>
+    <p>Classes, objects, properties and methods — then encapsulation, inheritance, instantiation and polymorphism, and storing objects in arrays.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">💻 SDD Topics</div>
+        <ul>
+          <li><a href="design.html"><span class="sn-icon">📐</span>Design</a></li>
+          <li><a href="data-structures.html"><span class="sn-icon">🗂️</span>Data Structures</a></li>
+          <li><a href="oop.html" class="active"><span class="sn-icon">🧩</span>Object-Oriented Programming</a></li>
+          <li><a href="standard-algorithms.html"><span class="sn-icon">🔎</span>Standard Algorithms</a></li>
+          <li><a href="db-integration.html"><span class="sn-icon">🔌</span>Database Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#classes-objects">Classes &amp; Objects</a></li>
+          <li><a href="#constructor">Constructors &amp; Instantiation</a></li>
+          <li><a href="#principles">Encapsulation, Inheritance &amp; Polymorphism</a></li>
+          <li><a href="#array-of-objects">Arrays of Objects</a></li>
+          <li><a href="#worked-example">Worked Examples</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Why Object-Oriented Programming?</h2>
+      <p>As programs grow, it becomes important to limit how much one part of a program can interfere with the data in another. <strong>Object orientation</strong> separates a program into blocks of related data and the operations that apply to that data. Linking the data and its operations together means they can be treated as a single entity — an <strong>object</strong> — and the data can only be accessed directly by its associated operations.</p>
+      <p>You must be able to <strong>describe, exemplify and implement</strong> every construct on this page: <strong>object</strong>, <strong>property</strong>, <strong>method</strong>, <strong>class</strong>, <strong>sub-class</strong>, <strong>encapsulation</strong>, <strong>inheritance</strong>, <strong>instantiation</strong> and <strong>polymorphism</strong>. Precise use of this terminology is exactly what 'describe' questions reward.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Class</div><div class="def">A blueprint for an object — defines the instance variables (properties) and methods its objects will have.</div></div>
+        <div class="key-term"><div class="term">Object</div><div class="def">An instance of a class, with its own values for the instance variables.</div></div>
+        <div class="key-term"><div class="term">Property</div><div class="def">Data stored by an object — also called an instance variable.</div></div>
+        <div class="key-term"><div class="term">Method</div><div class="def">A subprogram defined in a class that operates on the object's data.</div></div>
+        <div class="key-term"><div class="term">Constructor</div><div class="def">The special method that creates an object and gives its instance variables initial values.</div></div>
+        <div class="key-term"><div class="term">Instantiation</div><div class="def">The act of creating an object from a class.</div></div>
+        <div class="key-term"><div class="term">Encapsulation</div><div class="def">Bundling data and methods into one unit and restricting direct access with private visibility.</div></div>
+        <div class="key-term"><div class="term">Inheritance</div><div class="def">A sub-class inherits the properties and methods of its super-class.</div></div>
+        <div class="key-term"><div class="term">Polymorphism</div><div class="def">The same method name behaving differently depending on the class of the object it is called on.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="classes-objects">Classes &amp; Objects</h2>
+      <p>A <strong>class</strong> is a blueprint. Once defined, any number of <strong>objects</strong> can be created from it. The class definition describes the data each object needs — its <strong>instance variables</strong> (properties) — and what each object can do — its <strong>methods</strong>.</p>
+
+      <div class="example-block">
+        <div class="example-label">Running example — the music player's Track class</div>
+        <p>A music player needs to store tracks. Each track has a <em>title</em>, an <em>artist</em> and a <em>length</em> — three instance variables — and can display itself — one method, <code>showTrack()</code>.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language</div>
+        <pre><code>CLASS Track IS {STRING title, STRING artist, REAL length}
+  METHODS
+  PROCEDURE showTrack()
+      SEND THIS.title &amp; " " &amp; THIS.artist &amp; " " &amp; THIS.length TO DISPLAY
+  END PROCEDURE
+END CLASS</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>class Track:
+    def __init__(self, title, artist, length):
+        self.title = title
+        self.artist = artist
+        self.length = length
+
+    def show_track(self):
+        print(self.title, self.artist, self.length)</code></pre>
+      </div>
+
+      <p>Two pieces of vocabulary to notice. In reference language, the keyword <code>THIS</code> is used inside a method to access the <strong>current object's</strong> instance variables; Python's equivalent is <code>self</code>. A method is called <em>through an object</em> using dot notation:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — creating and using an object</div>
+        <pre><code>DECLARE favouriteTrack INITIALLY Track("Telstar", "Tornados", 3.4)
+favouriteTrack.showTrack()   # displays: Telstar Tornados 3.4</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>favourite_track = Track("Telstar", "Tornados", 3.4)
+favourite_track.show_track()   # displays: Telstar Tornados 3.4</code></pre>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="constructor">Constructors &amp; Instantiation</h2>
+      <p>Creating an object from a class is called <strong>instantiation</strong>, and the method that runs when it happens is the <strong>constructor</strong>. The constructor has the <strong>same name as the class</strong> (in Python it is always <code>__init__</code>) and gives initial values to some or all of the instance variables — saving you from initialising them by hand every time an object is created.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — a PlayList class with a constructor</div>
+        <pre><code>CLASS PlayList IS {ARRAY OF Track tracks, INTEGER next,
+                   INTEGER maxLength, REAL playTime}
+  METHODS
+  CONSTRUCTOR PlayList(INTEGER maxLength)
+      DECLARE THIS.maxLength INITIALLY maxLength
+      DECLARE THIS.tracks INITIALLY Track[maxLength]
+      DECLARE THIS.next INITIALLY 0
+      DECLARE THIS.playTime INITIALLY 0.0
+  END CONSTRUCTOR
+
+  PROCEDURE addTrack(Track newTrack)
+      IF THIS.next = THIS.maxLength THEN
+          SEND "Error - playlist full" TO DISPLAY
+      ELSE
+          SET THIS.tracks[THIS.next] TO newTrack
+          SET THIS.next TO THIS.next + 1
+          SET THIS.playTime TO THIS.playTime + newTrack.length
+      END IF
+  END PROCEDURE
+END CLASS</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>class PlayList:
+    def __init__(self, max_length):
+        self.max_length = max_length
+        self.tracks = []
+        self.play_time = 0.0
+
+    def add_track(self, new_track):
+        if len(self.tracks) == self.max_length:
+            print("Error - playlist full")
+        else:
+            self.tracks.append(new_track)
+            self.play_time = self.play_time + new_track.length</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">Instantiation — both languages</div>
+        <pre><code># Reference language
+DECLARE myTracks INITIALLY PlayList(10)
+myTracks.addTrack(Track("Hey Joe", "Jimi Hendrix", 5.47))
+
+# Python
+my_tracks = PlayList(10)
+my_tracks.add_track(Track("Hey Joe", "Jimi Hendrix", 5.47))</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Terminology check:</strong> <code>PlayList(10)</code> <em>instantiates</em> a PlayList object by calling its <em>constructor</em> with an <em>actual parameter</em> of 10. Being able to narrate one line of code with that precision is what "explain this code" questions are looking for.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="principles">The Principles — Encapsulation, Inheritance &amp; Polymorphism</h2>
+
+      <h3>Encapsulation — bundling and protecting data</h3>
+      <p><strong>Encapsulation</strong> is the bundling of methods and instance variables into one unit — the class — which then lets each member be declared <strong>private</strong> or <strong>public</strong>:</p>
+      <ul>
+        <li><strong>Private (−)</strong> — accessible only from inside the owning class;</li>
+        <li><strong>Public (+)</strong> — accessible from any other part of the program.</li>
+      </ul>
+      <p>Good practice is to make instance variables <strong>private</strong> and to reach them only through public <strong>setters</strong> (methods that change a value) and <strong>getters</strong> (methods that retrieve one). This stops other parts of the program updating variables unintentionally — the whole reason OOP exists.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — setter and getter for a private variable</div>
+        <pre><code>PROCEDURE setAddress(STRING newAddress)
+    SET THIS.address TO newAddress
+END PROCEDURE
+
+FUNCTION getAddress() RETURNS STRING
+    RETURN THIS.address
+END FUNCTION</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>def set_address(self, new_address):
+    self.__address = new_address     # double underscore marks it private
+
+def get_address(self):
+    return self.__address</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>In SQA reference language, the assumption is that <strong>all instance variables are private and all methods are public</strong> — but you may still be asked to interpret +/− symbols on a <a href="design.html#class-diagrams">class diagram</a>.</div>
+      </div>
+
+      <h3>Inheritance — sub-classes and super-classes</h3>
+      <p><strong>Inheritance</strong> lets a <strong>sub-class</strong> inherit all the properties and methods of a <strong>super-class</strong>, then add its own. Common data is written once, in the super-class; the specialised classes only add what makes them different.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — ForSale inherits from House</div>
+        <pre><code>CLASS ForSale INHERITS House WITH {REAL askingPrice, BOOLEAN sold}
+  METHODS
+  PROCEDURE updateAskingPrice(REAL newPrice)
+      SET THIS.askingPrice TO newPrice
+  END PROCEDURE
+END CLASS</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>class ForSale(House):
+    def __init__(self, address, town, asking_price):
+        super().__init__(address, town)     # super-class constructor
+        self.asking_price = asking_price
+        self.sold = False
+
+    def update_asking_price(self, new_price):
+        self.asking_price = new_price</code></pre>
+      </div>
+      <p>A ForSale object now has <em>every</em> House property plus its own two — without House's code being repeated. On a class diagram this is shown by an arrow from the sub-class to the super-class (see <a href="design.html#class-diagrams">Design</a>).</p>
+
+      <h3>Polymorphism — one name, many behaviours</h3>
+      <p><strong>Polymorphism</strong> ("many forms") means the <strong>same method name</strong> can behave differently depending on the <strong>class of the object</strong> it is called on. A sub-class <strong>overrides</strong> an inherited method by providing its own version:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language</div>
+        <pre><code>CLASS House ...
+  PROCEDURE showDetails()
+      SEND THIS.address &amp; " " &amp; THIS.town TO DISPLAY
+  END PROCEDURE
+END CLASS
+
+CLASS ForSale INHERITS House ...
+  OVERRIDE PROCEDURE showDetails()
+      SEND THIS.address &amp; " offers over " &amp; THIS.askingPrice TO DISPLAY
+  END PROCEDURE
+END CLASS</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>class House:
+    def show_details(self):
+        print(self.address, self.town)
+
+class ForSale(House):
+    def show_details(self):                 # overrides the inherited method
+        print(self.address, "offers over", self.asking_price)</code></pre>
+      </div>
+      <p>Calling <code>property.showDetails()</code> now runs <em>whichever version matches the object's class</em> — a House object shows address and town, a ForSale object shows the asking price. The calling code doesn't need to know or care which it has: that is polymorphism.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🎬</div>
+        <div class="placeholder-text">Animation placeholder — The four ideas in one scene</div>
+        <div class="placeholder-sub">Planned: an animation building the estate-agency program step by step — encapsulating House's data, instantiating objects, extending with sub-classes, then calling showDetails() on a mixed list to demonstrate polymorphism.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="array-of-objects">Arrays of Objects</h2>
+      <p>An <strong>array of objects</strong> is exactly what it sounds like: an array whose elements are objects created from a class. It is the OO equivalent of Higher's array of records — and it is why the <code>PlayList</code> class above declared <code>tracks</code> as <code>ARRAY OF Track</code>.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — processing an array of objects</div>
+        <pre><code># display every track in the playlist
+PROCEDURE showTracks()
+    FOR counter FROM 0 TO THIS.next - 1 DO
+        THIS.tracks[counter].showTrack()
+    END FOR
+END PROCEDURE
+
+# linear search of an array of objects by title
+FUNCTION findTitle(STRING trackTitle) RETURNS INTEGER
+    DECLARE result INITIALLY -1
+    FOR index FROM 0 TO THIS.next - 1 DO
+        IF THIS.tracks[index].title = trackTitle THEN
+            SET result TO index
+        END IF
+    END FOR
+    RETURN result
+END FUNCTION</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>def show_tracks(self):
+    for track in self.tracks:
+        track.show_track()
+
+def find_title(self, track_title):
+    result = -1
+    for index in range(len(self.tracks)):
+        if self.tracks[index].title == track_title:
+            result = index
+    return result</code></pre>
+      </div>
+      <p>The access pattern mirrors an array of records — <strong>index selects the object, dot notation selects the property or method</strong>: <code>tracks[index].title</code>. Every <a href="standard-algorithms.html">standard algorithm</a> can be applied to an array of objects by comparing one property of each object.</p>
+    </article>
+
+    <article>
+      <h2 id="worked-example">Worked Examples — 2023 Question 4</h2>
+      <p>This past-paper question walks through a complete OO program — reading a class diagram, explaining constructs, then writing OO code. It is the best single rehearsal of this whole page. Attempt each part before expanding.</p>
+
+      <div class="worked-example">
+        <div class="q-label">OOP — 2023 Question 4, context &amp; part (a)</div>
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-1.png" alt="2023 Question 4 — object-oriented programming context." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Before reading the parts:</strong> study the class definitions. Identify the class names, instance variables (with data types), the constructor, and any inheritance between classes — the answers to nearly every part are in that structure.</p>
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">OOP — 2023 Question 4, part (b)</div>
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-2.png" alt="2023 Question 4 part b." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-2_ans.png" alt="Marking instructions for 2023 Question 4 part b." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">OOP — 2023 Question 4, part (c)</div>
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-3.png" alt="2023 Question 4 part c." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-3_ans.png" alt="Marking instructions for 2023 Question 4 part c." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">OOP — 2023 Question 4, part (d)</div>
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4.png" alt="2023 Question 4 part d." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4-1_ans.png" alt="Marking instructions for 2023 Question 4 part d (first page)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4-2_ans.png" alt="Marking instructions for 2023 Question 4 part d (second page)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">OOP — 2023 Question 4, part (e)</div>
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-5.png" alt="2023 Question 4 part e." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_oo_2023_q4-5_ans.png" alt="Marking instructions for 2023 Question 4 part e." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Terminology — 3 marks</div>
+        <p>The following line appears in a program:</p>
+        <div class="code-block"><pre><code>DECLARE nextBooking INITIALLY Booking("B107", "2026-03-14", 4)</code></pre></div>
+        <p>Using the correct object-oriented terminology, explain what this line does. Your answer should use the terms <em>class</em>, <em>object</em>, <em>constructor</em> and <em>instantiation</em>. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Award <strong>1 mark</strong> per bullet, to a maximum of 3:</p>
+            <ul>
+              <li>An <strong>object</strong> called <code>nextBooking</code> is created (<strong>instantiated</strong>) from the <code>Booking</code> <strong>class</strong>;</li>
+              <li>the <strong>constructor</strong> of the Booking class is called;</li>
+              <li>the three actual parameters ("B107", "2026-03-14", 4) give initial values to the object's instance variables.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Encapsulation — 2 marks</div>
+        <p>A programmer makes all the instance variables of a <code>BankAccount</code> class private, and provides public methods <code>deposit()</code>, <code>withdraw()</code> and <code>getBalance()</code>.</p>
+        <p>Explain <strong>one</strong> benefit of this approach, and state the term that describes it. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>The balance cannot be changed directly by other parts of the program — it can only be updated through the class's own methods, preventing accidental or invalid changes. <strong>(1 mark)</strong></li>
+              <li>This is <strong>encapsulation</strong>. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Polymorphism — 2 marks</div>
+        <p>A program stores <code>Circle</code>, <code>Square</code> and <code>Triangle</code> objects (all sub-classes of <code>Shape</code>) in one array. The loop below displays the area of every shape:</p>
+        <div class="code-block"><pre><code>FOR index FROM 0 TO length(shapes) - 1 DO
+    SEND shapes[index].area() TO DISPLAY
+END FOR</code></pre></div>
+        <p>Explain how polymorphism makes this loop possible. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>Each sub-class <strong>overrides</strong> <code>area()</code> with its own calculation (πr² for Circle, l² for Square, ½bh for Triangle). <strong>(1 mark)</strong></li>
+              <li>When <code>area()</code> is called, the version that runs is determined by the <strong>class of the object</strong> in that element — so one method name works for every shape without the loop needing to check the type. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

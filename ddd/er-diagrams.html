@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ER Diagrams — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">ER Diagrams</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>ER Diagrams</h1>
+    <p>Cardinality recapped from Higher, then the Advanced Higher additions: strong and weak entities, surrogate keys, and mandatory or optional relationship participation.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html" class="active"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#recap">Higher Recap — ER &amp; Cardinality</a></li>
+          <li><a href="#strong-weak">Strong &amp; Weak Entities</a></li>
+          <li><a href="#surrogate">Surrogate Keys</a></li>
+          <li><a href="#participation">Relationship Participation</a></li>
+          <li><a href="#together">Putting It All Together</a></li>
+          <li><a href="#worked-example">Worked Examples</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">ER Diagrams at Advanced Higher</h2>
+      <p>At Higher, an ER diagram showed <strong>entity names</strong>, <strong>attributes</strong>, <strong>relationship names</strong> and <strong>cardinality</strong>. Advanced Higher keeps all of that and adds two new pieces of notation: <strong>entity type</strong> (strong or weak) and <strong>relationship participation</strong> (mandatory or optional) — plus a design technique, the <strong>surrogate key</strong>, that can change one into the other.</p>
+      <p>These four ideas are not separate facts to memorise — they <strong>explain each other</strong>. A weak entity exists <em>because</em> its key depends on another entity; that dependence is <em>why</em> the owner's participation is mandatory; and a surrogate key removes the dependence, turning weak into strong. Read this page in order and each section should make the previous one click.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Cardinality</div><div class="def">How many occurrences of one entity link to another: one-to-one (1:1), one-to-many (1:M), many-to-many (M:M).</div></div>
+        <div class="key-term"><div class="term">Strong Entity</div><div class="def">Its existence does not depend on any other entity — its own primary key uniquely identifies every occurrence.</div></div>
+        <div class="key-term"><div class="term">Weak Entity</div><div class="def">Depends on one or more owner entities for its existence — its primary key is formed, in part, from the owner's primary key. Drawn with a double line.</div></div>
+        <div class="key-term"><div class="term">Owner Entity</div><div class="def">The strong entity a weak entity depends on.</div></div>
+        <div class="key-term"><div class="term">Surrogate Key</div><div class="def">An arbitrary unique value (often an auto-incrementing number) introduced to replace a compound or meaningful primary key.</div></div>
+        <div class="key-term"><div class="term">Mandatory Participation</div><div class="def">At least one occurrence of the entity must exist before occurrences can be added to the associated entity. Shown with a vertical line.</div></div>
+        <div class="key-term"><div class="term">Optional Participation</div><div class="def">Occurrences can be added to one entity without any existing occurrences in the associated entity. Shown with a bold circle.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="recap">Higher Recap — ER Diagrams &amp; Cardinality</h2>
+      <p>Quick recap, because every Advanced Higher diagram is built on this. An ER diagram has a <strong>rectangle</strong> per entity, joined by lines showing each <strong>relationship</strong>, with the relationship <strong>name</strong> written on the line and <strong>cardinality</strong> shown in crow's-foot notation (the fork sits at the "many" end):</p>
+      <table>
+        <thead><tr><th>Cardinality</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>One-to-one (1:1)</strong></td><td>One occurrence of A links to exactly one of B, and vice versa.</td><td>One customer holds one passport.</td></tr>
+          <tr><td><strong>One-to-many (1:M)</strong></td><td>One occurrence of A links to many of B; each B links to one A.</td><td>One resort is the location for many hotels.</td></tr>
+          <tr><td><strong>Many-to-many (M:M)</strong></td><td>Many of A link to many of B — cannot be implemented directly; resolved with a link entity into two 1:M relationships.</td><td>Many bookings include many destinations.</td></tr>
+        </tbody>
+      </table>
+      <p>And the Higher rule that turns diagram questions mechanical: <strong>a foreign key always sits on the "many" side</strong> — find the foreign key and you've found the crow's foot. Attributes are shown as ellipses (or listed), with the primary key underlined and foreign keys starred.</p>
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Higher-style 4-entity ER diagram</div>
+        <div class="placeholder-sub">Planned: the travel agency database (Resort, Hotel, Customer, Booking) drawn with Higher notation only — rectangles, crow's feet and relationship names — as the "before" picture for this page.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="strong-weak">Strong &amp; Weak Entities</h2>
+      <p>Now the first Advanced Higher addition. Look at the entities' <em>primary keys</em>, and ask: could this entity exist on its own?</p>
+      <ul>
+        <li>A <strong>strong entity</strong> has a primary key that uniquely identifies each occurrence <em>by itself</em>. Its existence does not depend on any other entity.</li>
+        <li>A <strong>weak entity</strong> depends on one or more <strong>owner entities</strong> for its existence — its primary key is formed, <em>in part</em>, using the primary key of its owner(s). It cannot be used independently.</li>
+      </ul>
+      <p>On the diagram, a weak entity is indicated with a <strong>double line</strong> (check the notation — this is exactly what the spec expects).</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — the travel agency booking system</div>
+        <p>Four entities, primary keys underlined, foreign keys starred:</p>
+        <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Resort</th><th>Hotel</th><th>Customer</th><th>Booking</th></tr></thead>
+          <tbody>
+            <tr><td><strong><u>resortID</u></strong></td><td><strong><u>hotelRef</u></strong></td><td><strong><u>customerNo</u></strong></td><td><strong><u>hotelRef</u>*</strong></td></tr>
+            <tr><td>resortName</td><td>hotelName</td><td>firstname</td><td><strong><u>customerNo</u>*</strong></td></tr>
+            <tr><td>resortType</td><td>resortID<strong>*</strong></td><td>surname</td><td><strong><u>startDate</u></strong></td></tr>
+            <tr><td></td><td>starRating</td><td>address</td><td>numberOfNights</td></tr>
+            <tr><td></td><td>mealPlan</td><td>town</td><td>numberInParty</td></tr>
+            <tr><td></td><td>pricePersonNight</td><td>postcode</td><td></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p><strong>Resort</strong> and <strong>Customer</strong> are <strong>strong</strong>: each has its own primary key that identifies every occurrence, depending on nothing else. <strong>Booking</strong> is <strong>weak</strong>: its primary key is a <em>compound</em> key built from <code>hotelRef</code> and <code>customerNo</code> — the primary keys of Hotel and Customer — so a booking cannot exist without them. <strong>Hotel</strong> is also weak, because its existence relies on <code>resortID</code> from Resort — every hotel must belong to a resort.</p>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>How to spot a weak entity fast:</strong> look for a primary key that <em>contains a foreign key</em> (a compound key built from other tables' keys), or an entity that logically can't exist until its owner does. That dependence is the whole definition.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="surrogate">Surrogate Keys</h2>
+      <p>Here's why weak entities matter in practice: compound keys are clumsy. Booking's primary key is <code>hotelRef + customerNo + startDate</code> — three fields that every related table would have to store as foreign keys. The fix is to introduce a <strong>surrogate key</strong>: an <strong>arbitrary value that is unique for each row</strong>, typically an <strong>auto-incrementing number</strong> with no real-world meaning.</p>
+      <div class="example-block">
+        <div class="example-label">Example — giving Booking a surrogate key</div>
+        <p>Add <code><strong><u>bookingID</u></strong></code> (auto-increment) as the primary key of Booking. <code>hotelRef</code> and <code>customerNo</code> stay in the table — but now as <em>plain foreign keys</em>, not parts of the primary key.</p>
+      </div>
+      <p>Two consequences — and this is the connection examiners probe:</p>
+      <ul>
+        <li>The introduction of a surrogate key <strong>changes a weak entity into a strong entity</strong> — the entity now has its own uniquely identifying key, so it no longer depends on its owners for identification;</li>
+        <li>It <strong>reduces the complexity of compound keys</strong> — related tables reference one small field instead of three.</li>
+      </ul>
+      <p>Surrogate keys also replace <em>meaningful</em> primary keys (like a postcode or registration) that could legitimately change — an arbitrary number never needs to change, which protects the links between tables.</p>
+
+      <h3>Worked Example</h3>
+      <div class="worked-example">
+        <div class="q-label">Surrogate Keys — 2022 Question 7</div>
+        <img src="../resources/ddd/questions/ddd_surr_2022_q7.png" alt="2022 Question 7 — surrogate keys." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> identify the existing primary key and why it is awkward (compound, or meaningful and liable to change). A surrogate key is an <em>arbitrary, unique, usually auto-incrementing</em> value added as the new primary key — use those three adjectives in your answer.</p>
+        <img src="../resources/ddd/questions/ddd_surr_2022_q7_ans.png" alt="Marking instructions for 2022 Question 7." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="participation">Relationship Participation</h2>
+      <p>The second Advanced Higher addition. <strong>Cardinality</strong> tells you <em>how many</em>; <strong>participation</strong> tells you whether taking part is <em>compulsory</em>. Participation is either:</p>
+      <ul>
+        <li><strong>Mandatory</strong> — at least one occurrence of the entity <strong>must exist</strong> before any occurrences can be added to its associated entity. Shown with a <strong>vertical line</strong> ( | ) at that entity's end of the relationship;</li>
+        <li><strong>Optional</strong> — occurrences of one entity can be added <strong>without</strong> any existing occurrences in the associated entity. Shown with a <strong>bold circle</strong> ( ● ) at that end.</li>
+      </ul>
+
+      <div class="example-block">
+        <div class="example-label">Example — travel agency participation, reasoned end by end</div>
+        <ul>
+          <li><strong>Resort : Hotel (1:M)</strong> — Resort's participation is <strong>mandatory</strong>: every hotel must be located in exactly one resort (a hotel can't be added until its resort exists). Hotel's participation is <strong>optional</strong>: a resort may exist with no hotels.</li>
+          <li><strong>Hotel : Booking (1:M)</strong> — Hotel is <strong>mandatory</strong>: every booking must be for an existing hotel. Booking is <strong>optional</strong>: a hotel may exist without any bookings.</li>
+          <li><strong>Customer : Booking (1:M)</strong> — Customer is <strong>mandatory</strong>: every booking needs an existing customer. Booking is <strong>optional</strong>: customers on the mailing list may never have made a booking.</li>
+        </ul>
+      </div>
+
+      <p>Now notice how this <strong>connects back to entity type</strong>: Booking is a <em>weak</em> entity precisely <em>because</em> its owners' participation is mandatory — a booking cannot be added until its hotel and customer exist. Weak entity, compound key, mandatory participation of the owner: three views of the same dependence. That's why exam answers that explain <em>why</em> ("Hotel is mandatory because each booking must be associated with exactly one hotel") score, while bare notation may not.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Notation reference card</div>
+        <div class="placeholder-sub">Planned: side-by-side diagram of the four line-endings — crow's foot (many), single line (one), vertical bar (mandatory), bold circle (optional) — and a fully annotated travel-agency ER diagram using all of them plus double-lined weak entities.</div>
+      </div>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">Participation Trainer</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for a trainer: given a scenario sentence ("a resort may or may not have hotels"), click the correct symbol for each end of the relationship and get instant feedback.</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="together">Putting It All Together</h2>
+      <p>A complete Advanced Higher ER diagram question expects, for <strong>three or more entities</strong>:</p>
+      <ol>
+        <li><strong>Entity names</strong> in rectangles — weak entities marked with a <strong>double line</strong>;</li>
+        <li><strong>Attributes</strong> (when asked) — primary keys underlined, foreign keys starred;</li>
+        <li><strong>Relationship name</strong> on each line;</li>
+        <li><strong>Cardinality</strong> — crow's foot at the many end;</li>
+        <li><strong>Participation</strong> — vertical line (mandatory) or bold circle (optional) at <em>each</em> end.</li>
+      </ol>
+      <p>Work through them in that order every time and nothing gets forgotten: entities → keys (which reveal weak entities and relationships) → cardinality (foreign key = many side) → participation (can this end exist without the other?).</p>
+
+      <h3>Worked Example</h3>
+      <div class="worked-example">
+        <div class="q-label">ER Diagram — 2022 Question 8(b)</div>
+        <p>This part belongs to the big database-driven website question — first study the database structure it uses:</p>
+        <img src="../resources/ddd/questions/ddd_structure for q8.png" alt="Database structure for 2022 Question 8." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/ddd/questions/ddd_er_2022_q8b.png" alt="2022 Question 8 part b — ER diagram question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> use the five-step checklist above. The foreign keys in the structure tell you where each crow's foot goes; then reason each participation end from the scenario — <em>must</em> this side exist first (vertical line), or can the other side exist without it (bold circle)?</p>
+        <img src="../resources/ddd/questions/ddd_er_2022_q8b_ans.png" alt="Marking instructions for 2022 Question 8 part b." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Strong or Weak? — 2 marks</div>
+        <p>A school library database has three entities: <strong>Pupil</strong> (<u>pupilID</u>, name, class), <strong>Book</strong> (<u>bookID</u>, title, author) and <strong>Loan</strong> (<u>pupilID*</u>, <u>bookID*</u>, <u>dateOut</u>, dateDue).</p>
+        <p>Identify one weak entity in this database, justifying your answer. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Loan</strong> is a weak entity <strong>(1 mark)</strong>;</li>
+              <li>because its (compound) primary key is formed using the primary keys of Pupil and Book — its existence depends on those owner entities, so a loan cannot exist without an existing pupil and book. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Surrogate Key — 2 marks</div>
+        <p>Describe how a surrogate key could be used to improve the design of the Loan entity above, and state the effect this has on the entity's type. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>Add an arbitrary, unique field such as <code>loanID</code> (auto-increment) as the new primary key, replacing the three-field compound key; <code>pupilID</code> and <code>bookID</code> remain as ordinary foreign keys. <strong>(1 mark)</strong></li>
+              <li>The Loan entity becomes a <strong>strong</strong> entity — it now has its own uniquely identifying primary key. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Participation — 2 marks</div>
+        <p>In a vet's database, every <strong>Appointment</strong> must be for an existing <strong>Animal</strong>, but an animal may be registered before it has any appointments.</p>
+        <p>State the participation of each entity in this relationship, and the symbol used for each on the ER diagram. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Animal — mandatory</strong> participation: an animal must exist before an appointment can be added — shown with a <strong>vertical line</strong>. <strong>(1 mark)</strong></li>
+              <li><strong>Appointment — optional</strong> participation: an animal may exist with no appointments — shown with a <strong>bold circle</strong>. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

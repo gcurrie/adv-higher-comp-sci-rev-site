@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Structures — SDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Software Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Data Structures</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-sdd">
+  <div class="inner">
+    <div class="hero-badge">Software Design &amp; Development</div>
+    <h1>Data Structures</h1>
+    <p>Records and arrays of records recapped, 2D arrays introduced, and the operation of single and double linked lists.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">💻 SDD Topics</div>
+        <ul>
+          <li><a href="design.html"><span class="sn-icon">📐</span>Design</a></li>
+          <li><a href="data-structures.html" class="active"><span class="sn-icon">🗂️</span>Data Structures</a></li>
+          <li><a href="oop.html"><span class="sn-icon">🧩</span>Object-Oriented Programming</a></li>
+          <li><a href="standard-algorithms.html"><span class="sn-icon">🔎</span>Standard Algorithms</a></li>
+          <li><a href="db-integration.html"><span class="sn-icon">🔌</span>Database Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#records">Recap — Records &amp; Arrays of Records</a></li>
+          <li><a href="#arrays-2d">1D Recap → 2D Arrays</a></li>
+          <li><a href="#linked-lists">Linked Lists</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Data Structures at Advanced Higher</h2>
+      <p>At Higher you stored data in <strong>parallel 1D arrays</strong>, <strong>records</strong> and <strong>arrays of records</strong>. All three are still required at Advanced Higher, joined by two new structures: the <strong>2D array</strong> (which you must implement) and the <strong>linked list</strong> (which you must be able to <em>describe and exemplify</em> — but not implement). A third new structure, the <strong>array of objects</strong>, belongs to object-oriented programming and is covered on the <a href="oop.html#array-of-objects">OOP page</a>.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Record</div><div class="def">A collection of named fields that can each hold a different data type.</div></div>
+        <div class="key-term"><div class="term">Array of Records</div><div class="def">A list of records — element by index, field by name: <code>stock[3].price</code>.</div></div>
+        <div class="key-term"><div class="term">2D Array</div><div class="def">A grid of values, all of one data type, accessed with two indices: <code>grid[row][column]</code>.</div></div>
+        <div class="key-term"><div class="term">Linked List</div><div class="def">A dynamic data structure where each node stores a data item and a pointer to the next node.</div></div>
+        <div class="key-term"><div class="term">Node</div><div class="def">One element of a linked list — the data item plus its pointer(s).</div></div>
+        <div class="key-term"><div class="term">Head</div><div class="def">The start of a linked list. The last node points to NULL.</div></div>
+        <div class="key-term"><div class="term">Pointer</div><div class="def">The memory address of the next (or, in a double linked list, previous) node.</div></div>
+        <div class="key-term"><div class="term">Dynamic Data Structure</div><div class="def">Has no fixed size — grows and shrinks as required, unlike an array whose size is set at declaration.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="records">Recap — Records &amp; Arrays of Records</h2>
+      <p>Quick reminder from Higher, because Advanced Higher questions still use these freely. A <strong>record</strong> groups related fields of <em>different</em> data types under one name; an <strong>array of records</strong> stores a list of them:</p>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language</div>
+        <pre><code>RECORD Student IS {STRING name, INTEGER mark, BOOLEAN passed}
+
+DECLARE pupils AS ARRAY OF Student INITIALLY [ ] * 20
+
+SET pupils[0].name TO "Aisha"
+SET pupils[0].mark TO 67</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>class Student:
+    def __init__(self, name="", mark=0, passed=False):
+        self.name = name
+        self.mark = mark
+        self.passed = passed
+
+pupils = [Student() for i in range(20)]
+
+pupils[0].name = "Aisha"
+pupils[0].mark = 67</code></pre>
+      </div>
+      <p>Notice the access pattern: <strong>index</strong> chooses the record, <strong>field name</strong> chooses the value — <code>pupils[0].mark</code>. Compare this with parallel 1D arrays, where the same index across <em>several</em> arrays links related data. Being able to argue <em>which structure suits which problem</em> is an Advanced Higher skill: records keep an item's data together and pass through parameters as one value; parallel arrays let you sort one attribute quickly but risk the arrays falling out of step.</p>
+    </article>
+
+    <article>
+      <h2 id="arrays-2d">From 1D Arrays to 2D Arrays</h2>
+      <p>A <strong>1D array</strong> is a list of values of one data type, accessed by a single index — <code>scores[4]</code>. A <strong>2D array</strong> extends this to a <strong>grid</strong>: every value still has the same data type, but each element is addressed by <strong>two indices</strong> — <strong>row first, then column</strong>.</p>
+
+      <div class="example-block">
+        <div class="example-label">Picture it — a 2D array of test scores</div>
+        <p><code>scores[3][2]</code> is the value in <strong>row 3, column 2</strong>. If each row is a pupil and each column a test, then row 3 holds one pupil's four test scores, and column 2 holds every pupil's score on test 2.</p>
+        <table style="max-width:420px;text-align:center;">
+          <thead><tr><th></th><th>[0]</th><th>[1]</th><th>[2]</th><th>[3]</th></tr></thead>
+          <tbody>
+            <tr><td><strong>[0]</strong></td><td>67</td><td>72</td><td>58</td><td>81</td></tr>
+            <tr><td><strong>[1]</strong></td><td>45</td><td>51</td><td>60</td><td>49</td></tr>
+            <tr><td><strong>[2]</strong></td><td>90</td><td>88</td><td>93</td><td>85</td></tr>
+            <tr><td><strong>[3]</strong></td><td>71</td><td>64</td><td><strong>77</strong></td><td>70</td></tr>
+          </tbody>
+        </table>
+        <p><code>scores[3][2]</code> = <strong>77</strong>.</p>
+      </div>
+
+      <h3>Declaring and traversing a 2D array</h3>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language</div>
+        <pre><code>DECLARE scores AS ARRAY OF ARRAY OF INTEGER INITIALLY [ [0]*4 ]*5
+
+# nested loops — outer loop rows, inner loop columns
+FOR row FROM 0 TO 4 DO
+    FOR column FROM 0 TO 3 DO
+        SEND scores[row][column] TO DISPLAY
+    END FOR
+END FOR</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>scores = [[0 for c in range(4)] for r in range(5)]
+
+# nested loops — outer loop rows, inner loop columns
+for row in range(5):
+    for column in range(4):
+        print(scores[row][column])</code></pre>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The classic error:</strong> in Python, <code>scores = [[0]*4]*5</code> creates five references to the <em>same</em> row — change one element and all five rows change. Use a list comprehension as above. In the exam, the classic error is swapping row and column indices — always say to yourself "<em>row, then column</em>".</div>
+      </div>
+
+      <h3>Typical 2D array processing</h3>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — total of one row, and of one column</div>
+        <pre><code># total of pupil 2's scores (fixed row, loop columns)
+DECLARE rowTotal INITIALLY 0
+FOR column FROM 0 TO 3 DO
+    SET rowTotal TO rowTotal + scores[2][column]
+END FOR
+
+# average of test 1 (fixed column, loop rows)
+DECLARE colTotal INITIALLY 0
+FOR row FROM 0 TO 4 DO
+    SET colTotal TO colTotal + scores[row][1]
+END FOR
+SEND colTotal / 5 TO DISPLAY</code></pre>
+      </div>
+      <p>Everything you know about <strong>standard algorithms</strong> transfers: a search or find-max over a 2D array simply fixes one index and loops the other, or nests two loops to visit every element.</p>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">2D Array Visualiser</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for a visualiser: type an index pair and watch the matching cell highlight; step through nested loops and watch the traversal order light up row by row.</p>
+        </div>
+      </div>
+
+      <h3>Worked Examples — 2D arrays in the exam</h3>
+      <p>This 2022 question works a 2D array hard across several parts. Attempt each part before expanding.</p>
+
+      <div class="worked-example">
+        <div class="q-label">2D Arrays — 2022 Question 5 (part 1)</div>
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1.png" alt="2022 Question 5 part 1 — a program using a 2D array." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Read the declaration first</strong> — establish what each row and each column represents before touching the code. Then trace the indices carefully: which index is fixed, which is looped?</p>
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1-1_ans.png" alt="Marking instructions for 2022 Question 5 part 1 (first part)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1-2_ans.png" alt="Marking instructions for 2022 Question 5 part 1 (second part)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">2D Arrays — 2022 Question 5 (parts 2 &amp; 3)</div>
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-2.png" alt="2022 Question 5 part 2." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-3.png" alt="2022 Question 5 part 3." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p>Part 3 asks you to <strong>write code</strong> — remember marks are for demonstrating understanding of the 2D array processing (correct indices, correct loop bounds), not for perfect syntax in any particular language.</p>
+        <img src="../resources/sdd/questions/sdd_2d_2022_q5-3_ans.png" alt="Marking instructions for 2022 Question 5 part 3." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="linked-lists">Linked Lists (Single &amp; Double)</h2>
+      <p>A <strong>linked list</strong> is a <strong>dynamic data structure</strong>. Unlike a 1D array — which stores each element <em>sequentially</em> in memory and typically has a fixed size set at declaration — a linked list has <strong>no fixed size</strong>: it grows and shrinks as required. Each element, called a <strong>node</strong>, has its own address in memory and stores two things:</p>
+      <ul>
+        <li>the <strong>data item</strong> itself;</li>
+        <li>a <strong>pointer</strong> — the address of the <em>next</em> node.</li>
+      </ul>
+      <p>The start of the list is the <strong>HEAD</strong>, and the final node's pointer is <strong>NULL</strong>. To find any item, you must start at the HEAD and follow the pointers node by node — a linked list is a <strong>linear</strong> structure that a single linked list can only <strong>traverse in one direction</strong>.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Single linked list</div>
+        <div class="placeholder-sub">Planned: four nodes ("Computing" → "Science" → "is" → "fun") with memory addresses, HEAD label and NULL terminator.</div>
+      </div>
+
+      <h3>Why bother? Insertion and deletion</h3>
+      <p>This is the heart of every linked-list exam question. To <strong>insert</strong> into a 1D array at a given position, every element beyond that point must be <strong>shifted along</strong> one place in memory; the same applies to deletion. In a linked list, the data <strong>never moves</strong>:</p>
+      <ul>
+        <li><strong>Insert:</strong> create the new node anywhere in memory, then update <strong>one pointer</strong> — the previous node now points to the new node, and the new node points to the one that follows;</li>
+        <li><strong>Delete:</strong> update the previous node's pointer to skip the deleted node, and free its memory.</li>
+      </ul>
+      <p>Because only pointers change, inserting and deleting are <strong>more efficient</strong> in a linked list than in an array. One more difference worth quoting: a linked list can store data of <strong>multiple data types</strong>, where a 1D array is usually limited to one.</p>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🎬</div>
+        <div class="placeholder-text">Animation placeholder — Inserting &amp; deleting a node</div>
+        <div class="placeholder-sub">Planned: step-through animation — insert "really" between "is" and "fun" (new node at address 555, one pointer redirected), then delete "Science" (pointer bypasses the node, memory freed).</div>
+      </div>
+
+      <h3>Double linked lists</h3>
+      <p>A <strong>double linked list</strong> adds a <strong>second pointer</strong> to every node, storing the address of the <strong>previous</strong> node. The trade-offs:</p>
+      <table>
+        <thead><tr><th></th><th>Single linked list</th><th>Double linked list</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Traversal</strong></td><td>One direction only (HEAD → NULL)</td><td><strong>Both directions</strong></td></tr>
+          <tr><td><strong>Memory</strong></td><td>One pointer per node</td><td>Extra memory — <strong>two pointers</strong> per node</td></tr>
+          <tr><td><strong>Deleting a known node</strong></td><td>Must traverse from the HEAD to find the <em>previous</em> node's pointer</td><td>More efficient — the previous node is found instantly via the previous pointer</td></tr>
+          <tr><td><strong>Inserting</strong></td><td>Traverse until the position is found</td><td>No traversal needed to insert at the start, at the end, or before/after a given node</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Scope check:</strong> you must be able to <strong>describe and exemplify the operation</strong> of linked lists — drawing and interpreting node/pointer diagrams and explaining efficiency. You do <strong>not</strong> need to implement them in code, so no pseudocode or program designs are required for this topic.</div>
+      </div>
+
+      <h3>Worked Example</h3>
+      <div class="worked-example">
+        <div class="q-label">Linked Lists — 2023 Question 2</div>
+        <img src="../resources/sdd/questions/sdd_link-list_2023_q2.png" alt="2023 Question 2 — a linked list question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> sketch the nodes with their pointers before answering. For any insert/delete question, identify <em>which pointers change</em> — and remember the efficiency argument: no data is moved, only pointers are updated.</p>
+        <img src="../resources/sdd/questions/sdd_link-list_2023_q2_ans.png" alt="Marking instructions for 2023 Question 2." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">2D Array Indices — 2 marks</div>
+        <p>A 2D array is declared to store the rainfall (in mm) for 12 months across 5 years: <code>rainfall[year][month]</code>.</p>
+        <p>(a) Write the reference for the rainfall in the <em>third</em> year, <em>first</em> month (assume indices start at 0). <strong>(1 mark)</strong><br />
+        (b) State the loop structure needed to total the rainfall for month 6 across all five years. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) <code>rainfall[2][0]</code> — row (year) index 2, column (month) index 0. <strong>(1 mark)</strong></li>
+              <li>(b) A single loop over the year index with the month index fixed: <code>FOR year FROM 0 TO 4: total = total + rainfall[year][6]</code>. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Linked List vs Array — 2 marks</div>
+        <p>A music streaming app stores a queue of upcoming tracks. Users constantly insert tracks into the middle of the queue and remove tracks from it.</p>
+        <p>Explain why a linked list is more suitable than a 1D array for storing this queue. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>Inserting/deleting in a 1D array requires <strong>all elements beyond that point to be shifted</strong> in memory <strong>(1 mark)</strong>;</li>
+              <li>in a linked list only a <strong>pointer is updated</strong> and no data moves — so frequent insertions/deletions are more efficient. (Also acceptable: a linked list is dynamic so the queue can grow/shrink without a fixed size.) <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Double Linked List — 2 marks</div>
+        <p>State <strong>one advantage</strong> and <strong>one disadvantage</strong> of a double linked list compared to a single linked list. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Advantage:</strong> it can be traversed in both directions / removing or inserting at a known node is more efficient because the previous node is found via the previous pointer. <strong>(1 mark)</strong></li>
+              <li><strong>Disadvantage:</strong> it requires additional memory, as an extra pointer is stored in every node. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

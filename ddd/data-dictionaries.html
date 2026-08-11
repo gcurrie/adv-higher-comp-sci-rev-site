@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Dictionaries — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Data Dictionaries</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>Data Dictionaries</h1>
+    <p>The Higher data dictionary, upgraded: attribute types are now SQL data types — text becomes varchar, and number splits into int and float.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html" class="active"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#recap">Higher Recap</a></li>
+          <li><a href="#sql-types">SQL Data Types</a></li>
+          <li><a href="#full-example">Full Example</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="recap">Higher Recap — What a Data Dictionary Does</h2>
+      <p>A <strong>data dictionary</strong> defines the properties of every attribute in every entity of the design: <strong>entity name</strong>, <strong>attribute name</strong>, <strong>primary/foreign key</strong>, <strong>type</strong>, <strong>size</strong>, whether a value is <strong>required</strong>, and any <strong>validation</strong> (presence check, restricted choice, field length, range). None of that changes at Advanced Higher.</p>
+      <p>What changes is the <strong>type column</strong>. At Higher you wrote generic types: <em>text, number, date, time, Boolean</em>. At Advanced Higher, attribute types are expressed as <strong>SQL data types</strong> — because the data dictionary is now a direct blueprint for the <a href="sql-ddl.html">CREATE TABLE statements</a> you will write yourself:</p>
+      <ul>
+        <li><strong>text</strong> is now <strong>varchar</strong>;</li>
+        <li><strong>number</strong> is split into <strong>int</strong> (whole numbers) and <strong>float</strong> (decimals);</li>
+        <li><strong>date</strong> and <strong>time</strong> remain, with fixed SQL formats.</li>
+      </ul>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">varchar(size)</div><div class="def">Variable-length text; the size parameter is mandatory and restricts the maximum number of characters (0–65535).</div></div>
+        <div class="key-term"><div class="term">int</div><div class="def">Whole numbers. A size parameter is optional (it only restricts display width).</div></div>
+        <div class="key-term"><div class="term">float(size, d)</div><div class="def">Decimal numbers; size is the total number of digits, d the digits after the decimal point.</div></div>
+        <div class="key-term"><div class="term">date</div><div class="def">A calendar date in the format YYYY-MM-DD.</div></div>
+        <div class="key-term"><div class="term">time</div><div class="def">A time in the format hh:mm:ss.</div></div>
+        <div class="key-term"><div class="term">Required</div><div class="def">Whether a value must be present — becomes NOT NULL in the CREATE TABLE.</div></div>
+        <div class="key-term"><div class="term">Validation</div><div class="def">Presence check, restricted choice, field length or range — each maps onto an SQL constraint.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="sql-types">The SQL Data Types</h2>
+      <table>
+        <thead><tr><th>Type</th><th>Sample</th><th>SQL implementation</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>integer</strong></td><td>32, −846</td><td><code>int</code></td><td>Size parameter optional — only restricts the maximum <em>display width</em>.</td></tr>
+          <tr><td><strong>float</strong></td><td>3.14</td><td><code>float(size, d)</code></td><td><code>size</code> = total digits; <code>d</code> = digits after the decimal point. <code>float(6,2)</code> suits prices up to 9999.99.</td></tr>
+          <tr><td><strong>varchar</strong></td><td>ABC123D</td><td><code>varchar(size)</code></td><td>Size parameter <strong>mandatory</strong> — restricts characters, 0 to 65535.</td></tr>
+          <tr><td><strong>date</strong></td><td>2019-05-23</td><td><code>date</code></td><td>Format is <strong>YYYY-MM-DD</strong>.</td></tr>
+          <tr><td><strong>time</strong></td><td>09:12:47</td><td><code>time</code></td><td>Format is <strong>hh:mm:ss</strong>.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Two classic slips:</strong> writing "text" or "number" in an Advanced Higher data dictionary (use the SQL types); and choosing <code>int</code> for a price or an average — anything with a decimal point needs <code>float</code>. Phone numbers and postcodes are <code>varchar</code>, not numbers: they have leading zeros and are never calculated with.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="full-example">Full Example — the Travel Agency Data Dictionary</h2>
+      <p>The same four-entity travel agency database used across this section (see <a href="er-diagrams.html#strong-weak">ER Diagrams</a>). Notice how every validation rule is written so it can be translated <em>directly</em> into a <a href="sql-ddl.html">CREATE TABLE constraint</a> — this table <em>is</em> the design the implementation gets tested against.</p>
+
+      <h3>Entity: Resort</h3>
+      <table>
+        <thead><tr><th>Attribute name</th><th>Key</th><th>Type</th><th>Size</th><th>Required</th><th>Validation</th></tr></thead>
+        <tbody>
+          <tr><td>resortID</td><td>PK</td><td>integer</td><td></td><td>yes</td><td></td></tr>
+          <tr><td>resortName</td><td></td><td>varchar</td><td>20</td><td>yes</td><td></td></tr>
+          <tr><td>resortType</td><td></td><td>varchar</td><td>20</td><td>yes</td><td>Restricted choice: coastal, city, island, country</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Entity: Hotel</h3>
+      <table>
+        <thead><tr><th>Attribute name</th><th>Key</th><th>Type</th><th>Size</th><th>Required</th><th>Validation</th></tr></thead>
+        <tbody>
+          <tr><td>hotelRef</td><td>PK</td><td>varchar</td><td>4</td><td>yes</td><td>Length = 4</td></tr>
+          <tr><td>hotelName</td><td></td><td>varchar</td><td>20</td><td>yes</td><td></td></tr>
+          <tr><td>resortID</td><td>FK</td><td>integer</td><td></td><td>yes</td><td>Existing resortID from Resort table</td></tr>
+          <tr><td>starRating</td><td></td><td>integer</td><td></td><td>yes</td><td>Range: &gt;=1 and &lt;=5</td></tr>
+          <tr><td>seasonStartDate</td><td></td><td>date</td><td></td><td>no</td><td></td></tr>
+          <tr><td>mealPlan</td><td></td><td>varchar</td><td>17</td><td>yes</td><td>Restricted choice: Room Only, Bed and Breakfast, Half Board, Full Board</td></tr>
+          <tr><td>checkInTime</td><td></td><td>time</td><td></td><td>yes</td><td></td></tr>
+          <tr><td>pricePersonNight</td><td></td><td>float</td><td>6,2</td><td>yes</td><td>Range: &gt;=50 and &lt;=250</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Entity: Customer</h3>
+      <table>
+        <thead><tr><th>Attribute name</th><th>Key</th><th>Type</th><th>Size</th><th>Required</th><th>Validation</th></tr></thead>
+        <tbody>
+          <tr><td>customerNo</td><td>PK</td><td>integer</td><td></td><td>yes</td><td>Auto increment</td></tr>
+          <tr><td>firstname</td><td></td><td>varchar</td><td>20</td><td>yes</td><td></td></tr>
+          <tr><td>surname</td><td></td><td>varchar</td><td>20</td><td>yes</td><td></td></tr>
+          <tr><td>address</td><td></td><td>varchar</td><td>40</td><td>yes</td><td></td></tr>
+          <tr><td>town</td><td></td><td>varchar</td><td>20</td><td>yes</td><td></td></tr>
+          <tr><td>postcode</td><td></td><td>varchar</td><td>8</td><td>yes</td><td>Length &lt;= 8</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Entity: Booking</h3>
+      <table>
+        <thead><tr><th>Attribute name</th><th>Key</th><th>Type</th><th>Size</th><th>Required</th><th>Validation</th></tr></thead>
+        <tbody>
+          <tr><td>hotelRef</td><td>PK, FK</td><td>varchar</td><td>4</td><td>yes</td><td>Existing hotelRef from Hotel table</td></tr>
+          <tr><td>customerNo</td><td>PK, FK</td><td>integer</td><td></td><td>yes</td><td>Existing customerNo from Customer table</td></tr>
+          <tr><td>startDate</td><td>PK</td><td>date</td><td></td><td>yes</td><td></td></tr>
+          <tr><td>numberNights</td><td></td><td>integer</td><td></td><td>yes</td><td>Range: &gt;=1</td></tr>
+          <tr><td>numberInParty</td><td></td><td>integer</td><td></td><td>yes</td><td>Range: &gt;=1</td></tr>
+        </tbody>
+      </table>
+
+      <p>Reading the keys ties the whole design together: Booking's primary key is a <strong>compound</strong> of three fields, two of which are foreign keys — the signature of the <a href="er-diagrams.html#strong-weak">weak entity</a> you identified on the ER diagram. Customer's auto-incrementing <code>customerNo</code> is a <a href="er-diagrams.html#surrogate">surrogate key</a> in action.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Testing link:</strong> "SQL-implemented tables match design" (see <a href="../integration/testing.html#area-specific">Testing</a>) means checking the built tables against <em>this document</em>, attribute by attribute. Get the dictionary right and both the implementation and the testing write themselves.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Choosing Types — 3 marks</div>
+        <p>A cinema database stores, for each screening: the screening reference (e.g. "SCR047"), the ticket price (e.g. 12.50), and the start time (e.g. 19:45:00).</p>
+        <p>Complete the type and size columns of the data dictionary for these three attributes. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>screeningRef — <code>varchar(6)</code>: text with digits and letters, size mandatory. <strong>(1 mark)</strong></li>
+              <li>ticketPrice — <code>float(4,2)</code> (or similar): a decimal value; int would lose the pence. <strong>(1 mark)</strong></li>
+              <li>startTime — <code>time</code>: format hh:mm:ss. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Higher → Advanced Higher — 2 marks</div>
+        <p>A Higher candidate's data dictionary lists an attribute as: <em>numberInStock — number — required</em>.</p>
+        <p>Rewrite the type for an Advanced Higher data dictionary, and explain why "number" is no longer acceptable. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>Type should be <code>int</code> (a whole-number count). <strong>(1 mark)</strong></li>
+              <li>At Advanced Higher, attribute types are expressed as <strong>SQL data types</strong>, and "number" is split into <strong>int</strong> and <strong>float</strong> — the dictionary must state which, because it becomes the type in the CREATE TABLE statement. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

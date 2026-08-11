@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Design &amp; Development — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a>
+    <span class="sep">›</span>
+    <span class="current">Database Design &amp; Development</span>
+  </div>
+</div>
+
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Optional — Question Paper Section 2</div>
+    <h1>Database Design &amp; Development</h1>
+    <p>Design relational databases with strong and weak entities, surrogate keys and participation — then build them from scratch with SQL DDL and query them with subqueries and new operators.</p>
+  </div>
+</section>
+
+<main class="page-content">
+
+  <div class="callout callout-info mb-3">
+    <div class="callout-icon">ℹ️</div>
+    <div>DDD is worth <strong>20 of the 55 question-paper marks</strong> (Section 2 — chosen instead of Web). The section includes a question set in the context of a <strong>database-driven website</strong>, so a couple of marks may ask about HTML forms — covered on the <a href="web-integration.html">Web Integration</a> page. Analysis, testing and evaluation for DDD are in the <a href="../integration/index.html">Integration</a> section.</div>
+  </div>
+
+  <section class="mb-4">
+    <h2 class="section-title"><span class="icon">📖</span>Design Topics</h2>
+    <div class="card-grid card-grid-3">
+
+      <a href="er-diagrams.html" class="card card-topic">
+        <div class="topic-icon">🔗</div>
+        <h3>ER Diagrams</h3>
+        <p>Higher recap, then the Advanced Higher additions: strong and weak entities, surrogate keys, and mandatory/optional relationship participation.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="eo-diagrams.html" class="card card-topic">
+        <div class="topic-icon">🔁</div>
+        <h3>EO Diagrams</h3>
+        <p>Entity-occurrence diagrams recapped from Higher — and how to identify relationship participation from the pattern of links.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="data-dictionaries.html" class="card card-topic">
+        <div class="topic-icon">📖</div>
+        <h3>Data Dictionaries</h3>
+        <p>Data dictionaries now use SQL data types — text becomes varchar, number splits into int and float — plus keys, sizes and validation.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="query-design.html" class="card card-topic">
+        <div class="topic-icon">📝</div>
+        <h3>Query Design</h3>
+        <p>Planning queries before writing SQL: fields and calculations, tables, search criteria, grouping, having, sort order — and nested inner-query designs.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2 class="section-title"><span class="icon">⚙️</span>Implementation Topics</h2>
+    <div class="card-grid card-grid-3">
+
+      <a href="sql-ddl.html" class="card card-topic">
+        <div class="topic-icon">🏗️</div>
+        <h3>SQL — DDL</h3>
+        <p>CREATE DATABASE and CREATE TABLE with primary/foreign key, NOT NULL, CHECK and auto-increment constraints — and DROP.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="sql-dml.html" class="card card-topic">
+        <div class="topic-icon">🔎</div>
+        <h3>SQL — DML</h3>
+        <p>Higher SQL recapped, then the new material: the HAVING clause, subqueries in WHERE, and the IN, NOT, BETWEEN, ANY and EXISTS operators.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="sql-practice.html" class="card card-topic">
+        <div class="topic-icon">🎯</div>
+        <h3>SQL Practice Questions</h3>
+        <p>Full multi-part past-paper questions where query design and SQL writing are mixed together — just like the real exam.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+      <a href="web-integration.html" class="card card-topic">
+        <div class="topic-icon">🌐</div>
+        <h3>Web Integration — Forms</h3>
+        <p>The HTML form knowledge DDD candidates need for the database-driven website question: action, method (GET/POST), form elements and validation.</p>
+        <div class="card-arrow">Open topic →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2 class="section-title"><span class="icon">📊</span>What's New at Advanced Higher (vs Higher)</h2>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);">
+      <p>At Higher you queried <em>pre-populated</em> databases. The big shift at Advanced Higher: you now <strong>build the database yourself</strong> with SQL. The key additions are:</p>
+      <table>
+        <thead><tr><th>Topic</th><th>Advanced Higher adds…</th></tr></thead>
+        <tbody>
+          <tr><td>ER diagrams</td><td>Entity type (strong/weak); relationship participation (mandatory/optional); surrogate keys</td></tr>
+          <tr><td>EO diagrams</td><td>Identifying relationship participation from an entity-occurrence diagram</td></tr>
+          <tr><td>Data dictionary</td><td>SQL data types — varchar, int, float, date, time</td></tr>
+          <tr><td>Query design</td><td>The HAVING row, and inner-query (subquery) designs</td></tr>
+          <tr><td>SQL</td><td>DDL (CREATE/DROP with constraints); HAVING; subqueries; IN, NOT, BETWEEN, ANY, EXISTS</td></tr>
+          <tr><td>Web</td><td>HTML forms as they relate to a database-driven website (integration marks)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

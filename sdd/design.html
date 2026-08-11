@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design — SDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Software Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Design</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-sdd">
+  <div class="inner">
+    <div class="hero-badge">Software Design &amp; Development</div>
+    <h1>Design</h1>
+    <p>Structure diagrams and pseudocode at Advanced Higher level, UML class diagrams for object-oriented programs, and annotated user-interface wireframes.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">💻 SDD Topics</div>
+        <ul>
+          <li><a href="design.html" class="active"><span class="sn-icon">📐</span>Design</a></li>
+          <li><a href="data-structures.html"><span class="sn-icon">🗂️</span>Data Structures</a></li>
+          <li><a href="oop.html"><span class="sn-icon">🧩</span>Object-Oriented Programming</a></li>
+          <li><a href="standard-algorithms.html"><span class="sn-icon">🔎</span>Standard Algorithms</a></li>
+          <li><a href="db-integration.html"><span class="sn-icon">🔌</span>Database Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#pseudocode">Structure Diagrams &amp; Pseudocode</a></li>
+          <li><a href="#class-diagrams">UML Class Diagrams</a></li>
+          <li><a href="#ui-design">User-Interface Design</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Design at Advanced Higher</h2>
+      <p>Design turns the requirements specification into something a programmer can implement. From Higher you already know how to read and write <strong>structure diagrams</strong> and <strong>pseudocode</strong> showing <strong>top-level design</strong>, <strong>data flow</strong> and <strong>refinements</strong>, and how to sketch an interface with a <strong>wireframe</strong>. Advanced Higher keeps all three and adds a new notation designed specifically for object-oriented programs: the <strong>UML class diagram</strong>.</p>
+      <p>Design is the second-biggest skill in the course assessment: <strong>20 marks</strong> of the project and <strong>16–24 marks</strong> of the question paper.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Top-Level Design</div><div class="def">The main steps of the program, numbered, before any detail is added.</div></div>
+        <div class="key-term"><div class="term">Refinement</div><div class="def">Breaking one top-level step into numbered sub-steps (3 → 3.1, 3.2, 3.3).</div></div>
+        <div class="key-term"><div class="term">Data Flow</div><div class="def">The variables and data structures passed in and out of each module.</div></div>
+        <div class="key-term"><div class="term">Class Diagram</div><div class="def">A UML diagram modelling the static structure of an OO program — class name, instance variables, methods, visibility and inheritance.</div></div>
+        <div class="key-term"><div class="term">Instance Variable</div><div class="def">A variable defined in a class, holding data belonging to each object — listed with its data type on a class diagram.</div></div>
+        <div class="key-term"><div class="term">Visibility (+/−)</div><div class="def">On a class diagram, + marks a public member and − marks a private member.</div></div>
+        <div class="key-term"><div class="term">Constructor</div><div class="def">The method that creates and initialises an object — shown in the methods section with the same name as the class.</div></div>
+        <div class="key-term"><div class="term">Wireframe</div><div class="def">A user-interface design showing visual layout, inputs, validation, underlying processes and outputs.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="pseudocode">Structure Diagrams &amp; Pseudocode</h2>
+      <p>The notation is unchanged from Higher — what changes is the <strong>content</strong> being designed. Advanced Higher designs routinely involve <strong>2D arrays</strong>, <strong>arrays of objects</strong>, and modules that <strong>connect to a database</strong>. You must be able to <em>read and understand</em> designs using structure diagrams, pseudocode and UML, and <em>write</em> efficient designs using pseudocode.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — pseudocode design with top-level design, data flow and refinement</div>
+        <p>Design for the stock search program analysed on the <a href="../integration/analysis.html">Analysis</a> page (data held in a 2D array):</p>
+        <div class="code-block">
+          <div class="code-label">Top-level design with data flow</div>
+          <pre><code>1. Read stock data from file into 2D array    # Data flow OUT: stock(2D array)
+2. Sort array into ascending order of itemID  # IN: stock  OUT: stock
+3. Get target itemID from user                # OUT: target
+4. Search array for target                    # IN: stock, target  OUT: found, row
+5. Display result                             # IN: found, row, stock</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-label">Refinement of step 4 (binary search)</div>
+          <pre><code>4.1 set low to 0 and high to number of rows - 1
+4.2 set found to false
+4.3 while not found and low &lt;= high
+4.4    set mid to (low + high) DIV 2
+4.5    if stock[mid][0] = target then
+4.6       set found to true and row to mid
+4.7    else if target &gt; stock[mid][0] then
+4.8       set low to mid + 1
+4.9    else
+4.10      set high to mid - 1
+4.11   end if
+4.12 end while</code></pre>
+        </div>
+        <p>Notice each process from the functional requirements became a numbered top-level step, the data flow names the structures passed between modules, and the refinement expands one step into implementable detail — exactly the three things the course spec asks a design to show.</p>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div>Pseudocode is not a fixed notation — more "code-like" pseudocode is fine, and in the exam marks are for the <strong>logic</strong>, not the style. What loses marks is missing steps (forgetting to initialise, no loop end condition) or a design that doesn't match the requirements.</div>
+      </div>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Structure diagram with data flow</div>
+        <div class="placeholder-sub">Planned: structure diagram of the stock program above — five modules under a main module, annotated with the data flow in/out of each.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="class-diagrams">UML Class Diagrams</h2>
+      <p>Where a <a href="../integration/analysis.html#use-case">use case diagram</a> models the <strong>dynamic</strong> behaviour of a system, a <strong>class diagram</strong> models its <strong>static</strong> structure: the classes, what data they hold, what they can do, and how they relate to each other. This page assumes the OO vocabulary — if terms like <em>method</em> or <em>inheritance</em> feel shaky, skim the <a href="oop.html">Object-Oriented Programming</a> page first, then come back.</p>
+
+      <h3>Anatomy of a class</h3>
+      <p>A class is drawn as a box with <strong>three sections</strong>:</p>
+      <ol>
+        <li><strong>Class name</strong> — at the top;</li>
+        <li><strong>Instance variables</strong> — each with its <strong>data type</strong> (<code>address: String</code>);</li>
+        <li><strong>Methods</strong> — including the <strong>constructor</strong>, which always has the <strong>same name as the class</strong>.</li>
+      </ol>
+      <p>Every member is marked with its <strong>visibility</strong>: a <strong>−</strong> prefix for <strong>private</strong> (usable only by the owning class) and a <strong>+</strong> prefix for <strong>public</strong> (usable by any class).</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — the House class (estate agency program)</div>
+        <div style="overflow-x:auto;">
+        <table style="max-width:340px;font-family:var(--font-mono);font-size:.85rem;">
+          <thead><tr><th style="text-align:center;">House</th></tr></thead>
+          <tbody>
+            <tr><td>−address: String<br />−town: String<br />−bedrooms: Integer<br />−description: String<br />−houseValue: Integer</td></tr>
+            <tr><td>+house()<br />+setAddress()<br />+getAddress()<br />+updateBedrooms()</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>All five instance variables are <strong>private</strong> (−), so they can only be reached through the <strong>public</strong> (+) methods. <code>house()</code> is the <strong>constructor</strong> — same name as the class — used to create each individual House object. <code>setAddress()</code> and <code>getAddress()</code> are a <strong>setter and getter</strong> (mutator and accessor): the methods that edit and retrieve the value of the private variable <code>address</code>.</p>
+      </div>
+
+      <h3>Inheritance on a class diagram</h3>
+      <p>A <strong>sub-class</strong> inherits all the properties and methods of its <strong>super-class</strong>. On a class diagram, inheritance is shown by an <strong>arrow pointing from the sub-class to the super-class</strong>.</p>
+
+      <h3>Array of objects on a class diagram</h3>
+      <p>An instance variable can itself be an <strong>array of objects</strong> of another class, written as:</p>
+      <div class="code-block">
+        <div class="code-label">Notation</div>
+        <pre><code>offersReceived: Array of Offer[ ]</code></pre>
+      </div>
+      <p>where <code>Offer</code> is another class. The connection between the array of objects and its class is also shown with an arrow.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — full class diagram for the estate agency</div>
+        <p>The full design has <strong>House</strong> as the super-class, with <strong>ForSale</strong> and <strong>ForRent</strong> as sub-classes (inheritance arrows point up to House). ForSale contains <code>offersReceived: Array of Offer[ ]</code>, so a fourth class, <strong>Offer</strong>, is linked to ForSale by an arrow.</p>
+        <div style="overflow-x:auto;">
+        <table style="font-family:var(--font-mono);font-size:.8rem;">
+          <thead><tr><th style="text-align:center;">ForSale → House</th><th style="text-align:center;">ForRent → House</th><th style="text-align:center;">Offer</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>−askingPrice: Real<br />−closingDate: String<br />−underOffer: Boolean<br />−offersReceived: Array of Offer[ ]<br />−sold: Boolean</td>
+              <td>−rentalCost: Real<br />−deposit: Real<br />−rentalLength: Integer<br />−rented: Boolean</td>
+              <td>−dateOfOffer: String<br />−amountOfOffer: Integer</td>
+            </tr>
+            <tr>
+              <td>+forSale()<br />+updateAskingPrice()<br />+updateSoldStatus()</td>
+              <td>+forRent()<br />+updateRentStatus()</td>
+              <td>+offer()<br />+setOfferDate()<br />+getOfferDate()<br />+setOfferAmount()<br />+getOfferAmount()</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Because ForSale <strong>inherits</strong> from House, a ForSale object has <em>all nine</em> instance variables — the five from House plus its own four — without House's variables being re-declared. That is the whole point of inheritance: common data and methods are defined once, in the super-class.</p>
+      </div>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Estate agency class diagram</div>
+        <div class="placeholder-sub">Planned: proper UML rendering of House / ForSale / ForRent / Offer with inheritance arrows and the array-of-objects link.</div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Checklist for drawing a class diagram in the exam:</strong> class name on top ✔ instance variables <em>with data types</em> ✔ visibility symbols on every member ✔ constructor named after the class ✔ inheritance arrow from sub-class <em>to</em> super-class ✔. Missing data types and missing +/− symbols are the two most common dropped marks.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="ui-design">User-Interface Design</h2>
+      <p>At Higher a wireframe showed layout, inputs and outputs. At Advanced Higher a <strong>wireframe</strong> must indicate <strong>five</strong> things:</p>
+      <ul>
+        <li><strong>Visual layout</strong> — where every element sits on the screen;</li>
+        <li><strong>Inputs</strong> — every value the user provides, and the control used to enter it;</li>
+        <li><strong>Validation</strong> — annotated against each input: presence, range, length, restricted choice;</li>
+        <li><strong>Underlying processes</strong> — what happens when each button is pressed ("clicking Search calls the binary search on the stock array");</li>
+        <li><strong>Outputs</strong> — where and how results are displayed.</li>
+      </ul>
+      <div class="example-block">
+        <div class="example-label">Example — annotating a wireframe</div>
+        <p>For the stock search program: a text box labelled <em>itemID</em> (annotation: "input — integer, range check 1000–9999"); a <em>Search</em> button (annotation: "underlying process — binary search of 2D array; displays row if found, error message if not"); an output area (annotation: "output — itemID, price, number in stock").</p>
+      </div>
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Image placeholder — Annotated wireframe example</div>
+        <div class="placeholder-sub">Planned: a hand-drawn style wireframe of the stock search interface with callout annotations for inputs, validation, underlying processes and outputs.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Reading a Class Diagram — 3 marks</div>
+        <p>A class diagram shows the following class:</p>
+        <div class="code-block">
+          <div class="code-label">Class diagram (text form)</div>
+          <pre><code>Member
+-------------------------
+−name: String
+−email: String
+−sessionsAttended: Integer
+-------------------------
++member()
++getEmail()
+−updateEmail()</code></pre>
+        </div>
+        <p>(a) State the name of the constructor. <strong>(1 mark)</strong><br />
+           (b) Explain why <code>getEmail()</code> is needed to display a member's email address. <strong>(1 mark)</strong><br />
+           (c) State which method could <strong>not</strong> be called from the main program, justifying your answer. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) <code>member()</code> — the constructor always has the same name as the class. <strong>(1 mark)</strong></li>
+              <li>(b) The instance variable <code>email</code> is <strong>private</strong> (−), so it cannot be accessed directly from outside the class — the public <strong>getter</strong> method returns its value. <strong>(1 mark)</strong></li>
+              <li>(c) <code>updateEmail()</code> — it is marked <strong>private</strong> (−), so it can only be used by methods inside the Member class. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Inheritance on a Diagram — 2 marks</div>
+        <p>A veterinary program has a <code>Animal</code> class (instance variables: name, age, owner) and a <code>Dog</code> class (instance variables: breed, microchipNo) which inherits from Animal.</p>
+        <p>(a) State how the inheritance would be shown on a UML class diagram. <strong>(1 mark)</strong><br />
+           (b) State how many instance variables a Dog object has, justifying your answer. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) An <strong>arrow from the Dog (sub-)class pointing to the Animal (super-)class</strong>. <strong>(1 mark)</strong></li>
+              <li>(b) <strong>Five</strong> — Dog inherits name, age and owner from Animal and adds breed and microchipNo. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

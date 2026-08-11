@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL — DML — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">SQL — DML</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>SQL — Data Manipulation Language</h1>
+    <p>Higher SQL recapped, then the Advanced Higher additions: the HAVING clause, subqueries in the WHERE clause, and the IN, NOT, BETWEEN, ANY and EXISTS operators.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html" class="active"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#recap">Higher Recap</a></li>
+          <li><a href="#having">The HAVING Clause</a></li>
+          <li><a href="#operators">The New Logical Operators</a></li>
+          <li><a href="#subqueries">Subqueries</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="recap">Higher Recap — the DML You Already Have</h2>
+      <p>Everything from Higher SQL is still live at Advanced Higher and can appear in any question: <strong>SELECT … FROM … WHERE</strong> with joins across three or more tables, <strong>wildcards</strong> (<code>LIKE '%…%'</code>), <strong>computed values</strong> with <strong>aliases</strong> (<code>AS</code>), the <strong>aggregate functions</strong> (MIN, MAX, AVG, SUM, COUNT), <strong>GROUP BY</strong>, <strong>ORDER BY</strong>, and <strong>INSERT</strong>, <strong>UPDATE</strong> and <strong>DELETE</strong>.</p>
+      <p>Advanced Higher adds three things, and the full clause order becomes:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — the complete SELECT skeleton</div>
+        <pre><code>SELECT   list of field names
+FROM     list of table names
+WHERE    condition
+GROUP BY list of field names
+HAVING   condition
+ORDER BY list of field names;</code></pre>
+      </div>
+      <p>All examples below use the travel agency database — and each one implements a design from the <a href="query-design.html">Query Design</a> page.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">HAVING</div><div class="def">Filters <em>grouped</em> results — applied after GROUP BY, where WHERE cannot use aggregate functions.</div></div>
+        <div class="key-term"><div class="term">Subquery</div><div class="def">A query in brackets inside another query's WHERE clause — also called an inner or nested query.</div></div>
+        <div class="key-term"><div class="term">NOT</div><div class="def">Returns records where the condition is not true.</div></div>
+        <div class="key-term"><div class="term">BETWEEN</div><div class="def">Selects values within an inclusive range — numeric or text.</div></div>
+        <div class="key-term"><div class="term">IN</div><div class="def">Matches a value against a list — or against the rows returned by a subquery.</div></div>
+        <div class="key-term"><div class="term">ANY</div><div class="def">True if <em>any</em> of the subquery's values meets the condition.</div></div>
+        <div class="key-term"><div class="term">EXISTS</div><div class="def">True if the subquery returns one or more rows.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="having">The HAVING Clause</h2>
+      <p>The <strong>WHERE clause cannot be used with aggregate functions</strong> — <code>WHERE COUNT(*) &gt;= 2</code> is illegal, because WHERE is applied to <em>individual records</em> before any grouping happens. <strong>HAVING</strong> was added to SQL for exactly this reason: it filters the <em>summarised, grouped</em> results after GROUP BY has done its work. Using HAVING requires a GROUP BY to be present.</p>
+
+      <div class="example-block">
+        <div class="example-label">Resorts with at least two hotels (implements Query Design example 1)</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT resortName, COUNT(*) AS [Number of Hotels]
+FROM Resort, Hotel
+WHERE Resort.resortID = Hotel.resortID
+GROUP BY resortName
+HAVING COUNT(*) &gt;= 2;</code></pre>
+        </div>
+        <p>Read it in execution order: join the tables (WHERE matches the keys), group the rows by resort, count each group — <em>then</em> HAVING throws away groups with fewer than two hotels.</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Big-spending customers, biggest first (implements example 2)</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT firstName, surname,
+       SUM(pricePersonNight * numberNights * numberInParty)
+           AS [Total cost of all Bookings]
+FROM Customer, Booking, Hotel
+WHERE Customer.customerNo = Booking.customerNo
+  AND Booking.hotelRef = Hotel.hotelRef
+GROUP BY firstName, surname
+HAVING SUM(pricePersonNight * numberNights * numberInParty) &gt;= 2000
+ORDER BY SUM(pricePersonNight * numberNights * numberInParty) DESC;</code></pre>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>WHERE vs HAVING in one line:</strong> WHERE filters <strong>rows</strong> before grouping; HAVING filters <strong>groups</strong> after. A query can use both — WHERE to restrict which records get grouped, HAVING to restrict which groups appear.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="operators">The New Logical Operators</h2>
+      <p>At National 5 you met <strong>AND</strong> and <strong>OR</strong>. Advanced Higher adds five specialist operators used with the comparison operators (=, &lt;, &gt;, &lt;=, &gt;=, LIKE) in the WHERE clause:</p>
+
+      <h3>NOT</h3>
+      <p>Returns records where the condition is <strong>not true</strong>:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — non-coastal resorts and their hotels</div>
+        <pre><code>SELECT resortName, resortType, hotelName, mealPlan
+FROM Resort, Hotel
+WHERE Resort.resortID = Hotel.resortID
+  AND NOT resortType = "coastal";</code></pre>
+      </div>
+
+      <h3>BETWEEN</h3>
+      <p>Selects values within an <strong>inclusive</strong> range — and it works on <strong>text</strong> as well as numbers:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — customers in towns E through M, alphabetically</div>
+        <pre><code>SELECT surname, postcode, town
+FROM Customer
+WHERE town BETWEEN "E" AND "M"
+ORDER BY town;</code></pre>
+      </div>
+      <p>BETWEEN also appears in HAVING: <code>HAVING COUNT(*) BETWEEN 2 AND 4</code> — customers with between two and four bookings.</p>
+
+      <h3>IN</h3>
+      <p>Matches a value against a <strong>list</strong> — a tidy alternative to a chain of ORs:</p>
+      <div class="code-block code-sql">
+        <div class="code-label">SQL — hotels offering certain meal plans</div>
+        <pre><code>SELECT hotelName, mealPlan
+FROM Hotel
+WHERE mealPlan IN ("Room Only", "Half Board", "Full Board");</code></pre>
+      </div>
+      <p>NOT combines with IN to exclude a list: <code>WHERE NOT resortType IN ("city", "country")</code>.</p>
+
+      <p><strong>ANY</strong> and <strong>EXISTS</strong> only make sense with subqueries — they're covered below.</p>
+    </article>
+
+    <article>
+      <h2 id="subqueries">Subqueries in the WHERE Clause</h2>
+      <p>A <strong>subquery</strong> (inner query) is a query embedded, in brackets, within the WHERE clause of another query (the main or outer query). The subquery <strong>executes first</strong>, and its results are passed to the main query as a condition. This is how you answer questions that need <em>two steps of reasoning</em> — "the most expensive", "below average", "never booked".</p>
+
+      <h3>Single-value subqueries</h3>
+      <div class="example-block">
+        <div class="example-label">The most expensive hotel (implements Query Design example 4)</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT hotelName, starRating, pricePersonNight
+FROM Hotel
+WHERE pricePersonNight =
+    (SELECT MAX(pricePersonNight) FROM Hotel);</code></pre>
+        </div>
+        <p>The inner query returns <em>one value</em> — the maximum price — which the main query then compares with <code>=</code>. The same shape answers "below-average star rating": <code>AND starRating &lt; (SELECT AVG(starRating) FROM Hotel)</code>.</p>
+      </div>
+
+      <h3>Multiple-value subqueries — IN, ANY, EXISTS</h3>
+      <p>A subquery that returns <strong>more than one row</strong> can only be used with the multiple-value operators:</p>
+
+      <div class="example-block">
+        <div class="example-label">IN — hotels booked by customer 315</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT hotelName, starRating
+FROM Hotel
+WHERE hotelName IN
+    (SELECT hotelName FROM Hotel, Booking
+     WHERE Hotel.hotelRef = Booking.hotelRef
+       AND customerNo = 315);</code></pre>
+        </div>
+        <p>Add NOT for the complement — resorts <em>not</em> booked by customer 315 (see the design on the <a href="query-design.html#subquery-designs">Query Design</a> page).</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">ANY — bookings costing more than any booking by certain customers</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT customerNo, Hotel.hotelRef,
+       pricePersonNight*numberNights*numberInParty AS [Booking Cost]
+FROM Booking, Hotel
+WHERE Booking.hotelRef = Hotel.hotelRef
+  AND pricePersonNight*numberNights*numberInParty &gt; ANY
+    (SELECT pricePersonNight*numberNights*numberInParty
+     FROM Booking, Hotel, Customer
+     WHERE Booking.hotelRef = Hotel.hotelRef
+       AND Booking.customerNo = Customer.customerNo
+       AND surname IN ("Danderhall", "Lowden", "Shawfair"));</code></pre>
+        </div>
+        <p><code>&gt; ANY</code> is true if the value beats <em>at least one</em> of the subquery's values — i.e. anything greater than the <em>smallest</em> of them.</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">EXISTS / NOT EXISTS — customers who have never booked</div>
+        <div class="code-block code-sql">
+          <div class="code-label">SQL</div>
+          <pre><code>SELECT firstName, surname, address
+FROM Customer
+WHERE NOT EXISTS
+    (SELECT * FROM Booking
+     WHERE Customer.customerNo = Booking.customerNo);</code></pre>
+        </div>
+        <p><strong>EXISTS</strong> returns a Boolean: TRUE if the subquery contains <em>any rows</em>, FALSE if it returns none. Here, for each customer, the subquery looks for that customer's bookings; NOT EXISTS keeps only the customers for whom none are found.</p>
+      </div>
+
+      <h3>Rules subqueries must follow</h3>
+      <ul>
+        <li>Subqueries must be enclosed in <strong>brackets</strong>;</li>
+        <li>A subquery usually has only <strong>one field</strong> in its SELECT clause (unless used with EXISTS, where <code>SELECT *</code> is normal);</li>
+        <li>An <strong>ORDER BY</strong> cannot be used inside a subquery (the main query can have one);</li>
+        <li>A single-value operator (=, &gt;, &lt;) on a subquery that returns <strong>many rows</strong> causes an error — multiple-value subqueries need <strong>IN, ANY or EXISTS</strong>.</li>
+      </ul>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">Subquery Step-Through Visualiser</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for a visualiser: pick a query and watch it execute in two stages — the inner query's answer table appears first, then slots into the outer query's WHERE clause before the final answer table is built.</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer. For full multi-part exam questions, head to <a href="sql-practice.html">SQL Practice Questions</a>.</p>
+
+      <div class="practice-question">
+        <div class="q-label">WHERE vs HAVING — 2 marks</div>
+        <p>A candidate writes:</p>
+        <div class="code-block code-sql"><pre><code>SELECT resortName, AVG(pricePersonNight)
+FROM Resort, Hotel
+WHERE Resort.resortID = Hotel.resortID
+  AND AVG(pricePersonNight) &gt; 100
+GROUP BY resortName;</code></pre></div>
+        <p>The query produces an error. Identify the mistake and rewrite the faulty line correctly. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>An aggregate function (<code>AVG</code>) cannot be used in the <strong>WHERE</strong> clause — WHERE applies to individual records before grouping. <strong>(1 mark)</strong></li>
+              <li>Move the condition to a <strong>HAVING</strong> clause after GROUP BY: <code>HAVING AVG(pricePersonNight) &gt; 100;</code> <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Write a Subquery — 3 marks</div>
+        <p>Using the travel agency database, write a query to display the hotel name and price per person per night of every hotel that costs <strong>less than the average</strong> price per person per night. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <div class="code-block code-sql"><pre><code>SELECT hotelName, pricePersonNight
+FROM Hotel
+WHERE pricePersonNight &lt;
+    (SELECT AVG(pricePersonNight) FROM Hotel);</code></pre></div>
+            <p>Award <strong>1 mark</strong> for the correct SELECT/FROM; <strong>1 mark</strong> for the subquery calculating AVG(pricePersonNight); <strong>1 mark</strong> for comparing with &lt; in the WHERE clause.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Predict the Output — 2 marks</div>
+        <p>Explain what the following query displays:</p>
+        <div class="code-block code-sql"><pre><code>SELECT resortName
+FROM Resort
+WHERE EXISTS
+    (SELECT * FROM Hotel
+     WHERE Hotel.resortID = Resort.resortID
+       AND starRating = 5);</code></pre></div>
+        <p><strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>For each resort, the subquery looks for hotels in that resort with a 5-star rating; EXISTS returns TRUE if at least one such row is found. <strong>(1 mark)</strong></li>
+              <li>So the query displays the names of resorts that <strong>have at least one 5-star hotel</strong>. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

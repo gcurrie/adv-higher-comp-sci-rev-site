@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Query Design — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Query Design</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>Query Design</h1>
+    <p>Plan the query before you write the SQL: fields and calculations, tables, search criteria, grouping, having, sort order — and nested inner-query designs.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html" class="active"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#template">The Design Template</a></li>
+          <li><a href="#examples">Design Examples</a></li>
+          <li><a href="#subquery-designs">Designing Subqueries</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Why Design Queries?</h2>
+      <p>At Advanced Higher, queries get complicated — grouped calculations filtered with <strong>HAVING</strong>, <strong>subqueries</strong> nested inside <strong>WHERE</strong> clauses. Planning the query in a design table first reduces the frustration of wrestling with SQL syntax, and in the exam, query <em>design</em> is assessed in its own right. The design of an SQL query should indicate:</p>
+      <ul>
+        <li>the <strong>fields and/or calculations</strong> required;</li>
+        <li>the <strong>table(s) or query(-ies)</strong> that provide the details;</li>
+        <li>any <strong>search criteria</strong> to be applied;</li>
+        <li>what <strong>grouping</strong> is needed (if any);</li>
+        <li>the criteria applied to the grouping — the <strong>having</strong> row (if any);</li>
+        <li>the field(s) and direction used for the <strong>sort order</strong>.</li>
+      </ul>
+      <p>All the examples on this page use the travel agency database (Resort, Hotel, Customer, Booking) from the <a href="data-dictionaries.html#full-example">Data Dictionaries</a> page. The matching SQL for each design is on the <a href="sql-dml.html">SQL — DML</a> page — design here, implement there.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Fields / Calculations</div><div class="def">What the answer table will show — including computed values with their alias, e.g. Total Cost = SUM(…).</div></div>
+        <div class="key-term"><div class="term">Search Criteria</div><div class="def">Conditions applied to individual records — becomes the WHERE clause.</div></div>
+        <div class="key-term"><div class="term">Grouping</div><div class="def">The field(s) whose matching rows are summarised together — becomes GROUP BY.</div></div>
+        <div class="key-term"><div class="term">Having</div><div class="def">Conditions applied to the <em>grouped</em> results — becomes the HAVING clause.</div></div>
+        <div class="key-term"><div class="term">Sort Order</div><div class="def">Field(s) and direction (ascending/descending) — becomes ORDER BY.</div></div>
+        <div class="key-term"><div class="term">Inner Query</div><div class="def">A nested design block showing the fields, tables and criteria of a subquery whose result feeds the main query.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="template">The Design Template</h2>
+      <p>A simple table template captures everything. Leave rows blank when they're not needed — a blank row is information too (it says "no grouping in this query"):</p>
+      <table>
+        <tbody>
+          <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td></td></tr>
+          <tr><td><strong>Table(s)/query(-ies)</strong></td><td></td></tr>
+          <tr><td><strong>Search criteria</strong></td><td></td></tr>
+          <tr><td><strong>Grouping</strong></td><td></td></tr>
+          <tr><td><strong>Having</strong></td><td></td></tr>
+          <tr><td><strong>Sort order</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Where do conditions go?</strong> If the condition tests <em>individual records</em> ("star rating over 3") it's <strong>search criteria</strong>. If it tests a <em>summarised group</em> ("resorts with at least two hotels" — a COUNT) it's <strong>having</strong>. This one decision is most of the marks in design questions.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="examples">Design Examples</h2>
+
+      <div class="example-block">
+        <div class="example-label">Example 1 — HAVING with grouping and a row count</div>
+        <p><em>Display the resort name and number of hotels in any resort that has at least two hotels.</em></p>
+        <table>
+          <tbody>
+            <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td>resortName, Number of Hotels = COUNT(*)</td></tr>
+            <tr><td><strong>Table(s)/query(-ies)</strong></td><td>Resort, Hotel</td></tr>
+            <tr><td><strong>Search criteria</strong></td><td></td></tr>
+            <tr><td><strong>Grouping</strong></td><td>resortName</td></tr>
+            <tr><td><strong>Having</strong></td><td>COUNT(*) &gt;= 2</td></tr>
+            <tr><td><strong>Sort order</strong></td><td></td></tr>
+          </tbody>
+        </table>
+        <p>"At least two hotels" is a condition on a <em>count of grouped rows</em> — so it belongs in <strong>having</strong>, not search criteria.</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example 2 — HAVING with grouping and a sort</div>
+        <p><em>Display the full name and total cost of all bookings for each customer. Only list customers whose total cost exceeds £2000, biggest spender first.</em></p>
+        <table>
+          <tbody>
+            <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td>firstName, surname, Total cost of all Bookings = SUM(pricePersonNight * numberNights * numberInParty)</td></tr>
+            <tr><td><strong>Table(s)/query(-ies)</strong></td><td>Customer, Booking, Hotel</td></tr>
+            <tr><td><strong>Search criteria</strong></td><td></td></tr>
+            <tr><td><strong>Grouping</strong></td><td>firstName, surname</td></tr>
+            <tr><td><strong>Having</strong></td><td>SUM(pricePersonNight * numberNights * numberInParty) &gt;= 2000</td></tr>
+            <tr><td><strong>Sort order</strong></td><td>SUM(pricePersonNight * numberNights * numberInParty) DESC</td></tr>
+          </tbody>
+        </table>
+        <p>Three tables are needed because the price lives in Hotel, the nights and party size in Booking, and the name in Customer — the design must list <em>every</em> table the data touches.</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example 3 — logical operators in the search criteria</div>
+        <p><em>Display the surname, postcode and town of customers who live in towns beginning with the letters 'E' through to 'M', in alphabetical order of town.</em></p>
+        <table>
+          <tbody>
+            <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td>surname, postcode, town</td></tr>
+            <tr><td><strong>Table(s)/query(-ies)</strong></td><td>Customer</td></tr>
+            <tr><td><strong>Search criteria</strong></td><td>town BETWEEN "E" AND "M"</td></tr>
+            <tr><td><strong>Grouping</strong></td><td></td></tr>
+            <tr><td><strong>Having</strong></td><td></td></tr>
+            <tr><td><strong>Sort order</strong></td><td>town ASC</td></tr>
+          </tbody>
+        </table>
+        <p>The new <a href="sql-dml.html#operators">logical operators</a> (IN, NOT, BETWEEN, ANY, EXISTS) appear in designs exactly as they appear in SQL.</p>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="subquery-designs">Designing Subqueries — the Inner Query Block</h2>
+      <p>When a query needs a <a href="sql-dml.html#subqueries">subquery</a>, the design gains a <strong>nested inner-query block</strong> inside the search criteria row: the inner query gets its own fields/calculations, tables and search criteria, and the main query's criterion states how the inner result is used.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example 4 — subquery in the WHERE clause</div>
+        <p><em>Display the hotel name, star rating and price per person for the most expensive hotel.</em></p>
+        <table>
+          <tbody>
+            <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td>hotelName, starRating, pricePersonNight</td></tr>
+            <tr><td><strong>Table(s)/query(-ies)</strong></td><td>Hotel</td></tr>
+            <tr><td><strong>Search criteria</strong></td><td>pricePersonNight = <strong>[Inner query</strong> — Field(s): MAX(pricePersonNight); Table(s): Hotel; Search criteria: — <strong>]</strong></td></tr>
+            <tr><td><strong>Grouping</strong></td><td></td></tr>
+            <tr><td><strong>Having</strong></td><td></td></tr>
+            <tr><td><strong>Sort order</strong></td><td></td></tr>
+          </tbody>
+        </table>
+        <p>Read it inside-out, the way the database executes it: the inner query finds the maximum price <em>first</em>, then the main query finds the hotel(s) whose price equals that value. You cannot do this in one flat query — <code>WHERE pricePersonNight = MAX(pricePersonNight)</code> is illegal, which is <em>why</em> the subquery exists.</p>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example 5 — subquery using NOT and IN</div>
+        <p><em>Display the names and types of resort <strong>not</strong> booked by the customer with ID 315.</em></p>
+        <table>
+          <tbody>
+            <tr><td style="width:220px;"><strong>Field(s)/calculation(s)</strong></td><td>resortName, resortType</td></tr>
+            <tr><td><strong>Table(s)/query(-ies)</strong></td><td>Resort</td></tr>
+            <tr><td><strong>Search criteria</strong></td><td>resortName NOT IN <strong>[Inner query</strong> — Field(s): resortName; Table(s): Resort, Hotel, Booking; Search criteria: customerNo = 315 <strong>]</strong></td></tr>
+            <tr><td><strong>Grouping</strong></td><td></td></tr>
+            <tr><td><strong>Having</strong></td><td></td></tr>
+            <tr><td><strong>Sort order</strong></td><td></td></tr>
+          </tbody>
+        </table>
+        <p>The inner query builds the list of resorts customer 315 <em>did</em> book; <code>NOT IN</code> then excludes them. Subqueries that return <em>many</em> rows must be used with multiple-value operators — IN, ANY or EXISTS.</p>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Design → SQL:</strong> every one of these designs is implemented line for line on the <a href="sql-dml.html">SQL — DML</a> page. Fields row → SELECT; tables row → FROM (plus the joins); search criteria → WHERE; grouping → GROUP BY; having → HAVING; sort order → ORDER BY.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Complete the Design — 3 marks</div>
+        <p><em>Display the average price per person per night for each holiday resort. Only display resorts where that average exceeds £100.</em></p>
+        <p>Complete the design table for this query (fields/calculations, tables, grouping and having). <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Field(s)/calculation(s):</strong> resortName, Average Price = AVG(pricePersonNight) <strong>(1 mark)</strong></li>
+              <li><strong>Table(s):</strong> Resort, Hotel; <strong>Grouping:</strong> resortName <strong>(1 mark)</strong></li>
+              <li><strong>Having:</strong> AVG(pricePersonNight) &gt; 100 <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Search Criteria or Having? — 2 marks</div>
+        <p>For each requirement below, state whether the condition belongs in the <em>search criteria</em> row or the <em>having</em> row of a query design, justifying each answer:</p>
+        <ul>
+          <li>(a) "…only hotels with a star rating of 4 or more"</li>
+          <li>(b) "…only customers who have made more than three bookings"</li>
+        </ul>
+        <p><strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) <strong>Search criteria</strong> — it tests a value stored in each individual record (starRating &gt;= 4). <strong>(1 mark)</strong></li>
+              <li>(b) <strong>Having</strong> — "more than three bookings" is COUNT(*) &gt; 3, an aggregate calculated on grouped rows, so it must be applied after grouping. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Integration — Forms — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">Web Integration — Forms</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development — Integration</div>
+    <h1>Web Integration — HTML Forms</h1>
+    <p>The web knowledge DDD candidates need for the database-driven website question: form action and method, the form elements, and input validation.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html" class="active"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Why This Page Exists</a></li>
+          <li><a href="#form-element">The FORM Element</a></li>
+          <li><a href="#get-post">GET vs POST</a></li>
+          <li><a href="#inputs">Inputs, Select &amp; Textarea</a></li>
+          <li><a href="#validation">Form Validation</a></li>
+          <li><a href="#worked-example">Worked Example</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Why This Page Exists</h2>
+      <p>The DDD section of the question paper contains a question set in the context of a <strong>database-driven website</strong>, and part of it requires some integration with Web Design &amp; Development. In practice that means DDD candidates must be able to <strong>design and read HTML forms</strong> — the front end that collects the data your SQL then stores or searches. It's typically worth <strong>around 2 marks</strong>, but they're marks you should never drop: the content is small and completely learnable.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">action</div><div class="def">FORM attribute naming the file (usually .php) executed when the form is submitted.</div></div>
+        <div class="key-term"><div class="term">method</div><div class="def">FORM attribute choosing how the data is sent — GET or POST.</div></div>
+        <div class="key-term"><div class="term">GET</div><div class="def">Appends the form data to the URL — visible, bookmarkable; for non-sensitive data.</div></div>
+        <div class="key-term"><div class="term">POST</div><div class="def">Sends the form data inside the request — hidden; for sensitive data and database updates.</div></div>
+        <div class="key-term"><div class="term">name / value</div><div class="def">Form data travels as name/value pairs — the name attribute is the key the server uses to read each value.</div></div>
+        <div class="key-term"><div class="term">SELECT element</div><div class="def">A drop-down list — its options define the values that can be submitted.</div></div>
+        <div class="key-term"><div class="term">TEXTAREA</div><div class="def">A multi-line text input.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="form-element">The FORM Element — action &amp; method</h2>
+      <p>Every form needs two attributes that tell the browser what to do on submission:</p>
+      <div class="code-block">
+        <div class="code-label">HTML</div>
+        <pre><code>&lt;form action="registerStudent.php" method="POST"&gt;
+    ...form elements...
+    &lt;input type="submit" value="Register"&gt;
+&lt;/form&gt;</code></pre>
+      </div>
+      <ul>
+        <li><strong>action</strong> — the file that is opened/executed when the form is submitted. Because it's a <code>.php</code> file, the <strong>web server</strong> automatically executes the PHP code it contains — that code is what runs your SQL;</li>
+        <li><strong>method</strong> — <strong>GET</strong> or <strong>POST</strong>, which determines <em>how</em> the data travels.</li>
+      </ul>
+      <p>When the form is submitted, the browser builds a <strong>form data set</strong> of <strong>name/value pairs</strong>: each control's <code>name</code> attribute is the key, and the <code>value</code> is what the user entered (for text/number inputs) or what the HTML defined (for select and radio). The names must match the variables the server-side script expects — <code>$_POST["firstname"]</code> only works if an input was named <code>firstname</code>.</p>
+    </article>
+
+    <article>
+      <h2 id="get-post">GET vs POST</h2>
+      <p>Both methods start the same way — the browser constructs the form data set. Then they part company:</p>
+      <table>
+        <thead><tr><th></th><th>GET</th><th>POST</th></tr></thead>
+        <tbody>
+          <tr><td><strong>How data travels</strong></td><td>Appended to the URL after a <code>?</code></td><td>Encoded inside the message sent to the server</td></tr>
+          <tr><td><strong>Visibility</strong></td><td>Visible in the address bar and browser history — <strong>less secure</strong></td><td>Hidden from the user — <strong>more secure</strong></td></tr>
+          <tr><td><strong>Advantages</strong></td><td>The URL can be <strong>bookmarked</strong> and re-used; resent automatically after a connection issue; submissions can be <strong>cached</strong> (efficient for repeated queries)</td><td>Handles <strong>non-ASCII</strong> characters; <strong>no length limit</strong> on the data; not stored in history</td></tr>
+          <tr><td><strong>Disadvantages</strong></td><td>ASCII only; URL character limit restricts the data; stored in browsing history</td><td>Cannot be bookmarked; browser asks the user to resubmit after a network issue</td></tr>
+          <tr><td><strong>Use for…</strong></td><td>Non-sensitive data, e.g. the parameters of a database <strong>search</strong></td><td>Sensitive/personal data, and <strong>database updates</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Exam-ready rule of thumb:</strong> searching the database → GET is acceptable (bookmarkable, cacheable); inserting or updating personal data → <strong>POST</strong> (hidden, no length limit). Always justify with a property, not just the name.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="inputs">Inputs, Select &amp; Textarea</h2>
+      <p>The form elements carried up from Higher — you should be able to read and write all of these:</p>
+      <div class="code-block">
+        <div class="code-label">HTML — the element toolkit</div>
+        <pre><code>&lt;!-- single-line text --&gt;
+&lt;input type="text" name="firstname"&gt;
+
+&lt;!-- numeric input --&gt;
+&lt;input type="number" name="tickets" min="1" max="6"&gt;
+
+&lt;!-- one choice from a group --&gt;
+&lt;input type="radio" name="payment" value="card"&gt; Card
+&lt;input type="radio" name="payment" value="cash"&gt; Cash
+
+&lt;!-- drop-down list --&gt;
+&lt;select name="play"&gt;
+    &lt;option value="Macbeth"&gt;Macbeth&lt;/option&gt;
+    &lt;option value="Hamlet"&gt;Hamlet&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;!-- multi-line text --&gt;
+&lt;textarea name="message"&gt;&lt;/textarea&gt;
+
+&lt;!-- submit --&gt;
+&lt;input type="submit" value="Book Tickets"&gt;</code></pre>
+      </div>
+      <p>Note where each <strong>value</strong> comes from: the user types it for <code>text</code>, <code>number</code> and <code>textarea</code>; but for <strong>radio</strong> and <strong>select</strong>, the values are <strong>defined in the HTML code</strong> — the user just picks one. Query results sent back to the page are usually displayed in an HTML <strong>table</strong> built from <code>&lt;tr&gt;</code> rows of <code>&lt;th&gt;</code> (header) and <code>&lt;td&gt;</code> (data) cells.</p>
+    </article>
+
+    <article>
+      <h2 id="validation">Form Data Validation</h2>
+      <p>Three kinds of validation are expected on form input — the same three you already know from database design, applied at the form:</p>
+      <ul>
+        <li><strong>Presence</strong> — the field must not be left empty (the <code>required</code> attribute);</li>
+        <li><strong>Length</strong> — the entry must not exceed a maximum number of characters (<code>maxlength</code>);</li>
+        <li><strong>Range</strong> — a numeric entry must fall between limits (<code>min</code> and <code>max</code> on a number input).</li>
+      </ul>
+      <p>Spot the symmetry with the <a href="data-dictionaries.html">data dictionary</a>: validating at the form catches errors <em>before</em> submission; the <a href="sql-ddl.html#create-table">CHECK and NOT NULL constraints</a> catch anything that slips through at the database. A well-designed system does both.</p>
+    </article>
+
+    <article>
+      <h2 id="worked-example">Worked Example</h2>
+      <div class="worked-example">
+        <div class="q-label">Web Forms — 2022 Question 8(f)</div>
+        <img src="../resources/ddd/questions/ddd_web_2022_q8f.png" alt="2022 Question 8 part f — web form question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
+        <p><strong>Approach:</strong> match each requirement to a form element and its attributes — what should the <code>name</code> be (it must match what the server-side script reads)? Where do the <code>value</code>s come from? Should the method be GET or POST for this data?</p>
+        <img src="../resources/ddd/questions/ddd_web_2022_q8f_ans.png" alt="Marking instructions for 2022 Question 8 part f." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">GET or POST? — 2 marks</div>
+        <p>A website form asks new members for their name, address and date of birth, which are stored in a database table when the form is submitted.</p>
+        <p>State which method the form should use, justifying your answer with <strong>two</strong> properties of that method. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>POST</strong>, because the submitted data is <strong>not visible</strong> in the URL/browser history — appropriate for personal data. <strong>(1 mark)</strong></li>
+              <li>Any second property: no URL length limit on the data / non-ASCII characters can be submitted / POST is the standard method for database updates. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Reading a Form — 2 marks</div>
+        <p>A form contains:</p>
+        <div class="code-block"><pre><code>&lt;form action="findFilms.php" method="GET"&gt;
+    &lt;select name="genre"&gt;
+        &lt;option value="comedy"&gt;Comedy&lt;/option&gt;
+        &lt;option value="horror"&gt;Horror&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;input type="submit" value="Search"&gt;
+&lt;/form&gt;</code></pre></div>
+        <p>(a) State what happens when the Search button is clicked. <strong>(1 mark)</strong><br />
+        (b) State the name/value pair submitted if the user chooses Horror. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) The file <code>findFilms.php</code> is executed on the web server, with the form data appended to the URL (GET method). <strong>(1 mark)</strong></li>
+              <li>(b) <code>genre=horror</code> — the name comes from the select element's name attribute, the value from the chosen option's value attribute. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

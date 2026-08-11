@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EO Diagrams — DDD — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Database Design &amp; Development</a><span class="sep">›</span>
+    <span class="current">EO Diagrams</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-ddd">
+  <div class="inner">
+    <div class="hero-badge">Database Design &amp; Development</div>
+    <h1>Entity-Occurrence Diagrams</h1>
+    <p>The Higher diagram with a new job: at Advanced Higher, an EO diagram is used to identify relationship participation as well as cardinality.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🗄️ DDD Topics</div>
+        <ul>
+          <li><a href="er-diagrams.html"><span class="sn-icon">🔗</span>ER Diagrams</a></li>
+          <li><a href="eo-diagrams.html" class="active"><span class="sn-icon">🔁</span>EO Diagrams</a></li>
+          <li><a href="data-dictionaries.html"><span class="sn-icon">📖</span>Data Dictionaries</a></li>
+          <li><a href="query-design.html"><span class="sn-icon">📝</span>Query Design</a></li>
+          <li><a href="sql-ddl.html"><span class="sn-icon">🏗️</span>SQL — DDL</a></li>
+          <li><a href="sql-dml.html"><span class="sn-icon">🔎</span>SQL — DML</a></li>
+          <li><a href="sql-practice.html"><span class="sn-icon">🎯</span>SQL Practice Questions</a></li>
+          <li><a href="web-integration.html"><span class="sn-icon">🌐</span>Web Integration</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#recap">Higher Recap</a></li>
+          <li><a href="#participation">Identifying Participation</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="recap">Higher Recap — Entity-Occurrence Diagrams</h2>
+      <p>An <strong>entity-occurrence (EO) diagram</strong> proves the nature of a relationship using <em>real example data</em>. It lists a few actual <strong>occurrences</strong> of each entity (usually just their primary key values) and draws a line from each occurrence to the occurrences it links to. At Higher, you read the <strong>pattern of lines</strong> to confirm <strong>cardinality</strong>:</p>
+      <ul>
+        <li>one line each side ↔ <strong>one-to-one</strong>;</li>
+        <li>fanning out on one side only → <strong>one-to-many</strong>;</li>
+        <li>criss-crossing in both directions → <strong>many-to-many</strong> (which must be resolved with a link entity before implementation).</li>
+      </ul>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Occurrence</div><div class="def">A single instance of an entity — one row of the eventual table, usually written as its primary key value.</div></div>
+        <div class="key-term"><div class="term">Association</div><div class="def">A line joining an occurrence in one entity to a related occurrence in another.</div></div>
+        <div class="key-term"><div class="term">Cardinality</div><div class="def">Read from the fan pattern: which side's occurrences link to many on the other side?</div></div>
+        <div class="key-term"><div class="term">Participation</div><div class="def">Read from unlinked occurrences: an occurrence with no lines means participation at that end is optional.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="participation">The New Skill — Identifying Participation from an EO Diagram</h2>
+      <p>Advanced Higher gives the EO diagram a second job: <strong>identifying relationship participation</strong>. The trick is beautifully simple:</p>
+      <div class="callout callout-success">
+        <div class="callout-icon">🔑</div>
+        <div><strong>Look for occurrences with no lines.</strong> If even one occurrence of an entity has <strong>no association</strong>, that entity's participation in the relationship is <strong>optional</strong> — occurrences can clearly exist without a partner. If <em>every</em> occurrence is linked (and logically must be), participation is <strong>mandatory</strong>.</div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example — the travel agency, read from its EO diagram</div>
+        <p>Consider an EO diagram for Resort — Hotel — Booking — Customer with sample occurrences. Reading each relationship:</p>
+        <ul>
+          <li><strong>Resort : Hotel</strong> — every hotel occurrence has exactly one line back to a resort (<strong>Resort mandatory</strong> — every hotel must be located in a resort), but resort 406 has no hotels linked to it (<strong>Hotel optional</strong> — a resort may or may not have a hotel). Cardinality: 1:M.</li>
+          <li><strong>Hotel : Booking</strong> — every booking links to exactly one hotel (<strong>Hotel mandatory</strong>), but hotel GL13 has no bookings (<strong>Booking optional</strong>). Cardinality: 1:M.</li>
+          <li><strong>Customer : Booking</strong> — every booking links to exactly one customer (<strong>Customer mandatory</strong>), but customers 428 and 457 have no bookings — they're on the mailing list and have never booked (<strong>Booking optional</strong>). Cardinality: 1:M.</li>
+        </ul>
+      </div>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Travel agency EO diagram</div>
+        <div class="placeholder-sub">Planned: the four-column EO diagram (Resort, Hotel, Booking, Customer occurrences with association lines), with the unlinked occurrences highlighted and labelled "no line = optional participation".</div>
+      </div>
+
+      <p>Notice how the EO diagram, the <a href="er-diagrams.html#participation">participation notation</a> and the <a href="er-diagrams.html#strong-weak">weak entity</a> idea all line up: Booking's owners (Hotel and Customer) are the mandatory ends because a booking cannot exist without them — the same dependence that makes Booking a weak entity. One underlying idea, three notations.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Exam wording matters:</strong> answer participation questions with evidence from the diagram — "Customer participation is mandatory because <em>every booking occurrence is linked to a customer</em>; Booking participation is optional because <em>customer 428 has no bookings</em>." Point at the data.</div>
+      </div>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive — planned</div>
+        <p class="ib-title">EO → Participation Trainer</p>
+        <div class="ib-body">
+          <p class="ib-intro">Placeholder for a trainer: a randomly generated EO diagram; you choose mandatory/optional for each end of the relationship and the trainer highlights the occurrences that prove or disprove your answer.</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Reading an EO Diagram — 2 marks</div>
+        <p>An EO diagram for a music school shows Tutor and Lesson occurrences:</p>
+        <ul>
+          <li>Tut1 — Les1, Les3</li>
+          <li>Tut2 — Les2</li>
+          <li>Tut3 — (no lessons)</li>
+          <li>Every lesson is linked to exactly one tutor.</li>
+        </ul>
+        <p>State, with justification from the diagram, the participation of <strong>each</strong> entity in the relationship. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>Tutor — optional:</strong> Tut3 has no linked lessons, so a tutor can exist without lessons. <strong>(1 mark)</strong></li>
+              <li><strong>Lesson — (Tutor's end) mandatory:</strong> every lesson occurrence is linked to exactly one tutor, so a lesson cannot exist without a tutor. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Completing an EO Diagram — 2 marks</div>
+        <p>The following sample data shows speakers and the sessions they present, and delegates and the sessions they attend:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:1.5rem;">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Speaker</th><th>Session</th></tr></thead>
+              <tbody>
+                <tr><td>Spk1</td><td>Ses2</td></tr>
+                <tr><td>Spk1</td><td>Ses4</td></tr>
+                <tr><td>Spk2</td><td>Ses1</td></tr>
+                <tr><td>Spk3</td><td>Ses3</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Delegate</th><th>Session</th></tr></thead>
+              <tbody>
+                <tr><td>Del1</td><td>Ses1</td></tr>
+                <tr><td>Del2</td><td>Ses3</td></tr>
+                <tr><td>Del2</td><td>Ses4</td></tr>
+                <tr><td>Del3</td><td>Ses1</td></tr>
+                <tr><td>Del3</td><td>Ses2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>Complete an entity-occurrence diagram including entity names, the instances of each entity, and the associations between them. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Award <strong>1 mark</strong> for entity and instance names, <strong>1 mark</strong> for correct associations (Session in the middle; Speaker and Delegate on either side):</p>
+            <ul>
+              <li><strong>Entities/instances:</strong> Speaker (Spk1–3); Session (Ses1–4); Delegate (Del1–3).</li>
+              <li><strong>Speaker → Session:</strong> Spk1–Ses2, Spk1–Ses4, Spk2–Ses1, Spk3–Ses3.</li>
+              <li><strong>Delegate → Session:</strong> Del1–Ses1, Del2–Ses3, Del2–Ses4, Del3–Ses1, Del3–Ses2.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

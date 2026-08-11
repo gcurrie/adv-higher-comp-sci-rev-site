@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-depth="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation — Integration — Advanced Higher Computing Science</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<script src="../js/nav.js"></script>
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="../index.html">Home</a><span class="sep">›</span>
+    <a href="index.html">Integration</a><span class="sep">›</span>
+    <span class="current">Evaluation</span>
+  </div>
+</div>
+<section class="page-hero hero-image hero-int">
+  <div class="inner">
+    <div class="hero-badge">Integration — SDD, DDD &amp; WDD</div>
+    <h1>Evaluation</h1>
+    <p>Fitness for purpose, robustness, and the three types of maintainability — plus the criteria that only apply to SDD or DDD solutions.</p>
+  </div>
+</section>
+<main class="page-content">
+  <div class="content-layout">
+    <aside class="content-sidebar">
+      <nav class="sidebar-nav">
+        <div class="sn-header">🔗 Integration Topics</div>
+        <ul>
+          <li><a href="analysis.html"><span class="sn-icon">🔍</span>Analysis</a></li>
+          <li><a href="testing.html"><span class="sn-icon">🧪</span>Testing</a></li>
+          <li><a href="evaluation.html" class="active"><span class="sn-icon">✅</span>Evaluation</a></li>
+        </ul>
+      </nav>
+      <nav class="sidebar-nav" aria-label="Page sections">
+        <div class="sidebar-title">On this page</div>
+        <ul>
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#fitness">Fitness for Purpose</a></li>
+          <li><a href="#maintainability">Maintainability</a></li>
+          <li><a href="#robustness">Robustness</a></li>
+          <li><a href="#area-specific">Area-Specific Criteria</a></li>
+          <li><a href="#test-yourself">Test Yourself</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content-area">
+
+    <article>
+      <h2 id="intro">Evaluation at Advanced Higher</h2>
+      <p>At Higher you evaluated software against <strong>fitness for purpose</strong>, <strong>efficient use of coding constructs</strong>, <strong>usability</strong>, <strong>maintainability</strong> and <strong>robustness</strong>. All of those criteria survive at Advanced Higher — but they are reorganised, and one of them grows teeth. Every solution (SDD, DDD or WDD) is evaluated in terms of:</p>
+      <ul>
+        <li><strong>fitness for purpose</strong></li>
+        <li><strong>maintainability</strong> — now split into <strong>perfective</strong>, <strong>corrective</strong> and <strong>adaptive</strong> maintenance (this is the genuinely new content)</li>
+        <li><strong>robustness</strong></li>
+      </ul>
+      <p>On top of that, each area keeps criteria of its own: <strong>efficiency</strong> and <strong>usability</strong> for SDD, <strong>accuracy of output</strong> for DDD, and usability for WDD. Evaluation is worth <strong>5 marks</strong> of the project and up to <strong>5 marks</strong> of the question paper.</p>
+
+      <h3>Key Terms</h3>
+      <div class="key-terms">
+        <div class="key-term"><div class="term">Fitness for Purpose</div><div class="def">The solution meets all of its functional requirements, as proven by testing.</div></div>
+        <div class="key-term"><div class="term">Maintainability</div><div class="def">How easily a solution can be changed after hand-over — supported by modularity, comments, meaningful names and white space.</div></div>
+        <div class="key-term"><div class="term">Corrective Maintenance</div><div class="def">Fixing errors found after release, so the solution adheres to its original specification.</div></div>
+        <div class="key-term"><div class="term">Adaptive Maintenance</div><div class="def">Changing the solution in response to changes in its environment — e.g. a new operating system.</div></div>
+        <div class="key-term"><div class="term">Perfective Maintenance</div><div class="def">Improving the solution — adding new features so it better meets user requirements.</div></div>
+        <div class="key-term"><div class="term">Robustness</div><div class="def">The solution copes with errors during execution without failing — it degrades gracefully rather than crashing.</div></div>
+        <div class="key-term"><div class="term">Efficiency (SDD)</div><div class="def">How well the code uses system resources — processor time, memory and storage — judged by the constructs chosen.</div></div>
+        <div class="key-term"><div class="term">Accuracy of Output (DDD)</div><div class="def">Queries return exactly the data asked for — the right rows, fields, groupings and calculated values.</div></div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="fitness">Fitness for Purpose</h2>
+      <p>A solution is <strong>fit for purpose</strong> if — following design, implementation and testing — it meets <strong>all the functional requirements</strong> identified during analysis. This is why analysis matters so much: the functional requirements written on day one become the checklist the finished product is judged against.</p>
+      <p>The evidence comes from <a href="testing.html#final">final testing</a>. While creating your test data you calculated expected results; if the actual output matches the expected output for every functional requirement, the solution is fit for purpose.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example — an evaluation that concludes "not fit for purpose"</div>
+        <p>A database-driven shop website successfully implements all its insertions, deletions and edits — but it does not display <strong>confirmation</strong> of those actions, and it does not let the customer <strong>sort</strong> search results. Both were functional requirements (outputs and processes) in the requirements specification, so despite everything else working, the evaluation must conclude the solution is <strong>not fit for purpose</strong> — and state exactly which requirements were not met.</p>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>In your project evaluation</strong>, walk through the functional requirements one by one and state whether each was met, citing test results. An honest "requirement 6 was not met because…" earns marks; a vague "my project works well" does not.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="maintainability">Maintainability — the Three Types of Maintenance</h2>
+      <p><strong>Maintenance</strong> is the process of changing a solution <em>after</em> it has been written and handed over. At Higher, "maintainability" meant writing code that is easy to change: <strong>modular structure</strong>, <strong>meaningful variable and module names</strong>, <strong>effective internal commentary</strong> and <strong>white space/indentation</strong>. All of that still supports maintainability at Advanced Higher — but now you must also be able to <strong>name and distinguish the three types of maintenance</strong> a solution may need:</p>
+
+      <table>
+        <thead><tr><th>Type</th><th>What it is</th><th>Trigger</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Corrective</strong></td>
+            <td>Fixing <strong>bugs</strong> that made it through testing, so the solution adheres to its <em>original specification</em>.</td>
+            <td>An error is discovered after release.</td>
+            <td>A leap-year date bug in a booking system is patched.</td>
+          </tr>
+          <tr>
+            <td><strong>Adaptive</strong></td>
+            <td>Amending the solution in response to <strong>changes in its operating environment</strong> — the requirements haven't changed, the world has.</td>
+            <td>New OS, new hardware, new database version, changed law.</td>
+            <td>A program is updated so it runs after the organisation moves from Windows 10 to Windows 11.</td>
+          </tr>
+          <tr>
+            <td><strong>Perfective</strong></td>
+            <td><strong>Improving</strong> the solution — adding new features so it better meets user requirements.</td>
+            <td>Users request functionality beyond the original specification.</td>
+            <td>An export-to-PDF feature is added to a reporting tool.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Common exam confusion:</strong> corrective vs perfective. Ask: <em>was the behaviour wrong against the original specification?</em> If yes, fixing it is <strong>corrective</strong>. If the solution worked as specified but users now want more, that's <strong>perfective</strong>. If nothing about the requirements changed but the environment did, it's <strong>adaptive</strong>.</div>
+      </div>
+
+      <div class="placeholder-block">
+        <div class="placeholder-icon">🖼️</div>
+        <div class="placeholder-text">Diagram placeholder — Maintenance decision tree</div>
+        <div class="placeholder-sub">Planned: a small flowchart — "Is it a bug? → corrective. Did the environment change? → adaptive. New feature requested? → perfective."</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="robustness">Robustness</h2>
+      <p><strong>Robustness</strong> is the solution's ability to cope with errors during execution <strong>without failing</strong>. A robust program does not crash out when it meets unexpected input or an external error (a missing file, a lost database connection) — it <em>gracefully handles</em> the error: it notifies the user and provides a point from which they can continue.</p>
+      <p>Two things worth stating in an evaluation:</p>
+      <ul>
+        <li>Robustness is judged from the results of testing with <strong>exceptional data</strong> and destructive testing — trying to break the solution;</li>
+        <li>A solution can meet every functional requirement (be fit for purpose) and <em>still</em> not be robust — the two criteria are independent.</li>
+      </ul>
+      <div class="example-block">
+        <div class="example-label">Example — robustness in an integrated solution</div>
+        <p>A program that reads from a database should not crash if the connection fails. Placing the connection code inside a <code>try</code> structure so the program reports "could not connect to the database" and returns to the menu is a robustness feature — worth describing explicitly in a project evaluation.</p>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="area-specific">Area-Specific Criteria</h2>
+      <p>The remaining Higher criteria did not disappear — they were assigned to the area where they make sense:</p>
+
+      <h3>SDD — Efficiency</h3>
+      <p><strong>Efficiency</strong> relates to how the software uses system resources: processor time, memory and storage. At this level it is assessed by reviewing the <strong>efficiency of the code</strong>:</p>
+      <ul>
+        <li><strong>Reuse of modular code</strong> — one parameterised validation function called three times beats three near-identical loops (see the worked comparison on the <a href="../sdd/oop.html">OOP</a> page);</li>
+        <li><strong>Choice of data structure</strong> — a <strong>2D array</strong> or <strong>array of records</strong> instead of a jumble of separate variables; a <a href="../sdd/data-structures.html#linked-lists">linked list</a> when frequent insertion/deletion is needed;</li>
+        <li><strong>Choice of algorithm</strong> — a <strong>binary search</strong> on sorted data makes far fewer comparisons than a linear search; an <strong>insertion sort</strong> usually beats a bubble sort. The efficiency arguments are covered in detail on the <a href="../sdd/standard-algorithms.html">Standard Algorithms</a> page.</li>
+      </ul>
+
+      <h3>SDD — Usability</h3>
+      <p><strong>Usability</strong> is the extent to which specified users can achieve specified goals with <em>effectiveness, efficiency and satisfaction</em>. A usable interface is:</p>
+      <ul>
+        <li><strong>easy to learn</strong> from first use;</li>
+        <li><strong>simple to use</strong> to achieve the program's purpose — it guides the user through the task;</li>
+        <li><strong>memorable</strong> — once used, the user can recall how it works on future visits.</li>
+      </ul>
+      <p>Evidence comes from <a href="testing.html#usability">usability testing on prototypes</a> and <a href="testing.html#end-user">end-user testing</a>.</p>
+
+      <h3>DDD — Accuracy of Output</h3>
+      <p><strong>Accuracy of output</strong> asks: do the queries return <em>exactly</em> the data asked for? The right rows, the right fields, correct calculated values, correct grouping — compared against expected answer tables prepared before testing. A query that returns the right customers but includes duplicates, or rounds a calculation wrongly, fails this criterion even though it "runs".</p>
+
+      <h3>Mapping Higher → Advanced Higher</h3>
+      <table>
+        <thead><tr><th>Higher criterion</th><th>Where it lives at Advanced Higher</th></tr></thead>
+        <tbody>
+          <tr><td>Fitness for purpose</td><td>All areas — unchanged, judged against functional requirements</td></tr>
+          <tr><td>Maintainability</td><td>All areas — <strong>expanded</strong> into corrective, adaptive and perfective maintenance</td></tr>
+          <tr><td>Robustness</td><td>All areas — unchanged</td></tr>
+          <tr><td>Efficient use of coding constructs</td><td>SDD only — as <strong>efficiency</strong>, now including data-structure and algorithm choice</td></tr>
+          <tr><td>Usability</td><td>SDD (and WDD) — with prototype-based usability testing as its evidence</td></tr>
+          <tr><td>Accuracy of output (Higher DDD)</td><td>DDD only — unchanged</td></tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article>
+      <h2 id="test-yourself">Test Yourself</h2>
+      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Types of Maintenance — 3 marks</div>
+        <p>State the type of maintenance being carried out in each of the following, justifying each answer:</p>
+        <ul>
+          <li>(a) A supermarket's stock program is amended after the company replaces its Windows tills with Android tablets.</li>
+          <li>(b) A payroll program occasionally calculates overtime incorrectly; the calculation is fixed.</li>
+          <li>(c) Users of a homework app ask for — and receive — a new dark mode.</li>
+        </ul>
+        <p><strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) <strong>Adaptive</strong> — the program is changed in response to a change in its operating environment (new platform). <strong>(1 mark)</strong></li>
+              <li>(b) <strong>Corrective</strong> — an error is fixed so the program adheres to its original specification. <strong>(1 mark)</strong></li>
+              <li>(c) <strong>Perfective</strong> — a new feature is added to better meet user requirements. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Fitness for Purpose vs Robustness — 2 marks</div>
+        <p>A finished program meets every functional requirement in its specification, but crashes when the user types a letter instead of a number.</p>
+        <p>Evaluate this program in terms of fitness for purpose <em>and</em> robustness. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>The program <strong>is fit for purpose</strong> — testing shows it meets all the functional requirements identified at analysis. <strong>(1 mark)</strong></li>
+              <li>The program <strong>is not robust</strong> — it fails to cope with unexpected input during execution (it crashes rather than handling the error gracefully). <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">SDD Efficiency — 2 marks</div>
+        <p>A program searches a sorted array of 10&nbsp;000 customer records using a linear search. Describe one change that would improve the efficiency of this program, and justify your answer. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>Replace the linear search with a <strong>binary search</strong>. <strong>(1 mark)</strong></li>
+              <li>The data is already sorted, and a binary search halves the search area with each comparison — at most 14 comparisons for 10&nbsp;000 items, against up to 10&nbsp;000 for a linear search. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>
