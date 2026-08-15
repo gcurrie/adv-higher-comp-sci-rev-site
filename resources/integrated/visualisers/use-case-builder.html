@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use Case Diagram Builder — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar-dark:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:820px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.good{border-color:var(--active);background:var(--active-bg)}
+  .chip.good .k{color:var(--active);opacity:.85}
+  .chip.good b{color:var(--active-strong)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .panel{border:1px solid var(--line);background:var(--panel)}
+  .panelbar{background:var(--bar-dark);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+  .scenario{font-size:15.5px;line-height:1.7;margin:0}
+  .scenario b{color:var(--active-strong)}
+
+  /* ---- tray ---- */
+  .tray{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;min-height:46px}
+  .titem{font-family:var(--sans);font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;padding:9px 16px;border:2px solid var(--ink-soft);border-radius:999px;background:#fff;color:var(--ink);cursor:grab;touch-action:none}
+  .titem:hover:not(:disabled){background:var(--bg);border-color:var(--ink)}
+  .titem.sel{border-color:var(--match-accent);background:var(--match-bg);outline:3px solid var(--match-bg)}
+  .titem.wrongshake{animation:flash .5s;border-color:var(--warn);color:var(--warn)}
+  @keyframes flash{0%,100%{background:transparent}15%,70%{background:var(--warn-bg)}}
+  .ghost{position:fixed;z-index:50;pointer-events:none;font-family:var(--sans);font-size:14px;font-weight:600;padding:9px 16px;border:2px solid var(--match-accent);border-radius:999px;background:var(--match-bg);opacity:.9;transform:translate(-50%,-120%)}
+  .traynote{font-size:13px;color:var(--ink-soft);margin:8px 0 0}
+
+  /* ---- canvas ---- */
+  .canvaswrap{overflow-x:auto;margin-top:14px}
+  .canvas{position:relative;aspect-ratio:900/540;min-width:640px;border:1px solid var(--line);background:#fff}
+  .canvas svg{position:absolute;inset:0;width:100%;height:100%}
+  .region{position:absolute;top:0;bottom:0;border:0;background:transparent;padding:0;cursor:pointer;display:none}
+  .canvas.placing .region{display:block}
+  .region:hover,.region.hot{background:rgba(201,162,39,.12);outline:2px dashed var(--match-accent);outline-offset:-4px}
+  .region:focus-visible{background:rgba(201,162,39,.12);outline:3px dashed var(--match-accent);outline-offset:-4px}
+  .region-left{left:0;width:24%}
+  .region-in{left:24%;width:52%}
+  .region-right{left:76%;width:24%}
+  .rlabel{position:absolute;left:50%;transform:translateX(-50%);bottom:6px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;pointer-events:none}
+
+  /* ---- stage 2 question ---- */
+  .qbox{display:none;margin-top:16px}
+  .qbox.show{display:block}
+  .qprompt{font-size:15px;font-weight:600;margin:0 0 10px}
+  .qopts{display:grid;gap:8px}
+  .qopt{font-family:var(--sans);font-size:14px;font-weight:500;text-transform:none;letter-spacing:0;text-align:left;padding:11px 14px;border-width:2px}
+  .qopt.right{border-color:var(--active);background:var(--active-bg)}
+  .qopt.wrongshake{animation:flash .5s;border-color:var(--warn);color:var(--warn)}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.warn{border-left-color:var(--warn);background:var(--warn-bg)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+
+  .done-box{display:none;margin-top:16px}
+  .done-box.show{display:block}
+  .scoreline{font-size:15px;margin:0 0 14px}
+  .scoreline b{color:var(--active-strong)}
+  .model{border:1px solid var(--match-accent);border-left:3px solid var(--match-accent);background:var(--match-bg);padding:13px 16px;font-size:14px;line-height:1.6}
+  .model .lbl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--match);display:block;margin-bottom:6px}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:700px){.controls{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; Integration &#183; Analysis</p>
+    <h1>Use Case Diagram Builder</h1>
+    <p class="sub"><b>Stage 1:</b> drag each item from the tray onto the diagram — outside-left (primary actors), inside the boundary (use cases), or outside-right (secondary actors). You can also tap an item, then tap a zone. <b>Stage 2:</b> choose the correct notation for each relationship. First attempts count towards your score.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip good"><span class="k">placed first try</span><b id="c-place">0 / 8</b></div>
+      <div class="chip good"><span class="k">links first try</span><b id="c-link">0 / 5</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="restart" class="primary">Restart</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE SCENARIO</span><span class="dim">QUICKBITE ONLINE TAKEAWAY</span></div>
+    <div class="panelbody">
+      <p class="scenario"><b>QuickBite</b> is an online takeaway ordering system. Customers browse the menu and <b>place orders</b>. Placing an order <b>always</b> requires the payment to be <b>authorised</b> by an external payment provider. Customers <b>may optionally add a tip</b> for the driver. Order details are <b>saved to the shop's database</b>. <b>Registered customers</b> can do everything customers can, and can also <b>reorder a saved favourite</b>.</p>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:14px">
+    <div class="panelbar"><span id="stage-title">STAGE 1 — PLACE THE COMPONENTS</span><span class="dim" id="stage-sub">DRAG OR TAP-THEN-TAP</span></div>
+    <div class="panelbody">
+      <div class="tray" id="tray"></div>
+      <p class="traynote" id="traynote">Where does each item belong? Primary actors left, use cases inside, secondary actors right.</p>
+
+      <div class="canvaswrap">
+        <div class="canvas placing" id="canvas">
+          <svg viewBox="0 0 900 540" id="svg" aria-label="The use case diagram being built">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1F2937"/>
+              </marker>
+            </defs>
+            <rect x="216" y="30" width="468" height="480" fill="#FDFDFC" stroke="#1F2937" stroke-width="1.5"/>
+            <text x="450" y="56" text-anchor="middle" font-size="15" font-weight="700" fill="#00442A" font-family="Public Sans, Arial, sans-serif">QuickBite Ordering System</text>
+            <g id="g-lines"></g>
+            <g id="g-items"></g>
+          </svg>
+          <button class="region region-left" data-region="left" aria-label="Place selected item outside the boundary on the left, the primary actor side"><span class="rlabel">primary actors</span></button>
+          <button class="region region-in" data-region="in" aria-label="Place selected item inside the system boundary"><span class="rlabel">use cases</span></button>
+          <button class="region region-right" data-region="right" aria-label="Place selected item outside the boundary on the right, the secondary actor side"><span class="rlabel">secondary actors</span></button>
+        </div>
+      </div>
+
+      <div class="qbox" id="qbox">
+        <p class="qprompt" id="qprompt"></p>
+        <div class="qopts" id="qopts"></div>
+      </div>
+
+      <div class="narrate idle" id="narrate" aria-live="polite">Pick any item in the tray to begin.</div>
+    </div>
+  </section>
+
+  <section class="panel done-box" id="done-box">
+    <div class="panelbar"><span>DIAGRAM COMPLETE</span><span class="dim">READ IT BACK</span></div>
+    <div class="panelbody">
+      <p class="scoreline" id="scoreline"></p>
+      <div class="model">
+        <span class="lbl">Exam tip</span>
+        When drawing a use case diagram from a scenario, work in this order: <b>actors</b> (anything outside the system, including the database), <b>use cases</b> (each action, inside the boundary), <b>associations</b> (every actor linked to at least one use case), then hunt the wording for <b>&#8220;always&#8221;</b> (&#171;include&#187;, arrow at the included use case), <b>&#8220;optionally&#8221;</b> (&#171;extend&#187;, arrow back at the base) and <b>&#8220;can do everything X can&#8221;</b> (generalisation, arrow at the ancestor).
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const SVGNS = "http://www.w3.org/2000/svg";
+
+  /* ---------- diagram data ---------- */
+  const ITEMS = [
+    {id:"customer", name:"Customer", kind:"actor", region:"left", x:105, y:120, sub:"(primary actor)",
+     why:"The Customer uses the system to achieve a goal — a <b>primary actor</b>, outside the boundary on the left.",
+     hint:"Who is this? Someone <i>using</i> the system to get something done — and actors never sit inside the boundary."},
+    {id:"regcust", name:"Registered Customer", kind:"actor", region:"left", x:105, y:400, sub:"(primary actor)",
+     why:"A Registered Customer is also a person using the system for their own goals — another <b>primary actor</b> on the left, placed below Customer ready for the generalisation.",
+     hint:"Registered or not, this is still a person using the system for their own goals."},
+    {id:"payprov", name:"Payment Provider", kind:"actor", region:"right", x:800, y:215, sub:"(secondary actor)",
+     why:"The Payment Provider <b>supports</b> the system in delivering the customer's goal — a <b>secondary actor</b>, outside the boundary on the right.",
+     hint:"It's external, but it doesn't <i>use</i> QuickBite for its own goals — it supports the system. Which side do supporting actors go?"},
+    {id:"db", name:"Shop Database", kind:"actor", region:"right", x:800, y:430, sub:"(secondary actor)",
+     why:"Data is saved to the database, so it is an external entity the system interacts with — a <b>secondary actor</b> on the right. Forgetting the database actor is one of the commonest lost marks.",
+     hint:"The database stores data <i>for</i> the system but is not part of it — and it isn't a use case."},
+    {id:"po", name:"Place Order", kind:"uc", region:"in", x:450, y:105, rx:88, ry:34,
+     why:"<b>Place Order</b> is an action the system performs — a use case, drawn as an ellipse inside the boundary.",
+     hint:"This is something the system <i>does</i> — actions live inside the boundary."},
+    {id:"ap", name:"Authorise Payment", kind:"uc", region:"in", x:450, y:265, rx:95, ry:34,
+     why:"<b>Authorise Payment</b> is a process the system must perform — a use case inside the boundary (the payment <i>provider</i> is the actor; the <i>authorising</i> is a use case).",
+     hint:"Careful — the payment <i>provider</i> is an actor, but the act of authorising is something the system does."},
+    {id:"tip", name:"Add Tip", kind:"uc", region:"in", x:610, y:175, rx:62, ry:30,
+     why:"<b>Add Tip</b> is an (optional) action the system performs — a use case inside the boundary.",
+     hint:"Optional or not, it is still an action the system carries out."},
+    {id:"reord", name:"Reorder Favourite", kind:"uc", region:"in", x:400, y:430, rx:95, ry:32,
+     why:"<b>Reorder Favourite</b> is an action the system performs for registered customers — a use case inside the boundary.",
+     hint:"Only some users can do it, but it is still an action the system performs."}
+  ];
+
+  /* ---------- stage 2 questions ---------- */
+  const LINKS = [
+    {prompt:"The Customer places orders. How should Customer be connected to Place Order?",
+     opts:[
+       {t:"A dashed arrow labelled «include»", w:"«include» connects two <i>use cases</i> — never an actor to a use case."},
+       {t:"A solid line with no arrowheads (association)", ok:true},
+       {t:"A dashed arrow labelled «extend»", w:"«extend» connects two <i>use cases</i> — never an actor to a use case."},
+       {t:"A solid arrow pointing at Place Order (generalisation)", w:"Generalisation shows inheritance between two actors or two use cases — not communication."}
+     ],
+     why:"An actor communicates with a use case through an <b>association</b> — a plain solid line, no arrowheads.",
+     draw:() => line(142,112, 362,105, {})},
+    {prompt:"Placing an order ALWAYS requires the payment to be authorised. How are Place Order and Authorise Payment connected?",
+     opts:[
+       {t:"«include» — dashed arrow pointing at Authorise Payment", ok:true},
+       {t:"«include» — dashed arrow pointing at Place Order", w:"Right relationship, wrong direction — the arrow points at the <i>included</i> (dependent) use case."},
+       {t:"«extend» — dashed arrow pointing at Place Order", w:"«extend» is for <i>optional</i> behaviour — but authorising payment is mandatory here."},
+       {t:"A solid association line", w:"Associations connect <i>actors</i> to use cases — this is a relationship between two use cases."}
+     ],
+     why:"Payment is <b>mandatory</b> — Place Order is incomplete without it — so this is <b>«include»</b>, dashed line, solid arrowhead pointing at the included use case.",
+     draw:() => line(450,139, 450,228, {dash:true, marker:true, label:"«include»", lx:460, ly:190})},
+    {prompt:"Customers MAY OPTIONALLY add a tip. How are Add Tip and Place Order connected?",
+     opts:[
+       {t:"«include» — dashed arrow pointing at Add Tip", w:"«include» is for <i>mandatory</i> behaviour — but a tip is optional."},
+       {t:"A solid association line", w:"Associations connect <i>actors</i> to use cases — this is a relationship between two use cases."},
+       {t:"«extend» — dashed arrow pointing at Place Order", ok:true},
+       {t:"«extend» — dashed arrow pointing at Add Tip", w:"Right relationship, wrong direction — the «extend» arrow points back at the <i>base</i> use case."}
+     ],
+     why:"A tip is <b>optional</b> — it only happens when the customer chooses — so this is <b>«extend»</b>, with the arrow pointing back at the base use case, Place Order.",
+     draw:() => line(556,152, 528,128, {dash:true, marker:true, label:"«extend»", lx:558, ly:130})},
+    {prompt:"Registered customers can do EVERYTHING customers can. How are the two actors connected?",
+     opts:[
+       {t:"Generalisation — solid line, solid arrowhead pointing at Customer", ok:true},
+       {t:"Generalisation — solid line, arrowhead pointing at Registered Customer", w:"Wrong direction — the arrow points at the <i>ancestor</i>, the actor being inherited from."},
+       {t:"A solid association line between the two actors", w:"Associations connect actors to <i>use cases</i>. Between two actors, inheritance is shown with generalisation."},
+       {t:"«include» — dashed arrow pointing at Customer", w:"«include» connects two use cases — never two actors."}
+     ],
+     why:"<b>Generalisation of an actor</b> — Registered Customer inherits every use case Customer has, so a solid line with a solid arrowhead points at the <b>ancestor</b>, Customer.",
+     draw:() => line(105,352, 105,190, {marker:true})},
+    {prompt:"Order details are SAVED to the shop's database. How is the Shop Database connected?",
+     opts:[
+       {t:"«include» — dashed arrow pointing at the Shop Database", w:"«include» connects two use cases — the database is an <i>actor</i>."},
+       {t:"A solid association line to Place Order", ok:true},
+       {t:"It should not be connected to anything", w:"Every actor must be associated with at least one use case — and the order data has to come from somewhere."},
+       {t:"Move it inside the boundary, next to Place Order", w:"The database is an <i>external</i> entity — actors always stay outside the system boundary."}
+     ],
+     why:"The database is an <b>actor</b>, so it connects to the use case that reads or writes its data with a plain <b>association</b> line.",
+     draw:() => line(524,132, 776,402, {})}
+  ];
+
+  const $ = id => document.getElementById(id);
+  const tray = $("tray"), canvas = $("canvas"), narrate = $("narrate");
+  const gItems = $("g-items"), gLines = $("g-lines");
+  const qbox = $("qbox"), qprompt = $("qprompt"), qopts = $("qopts");
+  const cPlace = $("c-place"), cLink = $("c-link");
+  const regions = [...document.querySelectorAll(".region")];
+
+  let placeRight = 0, linkRight = 0, placedCount = 0;
+  let selItem = null, ghost = null, qIdx = 0, qFirst = true;
+
+  function say(html, cls){
+    narrate.className = "narrate" + (cls ? " " + cls : "");
+    narrate.innerHTML = html;
+  }
+
+  /* ---------- SVG drawing helpers ---------- */
+  function el(name, attrs){
+    const n = document.createElementNS(SVGNS, name);
+    for(const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function drawActor(item){
+    const g = el("g", {});
+    const s = 'stroke="#002D1C" stroke-width="2" fill="none"';
+    g.innerHTML =
+      '<circle cx="'+item.x+'" cy="'+(item.y-40)+'" r="11" '+s+' fill="#fff"/>' +
+      '<line x1="'+item.x+'" y1="'+(item.y-29)+'" x2="'+item.x+'" y2="'+item.y+'" '+s+'/>' +
+      '<line x1="'+(item.x-18)+'" y1="'+(item.y-18)+'" x2="'+(item.x+18)+'" y2="'+(item.y-18)+'" '+s+'/>' +
+      '<line x1="'+item.x+'" y1="'+item.y+'" x2="'+(item.x-14)+'" y2="'+(item.y+22)+'" '+s+'/>' +
+      '<line x1="'+item.x+'" y1="'+item.y+'" x2="'+(item.x+14)+'" y2="'+(item.y+22)+'" '+s+'/>' +
+      '<text x="'+item.x+'" y="'+(item.y+42)+'" text-anchor="middle" font-size="13.5" font-weight="700" fill="#002D1C" font-family="Public Sans, Arial, sans-serif">'+item.name+'</text>' +
+      '<text x="'+item.x+'" y="'+(item.y+57)+'" text-anchor="middle" font-size="10.5" fill="#4A5568" font-family="Public Sans, Arial, sans-serif">'+item.sub+'</text>';
+    gItems.appendChild(g);
+  }
+
+  function drawUC(item){
+    const g = el("g", {});
+    g.appendChild(el("ellipse", {cx:item.x, cy:item.y, rx:item.rx, ry:item.ry, fill:"#fff", stroke:"#1B6B45", "stroke-width":"2"}));
+    const t = el("text", {x:item.x, y:item.y + 5, "text-anchor":"middle", "font-size":"14", fill:"#1F2937", "font-family":"Public Sans, Arial, sans-serif"});
+    t.textContent = item.name;
+    g.appendChild(t);
+    gItems.appendChild(g);
+  }
+
+  function line(x1,y1,x2,y2,o){
+    const l = el("line", {x1:x1, y1:y1, x2:x2, y2:y2, stroke:"#1F2937", "stroke-width":"1.5"});
+    if(o.dash) l.setAttribute("stroke-dasharray", "6 5");
+    if(o.marker) l.setAttribute("marker-end", "url(#arr)");
+    gLines.appendChild(l);
+    if(o.label){
+      const t = el("text", {x:o.lx, y:o.ly, "font-size":"13", "font-style":"italic", fill:"#1F2937", "font-family":"Public Sans, Arial, sans-serif"});
+      t.textContent = o.label;
+      gLines.appendChild(t);
+    }
+  }
+
+  /* ---------- stage 1: tray + placing ---------- */
+  function buildTray(){
+    tray.innerHTML = "";
+    // Fixed shuffle so actors and use cases are interleaved.
+    ["ap","customer","reord","payprov","po","regcust","tip","db"].forEach(id => {
+      const item = ITEMS.find(i => i.id === id);
+      const b = document.createElement("button");
+      b.className = "titem";
+      b.textContent = item.name;
+      b.dataset.id = item.id;
+      attachChip(b, item);
+      tray.appendChild(b);
+    });
+  }
+
+  function deselectChip(){
+    if(selItem){
+      const el = tray.querySelector('[data-id="' + selItem.id + '"]');
+      if(el) el.classList.remove("sel");
+      selItem = null;
+    }
+  }
+
+  function attachChip(btn, item){
+    let startX = 0, startY = 0, moved = false, pid = null;
+
+    btn.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      pid = e.pointerId;
+      btn.setPointerCapture(pid);
+      startX = e.clientX; startY = e.clientY;
+      moved = false;
+    });
+
+    btn.addEventListener("pointermove", e => {
+      if(pid === null || e.pointerId !== pid) return;
+      if(!moved && Math.hypot(e.clientX - startX, e.clientY - startY) > 6){
+        moved = true;
+        deselectChip();
+        ghost = document.createElement("div");
+        ghost.className = "ghost";
+        ghost.textContent = item.name;
+        document.body.appendChild(ghost);
+      }
+      if(moved){
+        ghost.style.left = e.clientX + "px";
+        ghost.style.top = e.clientY + "px";
+        regions.forEach(r => {
+          const b = r.getBoundingClientRect();
+          r.classList.toggle("hot", e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom);
+        });
+      }
+    });
+
+    btn.addEventListener("pointerup", e => {
+      if(pid === null || e.pointerId !== pid) return;
+      pid = null;
+      if(moved){
+        if(ghost){ ghost.remove(); ghost = null; }
+        regions.forEach(r => r.classList.remove("hot"));
+        const hit = regions.find(r => {
+          const b = r.getBoundingClientRect();
+          return e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
+        });
+        if(hit) tryPlace(item, hit.dataset.region, btn);
+      }else{
+        const wasSel = selItem === item;
+        deselectChip();
+        if(!wasSel){
+          selItem = item;
+          btn.classList.add("sel");
+          say("<b>" + item.name + "</b> selected — now tap where it belongs: left, inside the boundary, or right.", "idle");
+        }
+      }
+    });
+
+    btn.addEventListener("pointercancel", () => {
+      pid = null;
+      if(ghost){ ghost.remove(); ghost = null; }
+      regions.forEach(r => r.classList.remove("hot"));
+    });
+  }
+
+  regions.forEach(r => r.addEventListener("click", () => {
+    if(!selItem) return;
+    const item = selItem;
+    const btn = tray.querySelector('[data-id="' + item.id + '"]');
+    deselectChip();
+    tryPlace(item, r.dataset.region, btn);
+  }));
+
+  function tryPlace(item, region, btn){
+    if(region === item.region){
+      if(item.firstTry !== false){ placeRight++; }
+      placedCount++;
+      cPlace.textContent = placeRight + " / " + ITEMS.length;
+      if(item.kind === "actor") drawActor(item); else drawUC(item);
+      btn.remove();
+      say("<b>✓ Placed.</b> " + item.why, "");
+      if(placedCount === ITEMS.length) startStage2();
+    }else{
+      item.firstTry = false;
+      btn.classList.add("wrongshake");
+      setTimeout(() => btn.classList.remove("wrongshake"), 520);
+      say("<b>✗ Not there.</b> " + item.hint, "warn");
+    }
+    postHeight();
+  }
+
+  /* ---------- stage 2: relationships ---------- */
+  function startStage2(){
+    canvas.classList.remove("placing");
+    $("stage-title").textContent = "STAGE 2 — CONNECT THE DIAGRAM";
+    $("stage-sub").textContent = "CHOOSE THE NOTATION";
+    $("traynote").style.display = "none";
+    qbox.classList.add("show");
+    qIdx = 0;
+    say("All components placed. Now choose the correct notation for each relationship — the diagram draws itself as you answer.", "match");
+    showQ();
+  }
+
+  function showQ(){
+    const q = LINKS[qIdx];
+    qFirst = true;
+    qprompt.textContent = "Link " + (qIdx + 1) + " of " + LINKS.length + " — " + q.prompt;
+    qopts.innerHTML = "";
+    q.opts.forEach(o => {
+      const b = document.createElement("button");
+      b.className = "qopt";
+      b.textContent = o.t;
+      b.addEventListener("click", () => answer(q, o, b));
+      qopts.appendChild(b);
+    });
+    postHeight();
+  }
+
+  function answer(q, o, btn){
+    if(o.ok){
+      if(qFirst) linkRight++;
+      cLink.textContent = linkRight + " / " + LINKS.length;
+      btn.classList.add("right");
+      [...qopts.children].forEach(b => b.disabled = true);
+      q.draw();
+      say("<b>✓ Correct.</b> " + q.why, "");
+      qIdx++;
+      if(qIdx < LINKS.length){
+        setTimeout(showQ, 900);
+      }else{
+        setTimeout(finish, 900);
+      }
+    }else{
+      qFirst = false;
+      btn.classList.add("wrongshake");
+      setTimeout(() => btn.classList.remove("wrongshake"), 520);
+      say("<b>✗ Not that.</b> " + o.w, "warn");
+    }
+    postHeight();
+  }
+
+  function finish(){
+    // The two remaining associations complete the diagram automatically.
+    line(148,405, 303,428, {});
+    line(547,258, 774,222, {});
+    qbox.classList.remove("show");
+    say("The two remaining <b>associations</b> (Registered Customer — Reorder Favourite, and Authorise Payment — Payment Provider) complete the diagram: every actor is now associated with at least one use case.", "match");
+    let verdict;
+    if(placeRight === ITEMS.length && linkRight === LINKS.length) verdict = "Full marks on both stages — you can build a use case diagram from a scenario unaided.";
+    else if(linkRight >= 4) verdict = "Strong — the feedback you saw on any misses is exactly what an examiner checks: arrow direction and mandatory vs optional.";
+    else verdict = "Rebuild it — pay attention to which way each dashed arrow points. «include» points at the included use case; «extend» points back at the base.";
+    $("scoreline").innerHTML = "Placed <b>" + placeRight + " / " + ITEMS.length + "</b> components and chose <b>" + linkRight + " / " + LINKS.length + "</b> relationships correctly at the first attempt. " + verdict;
+    $("done-box").classList.add("show");
+    postHeight();
+  }
+
+  /* ---------- restart ---------- */
+  function reset(){
+    placeRight = 0; linkRight = 0; placedCount = 0; qIdx = 0;
+    selItem = null;
+    ITEMS.forEach(i => delete i.firstTry);
+    cPlace.textContent = "0 / " + ITEMS.length;
+    cLink.textContent = "0 / " + LINKS.length;
+    gItems.innerHTML = ""; gLines.innerHTML = "";
+    canvas.classList.add("placing");
+    qbox.classList.remove("show");
+    $("done-box").classList.remove("show");
+    $("stage-title").textContent = "STAGE 1 — PLACE THE COMPONENTS";
+    $("stage-sub").textContent = "DRAG OR TAP-THEN-TAP";
+    $("traynote").style.display = "";
+    buildTray();
+    say("Pick any item in the tray to begin.", "idle");
+    postHeight();
+  }
+
+  $("restart").addEventListener("click", reset);
+
+  let sentH = 0;
+  function postHeight(){
+    if(window.parent === window) return;
+    const h = Math.ceil(document.body.scrollHeight) + 6;
+    if(h > sentH || h < sentH - 24){
+      sentH = h;
+      window.parent.postMessage({type:"embed-height", height:h}, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+
+  reset();
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if("ResizeObserver" in window){ new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

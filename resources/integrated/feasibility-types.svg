@@ -1,0 +1,72 @@
+<svg viewBox="0 0 840 480" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" role="img" aria-label="The four types of feasibility">
+  <rect width="840" height="480" fill="#ffffff"/>
+  <text x="420" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#002D1C">The four types of feasibility — can this project actually be achieved?</text>
+
+  <!-- Economic -->
+  <g>
+    <rect x="15" y="55" width="395" height="200" rx="10" fill="#F7F9F8" stroke="#1B6B45" stroke-width="1.5"/>
+    <rect x="15" y="55" width="395" height="38" rx="10" fill="#1B6B45"/>
+    <rect x="15" y="80" width="395" height="13" fill="#1B6B45"/>
+    <text x="212" y="80" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Economic feasibility</text>
+    <text x="35" y="122" font-size="14" fill="#1F2937">
+      <tspan x="35" dy="0">Can the project be completed within the</tspan>
+      <tspan x="35" dy="20">available budget — and does the benefit</tspan>
+      <tspan x="35" dy="20">justify the cost (a cost-benefit analysis)?</tspan>
+    </text>
+    <text x="35" y="200" font-size="13" font-style="italic" fill="#555">
+      <tspan x="35" dy="0">A café is quoted £15 000 for a custom loyalty</tspan>
+      <tspan x="35" dy="18">app — far more than the app could ever save.</tspan>
+    </text>
+  </g>
+
+  <!-- Time -->
+  <g>
+    <rect x="430" y="55" width="395" height="200" rx="10" fill="#F7F9F8" stroke="#1B6B45" stroke-width="1.5"/>
+    <rect x="430" y="55" width="395" height="38" rx="10" fill="#1B6B45"/>
+    <rect x="430" y="80" width="395" height="13" fill="#1B6B45"/>
+    <text x="627" y="80" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Time feasibility</text>
+    <text x="450" y="122" font-size="14" fill="#1F2937">
+      <tspan x="450" dy="0">Can the project be delivered within the</tspan>
+      <tspan x="450" dy="20">required timescale, with the right people</tspan>
+      <tspan x="450" dy="20">and resources available when needed?</tspan>
+    </text>
+    <text x="450" y="200" font-size="13" font-style="italic" fill="#555">
+      <tspan x="450" dy="0">A festival's ticketing system is worthless if it</tspan>
+      <tspan x="450" dy="18">launches after tickets have gone on sale.</tspan>
+    </text>
+  </g>
+
+  <!-- Legal -->
+  <g>
+    <rect x="15" y="270" width="395" height="200" rx="10" fill="#F7F9F8" stroke="#1B6B45" stroke-width="1.5"/>
+    <rect x="15" y="270" width="395" height="38" rx="10" fill="#1B6B45"/>
+    <rect x="15" y="295" width="395" height="13" fill="#1B6B45"/>
+    <text x="212" y="295" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Legal feasibility</text>
+    <text x="35" y="337" font-size="14" fill="#1F2937">
+      <tspan x="35" dy="0">Can the solution be created and operated</tspan>
+      <tspan x="35" dy="20">without breaking the law — data protection</tspan>
+      <tspan x="35" dy="20">(GDPR), licensing, health and safety?</tspan>
+    </text>
+    <text x="35" y="415" font-size="13" font-style="italic" fill="#555">
+      <tspan x="35" dy="0">A fitness app storing users' heart-rate data is</tspan>
+      <tspan x="35" dy="18">handling sensitive personal data under GDPR.</tspan>
+    </text>
+  </g>
+
+  <!-- Technical -->
+  <g>
+    <rect x="430" y="270" width="395" height="200" rx="10" fill="#F7F9F8" stroke="#1B6B45" stroke-width="1.5"/>
+    <rect x="430" y="270" width="395" height="38" rx="10" fill="#1B6B45"/>
+    <rect x="430" y="295" width="395" height="13" fill="#1B6B45"/>
+    <text x="627" y="295" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Technical feasibility</text>
+    <text x="450" y="337" font-size="14" fill="#1F2937">
+      <tspan x="450" dy="0">Does the technology needed exist, and does</tspan>
+      <tspan x="450" dy="20">the organisation have (or can it acquire) the</tspan>
+      <tspan x="450" dy="20">hardware, software and expertise?</tspan>
+    </text>
+    <text x="450" y="415" font-size="13" font-style="italic" fill="#555">
+      <tspan x="450" dy="0">A live parcel-tracking app fails if the delivery</tspan>
+      <tspan x="450" dy="18">routes have no reliable mobile signal.</tspan>
+    </text>
+  </g>
+</svg>

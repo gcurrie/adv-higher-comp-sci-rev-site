@@ -26,6 +26,8 @@
     { term: 'User survey', desc: 'Questionnaire capturing the experience of existing or target users to shape requirements', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Gantt chart', desc: 'Horizontal bar chart used to schedule the tasks and resources of a project over time', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Scheduling', desc: 'Planning when each task of a project happens and in what order', page: 'integration/analysis.html', section: 'INT' },
+    { term: 'Resources (planning)', desc: 'The people, hardware and software each development stage needs — identified during planning', page: 'integration/analysis.html', section: 'INT' },
+    { term: 'Cost-benefit analysis', desc: 'Comparing the costs of acquiring, installing and maintaining a system against its tangible benefits', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Use case diagram', desc: 'UML diagram showing actors, use cases and the relationships between them', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Actor', desc: 'A person or external system that interacts with the system in a use case diagram', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Primary actor', desc: 'An actor that uses the system to achieve a goal — placed on the left of the system boundary', page: 'integration/analysis.html', section: 'INT' },

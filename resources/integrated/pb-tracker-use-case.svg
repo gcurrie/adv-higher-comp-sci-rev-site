@@ -1,0 +1,66 @@
+<svg viewBox="0 0 860 470" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" role="img" aria-label="Use case diagram for the PB Tracker system">
+  <defs>
+    <marker id="uc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1F2937"/>
+    </marker>
+  </defs>
+
+  <rect width="860" height="470" fill="#ffffff"/>
+
+  <!-- system boundary -->
+  <rect x="185" y="50" width="470" height="390" fill="#FDFDFC" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="420" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#002D1C">PB Tracker System</text>
+
+  <!-- associations (drawn first so ellipses sit on top) -->
+  <g stroke="#1F2937" stroke-width="1.5">
+    <line x1="112" y1="180" x2="290" y2="158"/>
+    <line x1="112" y1="205" x2="262" y2="252"/>
+    <line x1="501" y1="156" x2="748" y2="182"/>
+    <line x1="458" y1="253" x2="748" y2="207"/>
+  </g>
+
+  <!-- include: base (Record Race Result) points AT the included use case -->
+  <line x1="332" y1="290" x2="301" y2="343" stroke="#1F2937" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#uc-arrow)"/>
+  <text x="335" y="325" font-size="13" font-style="italic" fill="#1F2937">&#171;include&#187;</text>
+
+  <!-- extend: optional use case points AT the base use case -->
+  <line x1="512" y1="347" x2="422" y2="290" stroke="#1F2937" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#uc-arrow)"/>
+  <text x="478" y="332" font-size="13" font-style="italic" fill="#1F2937">&#171;extend&#187;</text>
+
+  <!-- use cases -->
+  <g>
+    <ellipse cx="395" cy="150" rx="108" ry="32" fill="#ffffff" stroke="#1B6B45" stroke-width="1.8"/>
+    <text x="395" y="155" text-anchor="middle" font-size="14" fill="#1F2937">Look Up Personal Best</text>
+
+    <ellipse cx="360" cy="260" rx="100" ry="32" fill="#ffffff" stroke="#1B6B45" stroke-width="1.8"/>
+    <text x="360" y="265" text-anchor="middle" font-size="14" fill="#1F2937">Record Race Result</text>
+
+    <ellipse cx="295" cy="375" rx="82" ry="30" fill="#ffffff" stroke="#1B6B45" stroke-width="1.8"/>
+    <text x="295" y="380" text-anchor="middle" font-size="14" fill="#1F2937">Validate Result</text>
+
+    <ellipse cx="535" cy="375" rx="75" ry="30" fill="#ffffff" stroke="#1B6B45" stroke-width="1.8"/>
+    <text x="535" y="380" text-anchor="middle" font-size="14" fill="#1F2937">Flag New PB</text>
+  </g>
+
+  <!-- Coach (primary actor) -->
+  <g stroke="#002D1C" stroke-width="2" fill="none">
+    <circle cx="95" cy="165" r="11" fill="#ffffff"/>
+    <line x1="95" y1="176" x2="95" y2="210"/>
+    <line x1="75" y1="190" x2="115" y2="190"/>
+    <line x1="95" y1="210" x2="80" y2="235"/>
+    <line x1="95" y1="210" x2="110" y2="235"/>
+  </g>
+  <text x="95" y="256" text-anchor="middle" font-size="14" font-weight="700" fill="#002D1C">Coach</text>
+  <text x="95" y="272" text-anchor="middle" font-size="11" fill="#555">(primary actor)</text>
+
+  <!-- Club Database (secondary actor) -->
+  <g stroke="#002D1C" stroke-width="2" fill="none">
+    <circle cx="765" cy="165" r="11" fill="#ffffff"/>
+    <line x1="765" y1="176" x2="765" y2="210"/>
+    <line x1="745" y1="190" x2="785" y2="190"/>
+    <line x1="765" y1="210" x2="750" y2="235"/>
+    <line x1="765" y1="210" x2="780" y2="235"/>
+  </g>
+  <text x="765" y="256" text-anchor="middle" font-size="14" font-weight="700" fill="#002D1C">Club Database</text>
+  <text x="765" y="272" text-anchor="middle" font-size="11" fill="#555">(secondary actor)</text>
+</svg>

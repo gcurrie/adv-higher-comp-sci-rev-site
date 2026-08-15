@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feasibility Sorter — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --eco:#92750A;  --eco-bg:#FEF3C7;
+    --tim:#1E40AF;  --tim-bg:#EFF6FF;
+    --leg:#6A1B9A;  --leg-bg:#F4E8FA;
+    --tec:#1B6B45;  --tec-bg:#E8F5EE;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:820px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.good{border-color:var(--active);background:var(--active-bg)}
+  .chip.good .k{color:var(--active);opacity:.85}
+  .chip.good b{color:var(--active-strong)}
+  .chip.bad{border-color:var(--warn);background:var(--warn-bg)}
+  .chip.bad .k{color:var(--warn);opacity:.85}
+  .chip.bad b{color:var(--warn)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .progress{height:6px;background:var(--tint);border:1px solid var(--line);border-top:0;margin:-14px 0 18px;overflow:hidden}
+  .progress i{display:block;height:100%;width:0;background:var(--active);transition:width .25s}
+
+  .panel{border:1px solid var(--line);background:var(--panel)}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  .scenario{font-size:17px;line-height:1.75;min-height:4.6em;margin:0}
+
+  .answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:16px}
+  .ans{font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;padding:14px 12px;border-width:2px;text-align:center}
+  .ans small{display:block;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;opacity:.75}
+  .ans.eco{color:var(--eco);border-color:var(--eco)} .ans.eco:hover:not(:disabled){background:var(--eco-bg)}
+  .ans.tim{color:var(--tim);border-color:var(--tim)} .ans.tim:hover:not(:disabled){background:var(--tim-bg)}
+  .ans.leg{color:var(--leg);border-color:var(--leg)} .ans.leg:hover:not(:disabled){background:var(--leg-bg)}
+  .ans.tec{color:var(--tec);border-color:var(--tec)} .ans.tec:hover:not(:disabled){background:var(--tec-bg)}
+  .ans.picked-right.eco{background:var(--eco-bg)}
+  .ans.picked-right.tim{background:var(--tim-bg)}
+  .ans.picked-right.leg{background:var(--leg-bg)}
+  .ans.picked-right.tec{background:var(--tec-bg)}
+  .ans.picked-wrong{animation:flash .5s;border-color:var(--warn)!important;color:var(--warn)!important}
+  @keyframes flash{0%,100%{background:transparent}15%,70%{background:var(--warn-bg)}}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.warn{border-left-color:var(--warn);background:var(--warn-bg);color:var(--warn)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+
+  .nextrow{margin-top:14px;display:flex;justify-content:flex-end}
+
+  .done-box{display:none;margin-top:16px}
+  .done-box.show{display:block}
+  .scoreline{font-size:15px;margin:0 0 14px}
+  .scoreline b{color:var(--active-strong)}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:12px 0 0;line-height:1.6}
+  .model{border:1px solid var(--match-accent);border-left:3px solid var(--match-accent);background:var(--match-bg);padding:13px 16px;font-size:14px;line-height:1.6}
+  .model .lbl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--match);display:block;margin-bottom:6px}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:700px){.controls{flex-direction:column;align-items:stretch}.scenario{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; Integration &#183; Analysis</p>
+    <h1>Feasibility Sorter</h1>
+    <p class="sub">Read each scenario and decide which type of feasibility is at stake: <b>economic</b>, <b>time</b>, <b>legal</b> or <b>technical</b>. Only your <b>first</b> answer counts towards your score — the feedback explains the reasoning either way.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">scenario</span><b id="c-q">1 / 10</b></div>
+      <div class="chip good"><span class="k">right first try</span><b id="c-right">0</b></div>
+      <div class="chip bad"><span class="k">missed</span><b id="c-wrong">0</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="restart" class="primary">Restart</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE SCENARIO</span><span class="dim">PICK THE FEASIBILITY TYPE</span></div>
+    <div class="panelbody">
+      <p class="scenario" id="scenario"></p>
+      <div class="answers">
+        <button class="ans eco" data-t="eco">Economic<small>budget &amp; benefit</small></button>
+        <button class="ans tim" data-t="tim">Time<small>deadline &amp; availability</small></button>
+        <button class="ans leg" data-t="leg">Legal<small>GDPR &amp; licensing</small></button>
+        <button class="ans tec" data-t="tec">Technical<small>tech &amp; expertise</small></button>
+      </div>
+      <div class="narrate idle" id="narrate" aria-live="polite">Read the scenario, then choose a feasibility type.</div>
+      <div class="nextrow"><button id="next" disabled>Next scenario &#9654;</button></div>
+    </div>
+  </section>
+
+  <section class="panel done-box" id="done-box">
+    <div class="panelbar"><span>ALL SCENARIOS SORTED</span><span class="dim">HOW TO USE THIS IN THE EXAM</span></div>
+    <div class="panelbody">
+      <p class="scoreline" id="scoreline"></p>
+      <div class="model">
+        <span class="lbl">Exam tip</span>
+        Naming the type is only half an answer. In the exam, tie it to the scenario and state the consequence:
+        <em>&#8220;Time feasibility &#8212; the system is needed before the new surgery opens in three months, and if it cannot be delivered by then the project should not go ahead.&#8221;</em>
+      </div>
+      <p class="tipnote"><b>Watch for overlaps:</b> many scenarios touch two types (a licence that costs too much is legal <i>and</i> economic). In an exam, pick the type the question's wording points at &#8212; and justify it from the scenario, never from a memorised definition alone.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const TYPES = {
+    eco:{label:"Economic feasibility"},
+    tim:{label:"Time feasibility"},
+    leg:{label:"Legal feasibility"},
+    tec:{label:"Technical feasibility"}
+  };
+
+  const SCENARIOS = [
+    {t:"eco",
+     text:"A charity is quoted £40 000 for a custom volunteer-rota app. The charity's total income last year was £25 000.",
+     why:"The cost is being compared with the available budget — the quote is more than the charity's entire income, so a cost-benefit analysis fails before anything else is even considered.",
+     hint:"Look at what the £40 000 is being compared with."},
+    {t:"tim",
+     text:"A school's new exams-administration system must be working before the SQA exam diet begins in May. It is now January, and development is estimated to take seven months.",
+     why:"Seven months of work will not fit in the four months available — the project cannot be delivered within the required timescale, however good or affordable it is.",
+     hint:"Count the months available against the months of work."},
+    {t:"leg",
+     text:"A supermarket wants its new loyalty app to build a profile of each customer's spending and sell those profiles to advertisers, without asking customers first.",
+     why:"Processing and selling personal data without consent breaches data-protection law (GDPR) — the system could be built cheaply and on time, but it could not be operated lawfully.",
+     hint:"The customers were never asked. Which law does that touch?"},
+    {t:"tec",
+     text:"A start-up's app needs to locate a phone to within 10 cm inside a shopping centre. No available positioning technology can do this reliably indoors.",
+     why:"The technology the solution depends on does not exist — no budget or schedule fixes that, so the project is not technically feasible.",
+     hint:"Is there any product or technique that can actually do this today?"},
+    {t:"leg",
+     text:"A gym wants to match members' faces against a live CCTV feed to open the turnstiles automatically. The Information Commissioner has ruled similar biometric systems unlawful.",
+     why:"Biometric data is special-category personal data — if regulators have ruled this processing unlawful, the system cannot legally be operated, whatever its technical merits.",
+     hint:"The regulator has already ruled on systems like this."},
+    {t:"tim",
+     text:"A café owner wants an online booking page for a one-off food festival in ten days' time. The only available developer is on holiday until after the festival.",
+     why:"This is about the schedule: the right people are not available when they are needed, so the system cannot be delivered before its (immovable) deadline.",
+     hint:"It isn't about money or skill — when is the developer free?"},
+    {t:"eco",
+     text:"A small business's proposed stock system needs server software licensed at £3 000 per year. The system is expected to save the business around £1 200 per year.",
+     why:"A cost-benefit analysis: the running costs are more than double the tangible benefit, so the expenditure cannot be justified — even though the business could technically afford it.",
+     hint:"Set the yearly cost against the yearly saving."},
+    {t:"tec",
+     text:"A village hall committee wants an online booking system for the hall — but the hall has no internet connection, and fibre will not reach the village for several years.",
+     why:"The organisation lacks the infrastructure the solution requires and cannot acquire it — a technical barrier that no amount of budget or scheduling removes in the timescale.",
+     hint:"What is physically missing at the hall?"},
+    {t:"leg",
+     text:"To save money, a developer plans to build a paid-for school app using a code library whose licence permits free use for personal projects only.",
+     why:"Using software outside the terms of its licence is a breach of the licensing agreement — a legal problem, even though the motivation was economic.",
+     hint:"Read the licence terms again — what kind of rule is being broken?"},
+    {t:"tim",
+     text:"A games studio estimates that its new engine needs 18 months of development. The publisher's contract requires the game to launch in 9 months.",
+     why:"The work needed is double the time available — the project as scoped cannot meet the contractual deadline, so either the scope changes or the project is not time feasible.",
+     hint:"Compare the estimate with the contract deadline."}
+  ];
+
+  const $ = id => document.getElementById(id);
+  const scenario = $("scenario"), narrate = $("narrate"), bar = $("bar");
+  const cQ = $("c-q"), cRight = $("c-right"), cWrong = $("c-wrong");
+  const nextBtn = $("next"), doneBox = $("done-box");
+  const ansBtns = [...document.querySelectorAll(".ans")];
+
+  let idx = 0, right = 0, wrong = 0, answered = false, firstTry = true;
+
+  function say(html, cls){
+    narrate.className = "narrate" + (cls ? " " + cls : "");
+    narrate.innerHTML = html;
+  }
+
+  function show(){
+    const s = SCENARIOS[idx];
+    scenario.textContent = s.text;
+    answered = false; firstTry = true;
+    ansBtns.forEach(b => { b.disabled = false; b.classList.remove("picked-right","picked-wrong"); });
+    nextBtn.disabled = true;
+    nextBtn.innerHTML = (idx === SCENARIOS.length - 1) ? "Finish &#9654;" : "Next scenario &#9654;";
+    cQ.textContent = (idx + 1) + " / " + SCENARIOS.length;
+    bar.style.width = (idx / SCENARIOS.length * 100) + "%";
+    say("Read the scenario, then choose a feasibility type.", "idle");
+    postHeight();
+  }
+
+  function pick(btn){
+    if(answered) return;
+    const s = SCENARIOS[idx];
+    if(btn.dataset.t === s.t){
+      answered = true;
+      if(firstTry){ right++; }
+      btn.classList.add("picked-right");
+      ansBtns.forEach(b => b.disabled = true);
+      say("<b>✓ " + TYPES[s.t].label + ".</b> " + s.why, "");
+      nextBtn.disabled = false;
+      nextBtn.focus();
+    }else{
+      if(firstTry){ wrong++; firstTry = false; }
+      btn.classList.add("picked-wrong");
+      setTimeout(() => btn.classList.remove("picked-wrong"), 520);
+      say("<b>✗ Not " + TYPES[btn.dataset.t].label.toLowerCase() + ".</b> " + s.hint, "warn");
+    }
+    cRight.textContent = right; cWrong.textContent = wrong;
+    bar.style.width = ((idx + (answered ? 1 : 0)) / SCENARIOS.length * 100) + "%";
+    postHeight();
+  }
+
+  function finish(){
+    let verdict;
+    if(right === SCENARIOS.length) verdict = "A clean sweep — you can tell the four types apart even when they overlap.";
+    else if(right >= 7) verdict = "Strong — re-read the feedback on the ones you missed; they are usually the overlap cases.";
+    else verdict = "Worth another run — focus on <b>what is being compared</b> in each scenario: money, dates, laws or capability.";
+    $("scoreline").innerHTML = "You sorted <b>" + right + "</b> of <b>" + SCENARIOS.length + "</b> scenarios correctly at the first attempt. " + verdict;
+    doneBox.classList.add("show");
+    doneBox.scrollIntoView({behavior:"smooth", block:"nearest"});
+    postHeight();
+  }
+
+  ansBtns.forEach(b => b.addEventListener("click", () => pick(b)));
+
+  nextBtn.addEventListener("click", () => {
+    if(idx === SCENARIOS.length - 1){ bar.style.width = "100%"; finish(); nextBtn.disabled = true; return; }
+    idx++; show();
+  });
+
+  $("restart").addEventListener("click", () => {
+    idx = 0; right = 0; wrong = 0;
+    cRight.textContent = "0"; cWrong.textContent = "0";
+    doneBox.classList.remove("show");
+    show();
+  });
+
+  let sentH = 0;
+  function postHeight(){
+    if(window.parent === window) return;
+    const h = Math.ceil(document.body.scrollHeight) + 6;
+    if(h > sentH || h < sentH - 24){
+      sentH = h;
+      window.parent.postMessage({type:"embed-height", height:h}, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+
+  show();
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if("ResizeObserver" in window){ new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>
