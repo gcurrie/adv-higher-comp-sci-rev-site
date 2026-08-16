@@ -17,7 +17,7 @@
     { term: 'Requirements specification', desc: 'Document detailing end-user requirements, scope, boundaries, constraints and functional requirements — often the basis of a legal contract', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Scope', desc: 'What the project must cover, including its deliverables', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Boundaries', desc: 'What the project will not cover — the limits of the development', page: 'integration/analysis.html', section: 'INT' },
-    { term: 'Constraints', desc: 'Restrictions on the development — technical, business, economic or political', page: 'integration/analysis.html', section: 'INT' },
+    { term: 'Constraints', desc: 'Restrictions on the development — economic, time, legal or technical, mirroring the four feasibility types', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Feasibility study', desc: 'Research to determine if a project is achievable: economic, time, legal and technical feasibility', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Economic feasibility', desc: 'Can the project be completed within budget? Includes cost-benefit analysis', page: 'integration/analysis.html', section: 'INT' },
     { term: 'Time feasibility', desc: 'Can the project be completed in the time available? (Also called schedule feasibility)', page: 'integration/analysis.html', section: 'INT' },
@@ -73,6 +73,12 @@
     { term: 'Public and private', desc: 'Visibility of class members on a UML diagram: + means public, − means private', page: 'sdd/design.html', section: 'SDD' },
     { term: 'Wireframe', desc: 'User-interface design showing visual layout, inputs, validation, underlying processes and outputs', page: 'sdd/design.html', section: 'SDD' },
     { term: 'User-interface design', desc: 'Wireframe annotated with inputs, validation, underlying processes and outputs', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Constructor', desc: 'Method that creates and initialises an object — always has the same name as the class', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Instance variable', desc: 'A variable defined in a class, listed with its data type on a class diagram', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Array of objects', desc: 'Instance variable holding many objects of another class — Array of Result[ ], linked by an arrow', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Inheritance (class diagram)', desc: 'Solid arrow drawn from the sub-class pointing at the super-class', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Efficient design', desc: 'A design that reaches the result with no unnecessary passes through the data', page: 'sdd/design.html', section: 'SDD' },
+    { term: 'Data types and structures', desc: 'Identifying the types, records and arrays a problem needs before designing it', page: 'sdd/design.html', section: 'SDD' },
 
     /* ── SDD: Data Structures ─── */
     { term: '2D array', desc: 'A grid of values of one data type, accessed with two indices: array[row][column]', page: 'sdd/data-structures.html', section: 'SDD' },

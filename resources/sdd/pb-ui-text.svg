@@ -1,0 +1,88 @@
+<svg viewBox="0 0 1160 640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" role="img" aria-label="Annotated text-based user interface design for the PB Tracker">
+  <defs>
+    <marker id="tann" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+  <rect width="1160" height="640" fill="#ffffff"/>
+  <text x="580" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#002D1C">PB Tracker — annotated text-based interface</text>
+
+  <!-- console -->
+  <rect x="250" y="52" width="600" height="452" fill="#001810" stroke="#1F2937" stroke-width="2"/>
+  <g font-family="Consolas, Menlo, monospace" font-size="13.5" fill="#E8F5EE">
+    <text x="268" y="82">=====================================</text>
+    <text x="268" y="102">  WESTBRAE HARRIERS - PB TRACKER</text>
+    <text x="268" y="122">=====================================</text>
+    <text x="268" y="152">Enter athlete name: <tspan fill="#C9A227">Ellie Morrison</tspan></text>
+    <text x="268" y="176">Enter distance (m):  <tspan fill="#C9A227">50</tspan></text>
+    <text x="268" y="200" fill="#FF9B8A">** 50 is not a track distance. **</text>
+    <text x="268" y="220" fill="#FF9B8A">** Enter 100 to 10000.         **</text>
+    <text x="268" y="244">Enter distance (m):  <tspan fill="#C9A227">1500</tspan></text>
+    <text x="268" y="278">Searching database...</text>
+    <text x="268" y="312" fill="#7FD4A8">PERSONAL BEST</text>
+    <text x="268" y="332">  4:21.6  Scottish Schools  12 May 2025</text>
+    <text x="268" y="366" fill="#7FD4A8">THREE MOST RECENT</text>
+    <text x="268" y="386">  18 Jun 2025  District League     4:24.9</text>
+    <text x="268" y="406">  12 May 2025  Scottish Schools   4:21.6</text>
+    <text x="268" y="426">  03 Apr 2025  Club Championship  4:27.2</text>
+    <text x="268" y="460">Look up another athlete? (Y/N): <tspan fill="#C9A227">_</tspan></text>
+  </g>
+
+  <!-- annotation arrows -->
+  <g stroke="#B91C1C" stroke-width="1.4" fill="none">
+    <line x1="246" y1="164" x2="200" y2="164" marker-end="url(#tann)"/>
+    <line x1="246" y1="210" x2="200" y2="210" marker-end="url(#tann)"/>
+    <line x1="246" y1="278" x2="200" y2="278" marker-end="url(#tann)"/>
+    <line x1="854" y1="322" x2="900" y2="322" marker-end="url(#tann)"/>
+    <line x1="854" y1="396" x2="900" y2="396" marker-end="url(#tann)"/>
+    <line x1="854" y1="460" x2="900" y2="460" marker-end="url(#tann)"/>
+  </g>
+
+  <!-- left cards -->
+  <g>
+    <rect x="10" y="126" width="188" height="76" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="20" y="144" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">INPUTS</text>
+    <text x="20" y="162" font-size="11.5" fill="#1F2937">athleteName and distance,</text>
+    <text x="20" y="178" font-size="11.5" fill="#1F2937">typed at the keyboard, one</text>
+    <text x="20" y="194" font-size="11.5" fill="#1F2937">prompt at a time.</text>
+
+    <rect x="10" y="210" width="188" height="76" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="20" y="228" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">VALIDATION</text>
+    <text x="20" y="246" font-size="11.5" fill="#1F2937">Range check, 100–10000.</text>
+    <text x="20" y="262" font-size="11.5" fill="#1F2937">The error message and the</text>
+    <text x="20" y="278" font-size="11.5" fill="#1F2937">re-prompt are both shown.</text>
+
+    <rect x="10" y="294" width="188" height="92" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="20" y="312" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">UNDERLYING PROCESS</text>
+    <text x="20" y="330" font-size="11.5" fill="#1F2937">Reads matching results</text>
+    <text x="20" y="346" font-size="11.5" fill="#1F2937">from the database, insertion</text>
+    <text x="20" y="362" font-size="11.5" fill="#1F2937">sorts by date, then finds</text>
+    <text x="20" y="378" font-size="11.5" fill="#1F2937">the fastest time.</text>
+  </g>
+
+  <!-- right cards -->
+  <g>
+    <rect x="906" y="292" width="244" height="60" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="916" y="310" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">OUTPUT</text>
+    <text x="916" y="328" font-size="11.5" fill="#1F2937">Personal best — fastest time,</text>
+    <text x="916" y="344" font-size="11.5" fill="#1F2937">with event and date.</text>
+
+    <rect x="906" y="366" width="244" height="60" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="916" y="384" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">OUTPUT</text>
+    <text x="916" y="402" font-size="11.5" fill="#1F2937">Three most recent results,</text>
+    <text x="916" y="418" font-size="11.5" fill="#1F2937">column-aligned for reading.</text>
+
+    <rect x="906" y="440" width="244" height="60" fill="#FDECEA" stroke="#B91C1C"/>
+    <text x="916" y="458" font-size="10" font-weight="700" fill="#B91C1C" letter-spacing="1">INPUT + VALIDATION</text>
+    <text x="916" y="476" font-size="11.5" fill="#1F2937">Restricted choice — only Y</text>
+    <text x="916" y="492" font-size="11.5" fill="#1F2937">or N is accepted.</text>
+  </g>
+
+  <!-- layout note -->
+  <rect x="250" y="524" width="600" height="70" fill="#E8F5EE" stroke="#1B6B45"/>
+  <text x="264" y="544" font-size="10" font-weight="700" fill="#1B6B45" letter-spacing="1">VISUAL LAYOUT</text>
+  <text x="264" y="562" font-size="11.5" fill="#1F2937">A banner names the program, prompts run down the screen in the order they happen, and</text>
+  <text x="264" y="578" font-size="11.5" fill="#1F2937">headed, indented blocks separate the two outputs — spacing does the work a box would do in a GUI.</text>
+
+  <text x="580" y="622" text-anchor="middle" font-size="12.5" font-style="italic" fill="#555">The same five things must be shown whether the interface is graphical or text-based.</text>
+</svg>

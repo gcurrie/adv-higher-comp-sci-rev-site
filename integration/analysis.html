@@ -66,8 +66,8 @@
         <div class="key-term"><div class="term">Purpose</div><div class="def">A plain-language statement of what the solution will do and who it is for.</div></div>
         <div class="key-term"><div class="term">Scope</div><div class="def">What the project must cover, including its deliverables.</div></div>
         <div class="key-term"><div class="term">Boundaries</div><div class="def">What the project will <em>not</em> cover — the limits of the development.</div></div>
-        <div class="key-term"><div class="term">Constraints</div><div class="def">Restrictions on the development — e.g. the language, platform, budget or timescale that must be used.</div></div>
-        <div class="key-term"><div class="term">Functional Requirements</div><div class="def">What the solution must do, defined in terms of inputs, processes and outputs.</div></div>
+        <div class="key-term"><div class="term">Constraints</div><div class="def">Restrictions that apply to the development, limiting the design decisions that can be made. Like feasibility, they are <em>economic</em>, <em>time</em>, <em>legal</em> or <em>technical</em>.</div></div>
+        <div class="key-term"><div class="term">Functional Requirements</div><div class="def">What the program must do — written as a numbered list of individual statements, each describing a single job. The exam may also ask for them in terms of inputs, processes and outputs.</div></div>
         <div class="key-term"><div class="term">Feasibility Study</div><div class="def">Research to determine whether the project can actually be achieved — economically, technically, legally and in the time available.</div></div>
         <div class="key-term"><div class="term">User Survey</div><div class="def">A questionnaire capturing the experience and needs of existing or target users, used to shape the requirements.</div></div>
         <div class="key-term"><div class="term">Gantt Chart</div><div class="def">A horizontal bar chart that schedules the tasks of a project against a time scale, showing sequence and overlap.</div></div>
@@ -101,7 +101,7 @@
       </ul>
 
       <h3>Functional Requirements</h3>
-      <p>Defined as <strong>inputs</strong>, <strong>processes</strong> and <strong>outputs</strong> — and notice that every input and output is <em>clearly labelled with where it comes from or goes to</em>. That labelling habit matters even more at Advanced Higher, where an input might come from the keyboard, a file, a web form <em>or a database</em>.</p>
+      <p>At Higher these are set out as <strong>inputs</strong>, <strong>processes</strong> and <strong>outputs</strong> — and notice that every input and output is <em>clearly labelled with where it comes from or goes to</em>. That labelling habit matters even more at Advanced Higher, where an input might come from the keyboard, a file, a web form <em>or a database</em>. (At Advanced Higher you will more often write them as a <a href="#requirements">numbered list of individual requirements</a> instead — the same information, laid out so each one can be tested on its own.)</p>
       <table>
         <thead><tr><th>Inputs</th><th>Processes</th><th>Outputs</th></tr></thead>
         <tbody>
@@ -164,12 +164,33 @@
       </ul>
 
       <h3>Constraints</h3>
-      <p><strong>Constraints</strong> are new at Advanced Higher: the restrictions that apply to the <em>development itself</em>, limiting the design decisions that can be made. For the PB Tracker:</p>
-      <ul>
-        <li><strong>Technical</strong> — the program must be written in <strong>Python with SQLite</strong>, the only tools the club's volunteer developer knows, and must run on the club's ageing Windows laptop.</li>
-        <li><strong>Economic</strong> — the club is run by volunteers and has <strong>no budget</strong>: only free software can be used.</li>
-        <li><strong>Time</strong> — the program must be ready before championship entries open in <strong>12 weeks</strong>.</li>
-      </ul>
+      <p><strong>Constraints</strong> are new at Advanced Higher: the restrictions that apply to the <em>development itself</em>, limiting the design decisions that can be made. They come in the same four types as the <a href="#feasibility">feasibility studies</a> you research next — <strong>economic</strong>, <strong>time</strong>, <strong>legal</strong> and <strong>technical</strong> — and that is not a coincidence. A constraint is a limit you have been <em>given</em>; the matching feasibility study is the research that asks whether the project can still succeed inside it.</p>
+
+      <table>
+        <thead><tr><th style="width:14%;">Type</th><th style="width:45%;">The constraint on this development</th><th>The feasibility question it forces you to research</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Economic</strong></td>
+            <td>The club is run by volunteers and has <strong>no budget</strong> — only free software may be used, and no hosting or licence fees can be paid.</td>
+            <td>Can the system be built <em>and maintained</em> at zero cost, and does the coaching time it saves justify the effort of building it?</td>
+          </tr>
+          <tr>
+            <td><strong>Time</strong></td>
+            <td>The program must be finished before <strong>championship entries open in 12 weeks</strong>, and the volunteer developer can only work on it in the evenings.</td>
+            <td>Can analysis, design, coding and testing all be completed in 12 weeks with only that developer available? (This is what the <a href="#scheduling">Gantt chart</a> is for.)</td>
+          </tr>
+          <tr>
+            <td><strong>Legal</strong></td>
+            <td>Race results are linked to <strong>named members, several of them juniors</strong>, so the club's data-protection policy requires results to stay on the club's own laptop — <strong>no cloud service or third-party website</strong> may be used.</td>
+            <td>Can members' personal data be stored and processed lawfully under <strong>GDPR</strong> — with consent obtained, held securely, and no more data kept than the system actually needs?</td>
+          </tr>
+          <tr>
+            <td><strong>Technical</strong></td>
+            <td>The program must be written in <strong>Python with SQLite</strong> — the only tools the volunteer developer knows — and must run on the club's <strong>ageing Windows laptop</strong>.</td>
+            <td>Does the developer have (or can they acquire) the skill to connect Python to a database, and will the finished program actually run on that hardware?</td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="callout callout-tip">
         <div class="callout-icon">💡</div>
@@ -179,7 +200,7 @@
 
     <article>
       <h2 id="feasibility">Research — Feasibility Studies &amp; User Surveys</h2>
-      <p>Before committing time and money, a development team carries out a <strong>feasibility study</strong>: is the proposed expenditure of time and money likely to be worthwhile, and can the project's objectives actually be achieved? You need to be able to <strong>describe, exemplify and implement</strong> research for four types of feasibility, plus user surveys. Notice how closely the four types mirror the <a href="#new-problem">constraint types</a> you have just met — a feasibility study is essentially research into whether the project can succeed <em>within its constraints</em>.</p>
+      <p>Before committing time and money, a development team carries out a <strong>feasibility study</strong>: is the proposed expenditure of time and money likely to be worthwhile, and can the project's objectives actually be achieved? You need to be able to <strong>describe, exemplify and implement</strong> research for four types of feasibility, plus user surveys. They are the same four types as the <a href="#new-problem">constraints</a> you have just met — economic, time, legal and technical — because a feasibility study is exactly the research that asks whether the project can succeed <em>within its constraints</em>.</p>
 
       <h3>The four types of feasibility</h3>
       <table>
@@ -323,33 +344,40 @@
       <p>All of the analysis so far feeds one document: the <strong>requirements specification</strong>. It details the scope, boundaries and constraints, and — because the client agrees to pay for what it describes — it is often the basis of a <strong>legally binding contract</strong> between client and developer, a favourite exam fact.</p>
       <p>At its heart are two linked lists of requirements:</p>
       <ul>
-        <li><strong>End-user requirements</strong> — what the users expect the solution to let them <em>do</em>, in their own words;</li>
-        <li><strong>Functional requirements</strong> — what the solution must do to deliver that, defined precisely as <strong>inputs</strong>, <strong>processes</strong> and <strong>outputs</strong>.</li>
+        <li><strong>End-user requirements</strong> — what the users expect the solution to let them <em>do</em>, written from their point of view: <em>"The end user should&nbsp;…"</em>;</li>
+        <li><strong>Functional requirements</strong> — what the program must actually <em>do</em> to deliver that, written as a <strong>numbered list of individual statements</strong>: <em>"The program should&nbsp;…"</em>.</li>
       </ul>
-      <p>Turning one into the other is the key skill — in the project you do it for real, and in the exam you may be asked to derive functional requirements from a scenario. Here it is for the <a href="#new-problem">PB Tracker</a>. An end-user requirement can produce <strong>more than one</strong> functional requirement:</p>
+      <p>Turning one into the other is the key skill — in the project you do it for real, and in the exam you may be asked to derive functional requirements from a scenario. Two rules make the list usable:</p>
+      <ul>
+        <li><strong>One requirement, one job.</strong> Each numbered FR describes a single thing the program does, so it can be designed, coded and <em>tested</em> on its own. "Load and sort the times" is two requirements, not one.</li>
+        <li><strong>Every FR traces back to an end-user requirement.</strong> If you cannot say which end-user requirement an FR serves, it does not belong in the specification — and one end-user requirement usually needs <strong>several</strong> FRs to deliver it.</li>
+      </ul>
+      <p>Here it is for the <a href="#new-problem">PB Tracker</a>. Notice how naming the <strong>Advanced Higher concepts</strong> — array of records, insertion sort, database read and write — makes each requirement precise enough to build from:</p>
 
       <table>
-        <thead><tr><th style="width:38%;">End-user requirement</th><th>Functional requirements</th></tr></thead>
+        <thead><tr><th style="width:34%;">End-user requirement</th><th>Functional requirements</th></tr></thead>
         <tbody>
           <tr>
-            <td><strong>EU1</strong> — "As a coach, I want to look up an athlete's personal best for a distance, so that I can select championship entries."</td>
+            <td><strong>EU1</strong> — The end user should be able to look up an athlete's personal best for a chosen distance, in order to select championship entries.</td>
             <td>
               <ul>
-                <li><strong>Inputs:</strong> the athlete's name and a distance — <em>entered at the keyboard</em>.</li>
-                <li><strong>Processes:</strong> read all matching times <em>from the club database</em>; sort them fastest-first (<em>insertion sort</em>).</li>
-                <li><strong>Outputs:</strong> the personal best and the three most recent times — <em>displayed on screen</em>.</li>
+                <li><strong>FR1</strong> — The program should take in the athlete's name and the distance from the keyboard.</li>
+                <li><strong>FR2</strong> — The program should load all times matching the entered name and distance from the club <strong>database</strong> into an <strong>array of records</strong>, each record holding the time, date and event.</li>
+                <li><strong>FR3</strong> — The program should sort the array of records into order of time, fastest first, using an <strong>insertion sort</strong>.</li>
+                <li><strong>FR4</strong> — The program should display the fastest time as the athlete's personal best, together with the three most recent times and their dates and events.</li>
               </ul>
             </td>
           </tr>
           <tr>
-            <td><strong>EU2</strong> — "As a coach, I want to record new race results and know immediately when one is a new personal best, so that records stay up to date."</td>
+            <td><strong>EU2</strong> — The end user should be able to record a new race result and be told immediately when it is a new personal best, so that club records stay up to date.</td>
             <td>
               <ul>
-                <li><strong>Inputs:</strong> athlete's name, distance, time, date and event — <em>entered at the keyboard</em>.</li>
-                <li><strong>Processes:</strong> validate the time against the accepted range for that distance; compare the new time with the stored personal best.</li>
-                <li><strong>Outputs:</strong> the validated result — <em>written to the club database</em>; a confirmation message, plus a "new PB!" message when the comparison succeeds — <em>displayed on screen</em>.</li>
+                <li><strong>FR5</strong> — The program should take in the athlete's name, distance, time, date and event from the keyboard.</li>
+                <li><strong>FR6</strong> — The program should validate the time entered against the accepted range for that distance, re-prompting until a valid time is entered.</li>
+                <li><strong>FR7</strong> — The program should compare the new time with the athlete's stored personal best for that distance.</li>
+                <li><strong>FR8</strong> — The program should write the validated result to the club <strong>database</strong>.</li>
+                <li><strong>FR9</strong> — The program should display a confirmation message, and additionally a "new personal best" message when the new time beats the stored best.</li>
               </ul>
-              <p style="margin:.4rem 0 0;font-size:.9rem;color:var(--text-muted);">One end-user requirement, two functional requirements — recording the result <em>and</em> flagging the PB.</p>
             </td>
           </tr>
         </tbody>
@@ -357,7 +385,12 @@
 
       <div class="callout callout-warning">
         <div class="callout-icon">⚠️</div>
-        <div><strong>This example is deliberately partial.</strong> A full requirements specification for the PB Tracker would list more end-user requirements — and your project allows up to <strong>six</strong>. Two are shown here so the <em>mapping</em> is clear: every functional requirement must trace back to an end-user requirement, with its inputs and outputs labelled with their source or destination (keyboard, screen, file or database).</div>
+        <div><strong>This example is deliberately partial.</strong> A full requirements specification for the PB Tracker would list more end-user requirements — your project allows up to <strong>six</strong>, delivered by <strong>4</strong> Advanced Higher concept FRs, <strong>3</strong> integration FRs and <strong>4–8</strong> additional FRs (at least <strong>2</strong> of them for validating keyboard input). Two end-user requirements are shown here so the <em>mapping</em> is clear. Numbering the FRs is what makes those limits countable — and markers apply a penalty when they are exceeded.</div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>In the exam you may see the other format.</strong> The course specification's own worked requirements specifications describe functional requirements <em>"in terms of the inputs, processes and outputs"</em> — exactly the layout used in the <a href="#higher-recap">Higher recap</a> above. Both describe the same thing: FR1 and FR5 are inputs, FR2, FR3, FR6 and FR7 are processes, FR4, FR8 and FR9 are outputs. Read the question and answer in whichever format it asks for.</div>
       </div>
     </article>
 
@@ -673,17 +706,6 @@
         </details>
       </div>
 
-      <div class="practice-question">
-        <div class="q-label">Constraints — 1 mark</div>
-        <p>A requirements specification for a school app states: "The app must be developed in Python and run on the school's Windows 10 network."</p>
-        <p>State the term used to describe this part of the requirements specification. <strong>(1 mark)</strong></p>
-        <details class="marking-instructions">
-          <summary>Marking Instructions</summary>
-          <div class="answer-body">
-            <p><strong>Constraints</strong> — restrictions that apply to the development (development language and delivery platform). <strong>(1 mark)</strong></p>
-          </div>
-        </details>
-      </div>
     </article>
 
     </div>

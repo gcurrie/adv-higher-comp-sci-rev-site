@@ -19,7 +19,7 @@
   <div class="inner">
     <div class="hero-badge">Software Design &amp; Development</div>
     <h1>Design</h1>
-    <p>Structure diagrams and pseudocode at Advanced Higher level, UML class diagrams for object-oriented programs, and annotated user-interface wireframes.</p>
+    <p>Structure diagrams, pseudocode and data flow applied to Advanced Higher problems, annotated user-interface designs, and the new notation for object-oriented programs — the UML class diagram.</p>
   </div>
 </section>
 <main class="page-content">
@@ -39,9 +39,12 @@
         <div class="sidebar-title">On this page</div>
         <ul>
           <li><a href="#intro">Introduction</a></li>
-          <li><a href="#pseudocode">Structure Diagrams &amp; Pseudocode</a></li>
+          <li><a href="#problem">The Problem</a></li>
+          <li><a href="#structure-diagrams">Structure Diagrams</a></li>
+          <li><a href="#pseudocode">Pseudocode</a></li>
+          <li><a href="#design-worked">Worked Example</a></li>
+          <li><a href="#ui-design">User Interface</a></li>
           <li><a href="#class-diagrams">UML Class Diagrams</a></li>
-          <li><a href="#ui-design">User-Interface Design</a></li>
           <li><a href="#test-yourself">Test Yourself</a></li>
         </ul>
       </nav>
@@ -50,164 +53,700 @@
 
     <article>
       <h2 id="intro">Design at Advanced Higher</h2>
-      <p>Design turns the requirements specification into something a programmer can implement. From Higher you already know how to read and write <strong>structure diagrams</strong> and <strong>pseudocode</strong> showing <strong>top-level design</strong>, <strong>data flow</strong> and <strong>refinements</strong>, and how to sketch an interface with a <strong>wireframe</strong>. Advanced Higher keeps all three and adds a new notation designed specifically for object-oriented programs: the <strong>UML class diagram</strong>.</p>
-      <p>Design is the second-biggest skill in the course assessment: <strong>20 marks</strong> of the project and <strong>16–24 marks</strong> of the question paper.</p>
+      <p>Design turns the <a href="../integration/analysis.html#requirements">requirements specification</a> into something a programmer can actually build. Almost everything you need you already have:</p>
+      <ul>
+        <li><strong>Structure diagrams</strong> — from National 5 and Higher: the main steps of a program drawn as boxes, broken down into smaller boxes;</li>
+        <li><strong>Pseudocode</strong> — the same design written as numbered steps in plain, structured English;</li>
+        <li><strong>Data flow</strong> — from Higher: naming the variables and structures that pass <em>into</em> and <em>out of</em> each module;</li>
+        <li><strong>User-interface design</strong> — from Higher: a wireframe showing what the user sees and does.</li>
+      </ul>
+      <p><strong>None of these notations change at Advanced Higher.</strong> What changes is <em>what you are designing with them</em>. A Higher structure diagram might read data from a file into a 1-D array and search it. At Advanced Higher the same boxes will hold an <strong>array of records</strong> read from a <strong>database</strong>, an <strong>insertion sort</strong>, a <strong>binary search</strong>, or a <strong>2-D array</strong> — so every example on this page is built from Advanced Higher concepts rather than Higher ones.</p>
+      <p>One notation <em>is</em> new, and it exists because Advanced Higher introduces object-oriented programming: the <strong>UML class diagram</strong>, which models the classes in a program rather than its steps.</p>
+      <p>Design is the second-biggest skill in the course assessment: <strong>20 marks</strong> of the project and a substantial share of the question paper.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>The course specification asks you to <strong>read and understand</strong> designs written as structure diagrams, pseudocode and UML — but to <strong>write</strong> efficient designs using <strong>pseudocode</strong>. So practise reading all three notations, and practise producing pseudocode until it is automatic.</div>
+      </div>
 
       <h3>Key Terms</h3>
       <div class="key-terms">
-        <div class="key-term"><div class="term">Top-Level Design</div><div class="def">The main steps of the program, numbered, before any detail is added.</div></div>
-        <div class="key-term"><div class="term">Refinement</div><div class="def">Breaking one top-level step into numbered sub-steps (3 → 3.1, 3.2, 3.3).</div></div>
-        <div class="key-term"><div class="term">Data Flow</div><div class="def">The variables and data structures passed in and out of each module.</div></div>
-        <div class="key-term"><div class="term">Class Diagram</div><div class="def">A UML diagram modelling the static structure of an OO program — class name, instance variables, methods, visibility and inheritance.</div></div>
-        <div class="key-term"><div class="term">Instance Variable</div><div class="def">A variable defined in a class, holding data belonging to each object — listed with its data type on a class diagram.</div></div>
-        <div class="key-term"><div class="term">Visibility (+/−)</div><div class="def">On a class diagram, + marks a public member and − marks a private member.</div></div>
-        <div class="key-term"><div class="term">Constructor</div><div class="def">The method that creates and initialises an object — shown in the methods section with the same name as the class.</div></div>
+        <div class="key-term"><div class="term">Top-Level Design</div><div class="def">The main steps of the program, numbered, before any detail is added — one step per functional requirement.</div></div>
+        <div class="key-term"><div class="term">Refinement</div><div class="def">Breaking one top-level step into numbered sub-steps (3 → 3.1, 3.2, 3.3) until it is detailed enough to code from.</div></div>
+        <div class="key-term"><div class="term">Data Flow</div><div class="def">The variables and data structures passed <em>in</em> to and <em>out</em> of each module.</div></div>
+        <div class="key-term"><div class="term">Efficient Design</div><div class="def">A design that reaches the result with no unnecessary passes through the data and no repeated work.</div></div>
         <div class="key-term"><div class="term">Wireframe</div><div class="def">A user-interface design showing visual layout, inputs, validation, underlying processes and outputs.</div></div>
+        <div class="key-term"><div class="term">Class Diagram</div><div class="def">A UML diagram modelling the static structure of an OO program — class name, instance variables, methods, visibility, inheritance and arrays of objects.</div></div>
+        <div class="key-term"><div class="term">Instance Variable</div><div class="def">A variable defined in a class, holding data belonging to each object — listed with its data type on a class diagram.</div></div>
+        <div class="key-term"><div class="term">Visibility (+/−)</div><div class="def">On a class diagram, <strong>+</strong> marks a public member and <strong>−</strong> marks a private member.</div></div>
+        <div class="key-term"><div class="term">Constructor</div><div class="def">The method that creates and initialises an object — shown in the methods section with the same name as the class.</div></div>
+        <div class="key-term"><div class="term">Array of Objects</div><div class="def">An instance variable holding many objects of another class, written <code>results: Array of Result[ ]</code>.</div></div>
       </div>
     </article>
 
     <article>
-      <h2 id="pseudocode">Structure Diagrams &amp; Pseudocode</h2>
-      <p>The notation is unchanged from Higher — what changes is the <strong>content</strong> being designed. Advanced Higher designs routinely involve <strong>2D arrays</strong>, <strong>arrays of objects</strong>, and modules that <strong>connect to a database</strong>. You must be able to <em>read and understand</em> designs using structure diagrams, pseudocode and UML, and <em>write</em> efficient designs using pseudocode.</p>
+      <h2 id="problem">The Problem We Are Designing</h2>
+      <p>Every design notation on this page describes <strong>the same problem</strong>, so you can see one solution expressed four different ways. It is the <strong>PB Tracker</strong> analysed in full on the <a href="../integration/analysis.html#new-problem">Analysis</a> page:</p>
 
       <div class="example-block">
-        <div class="example-label">Example — pseudocode design with top-level design, data flow and refinement</div>
-        <p>Design for the stock search program analysed on the <a href="../integration/analysis.html">Analysis</a> page (data held in a 2D array):</p>
-        <div class="code-block">
-          <div class="code-label">Top-level design with data flow</div>
-          <pre><code>1. Read stock data from file into 2D array    # Data flow OUT: stock(2D array)
-2. Sort array into ascending order of itemID  # IN: stock  OUT: stock
-3. Get target itemID from user                # OUT: target
-4. Search array for target                    # IN: stock, target  OUT: found, row
-5. Display result                             # IN: found, row, stock</code></pre>
-        </div>
-        <div class="code-block">
-          <div class="code-label">Refinement of step 4 (binary search)</div>
-          <pre><code>4.1 set low to 0 and high to number of rows - 1
-4.2 set found to false
-4.3 while not found and low &lt;= high
-4.4    set mid to (low + high) DIV 2
-4.5    if stock[mid][0] = target then
-4.6       set found to true and row to mid
-4.7    else if target &gt; stock[mid][0] then
-4.8       set low to mid + 1
-4.9    else
-4.10      set high to mid - 1
-4.11   end if
-4.12 end while</code></pre>
-        </div>
-        <p>Notice each process from the functional requirements became a numbered top-level step, the data flow names the structures passed between modules, and the refinement expands one step into implementable detail — exactly the three things the course spec asks a design to show.</p>
+        <div class="example-label">Problem description — Westbrae Harriers PB Tracker</div>
+        <p>A coach types in an <strong>athlete's name and a distance</strong>. The program reads <strong>every result that athlete has recorded at that distance from the club database</strong>, then displays the athlete's <strong>personal best</strong> for the distance together with their <strong>three most recent</strong> results, each showing the date and the event.</p>
       </div>
+
+      <p>Look at what that one paragraph contains — it is a deliberately Advanced Higher shape of problem:</p>
+      <ul>
+        <li><strong>Data entered by the user</strong> — the athlete's name and the distance, from the keyboard;</li>
+        <li><strong>Data read from a database</strong> — every matching result, loaded into a data structure;</li>
+        <li><strong>A complex process</strong> — the results must be put in date order before the three most recent can be picked out, and the fastest of them found;</li>
+        <li><strong>A structured output</strong> — not a single value, but a personal best <em>and</em> a formatted list of three results.</li>
+      </ul>
+
+      <h3>Identifying the data types and structures</h3>
+      <p>Before drawing anything, work out <strong>what the data looks like</strong>. Each result has three pieces of information of different types, which rules out a simple array — you need a <strong>record</strong>, and then an <strong>array of records</strong> to hold many of them:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Record definition and data structures</div>
+        <pre><code>RECORD result IS { STRING date, STRING event, REAL time }
+
+resultsArray   an array of result records — up to 100 for one athlete
+numResults     how many results were actually loaded
+athleteName    the name entered by the coach
+distance       the distance entered by the coach, 100 to 10000
+bestIndex      the position of the fastest result in resultsArray</code></pre>
+      </div>
+      <p class="text-muted" style="font-size:.9rem;">The record structure is written in the form <strong>exam papers use</strong> when they hand you one — 2023 Question 5 gives its record exactly like this — so it is worth being able to read at a glance.</p>
+
+      <table>
+        <thead><tr><th style="width:22%;">Data</th><th style="width:22%;">Type or structure</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><code>date</code>, <code>event</code></td><td>String</td><td>Text that is displayed but never calculated with.</td></tr>
+          <tr><td><code>time</code></td><td>Real</td><td>Race times need decimal places (4:21.6), so an integer would lose precision.</td></tr>
+          <tr><td><code>result</code></td><td><strong>Record</strong></td><td>Three <em>different</em> types describing one thing — exactly what a record is for. Parallel arrays would work but are far harder to sort.</td></tr>
+          <tr><td><code>resultsArray</code></td><td><strong>Array of records</strong></td><td>Many results, all the same shape, that must be sorted and searched as a unit.</td></tr>
+          <tr><td><code>numResults</code>, <code>distance</code>, <code>bestIndex</code></td><td>Integer</td><td>Whole-number counts, positions and metres.</td></tr>
+        </tbody>
+      </table>
+      <p>Choosing the structure <em>first</em> is what makes the rest of the design possible — the moment you commit to an array of records, sorting becomes "move whole records", and every later step can refer to <code>resultsArray[index].time</code>. Records and arrays of records are covered in depth on the <a href="data-structures.html">Data Structures</a> page.</p>
+    </article>
+
+    <article>
+      <h2 id="structure-diagrams">Structure Diagrams</h2>
+      <p>A <strong>structure diagram</strong> shows a program as boxes. The program name goes in a box at the top, the <strong>main steps</strong> sit in a row beneath it, and anything below a box happens <em>inside</em> that box. Boxes at the same level run <strong>left to right</strong>.</p>
+
+      <h3>Top-level design with data flow</h3>
+      <p>The <strong>top-level design</strong> is just the main steps, in order, with no detail — and the fastest way to get it is to take the <a href="../integration/analysis.html#requirements">functional requirements</a> and turn each one into a box. <strong>Data flow</strong> is then added to every box: which variables go <em>in</em>, and which come back <em>out</em>.</p>
+
+      <img src="../resources/sdd/pb-structure-top.svg"
+           class="zoomable"
+           alt="Top-level structure diagram for the PB Tracker. A box labelled Look Up Personal Best sits at the top, with five boxes beneath it connected by a horizontal line: 1 Get athlete name and distance, 2 Load results from database into resultsArray, 3 Sort results by date most recent first, 4 Find the personal best, and 5 Display PB and the three recent results. Green downward arrows on each connector show data flowing in and gold upward arrows show data flowing out. Beneath each box a band lists the variables: step 1 takes nothing in and returns athleteName and distance; step 2 takes athleteName and distance and returns resultsArray and numResults; step 3 takes resultsArray and numResults and returns the sorted resultsArray; step 4 takes resultsArray and numResults and returns bestIndex; step 5 takes resultsArray, numResults and bestIndex and returns nothing."
+           style="width:100%;max-width:1180px;margin:1.25rem auto;display:block;" />
+
+      <p>Read the data flow across the diagram and you can see the whole program working: <code>athleteName</code> and <code>distance</code> are produced by step 1 and consumed by step 2; <code>resultsArray</code> is produced by step 2, <em>modified</em> by step 3, and then read by steps 4 and 5. A variable that goes into a module and comes back changed — like <code>resultsArray</code> in step 3 — is flowing <strong>in and out</strong>, and that is worth showing explicitly.</p>
 
       <div class="callout callout-tip">
         <div class="callout-icon">💡</div>
-        <div>Pseudocode is not a fixed notation — more "code-like" pseudocode is fine, and in the exam marks are for the <strong>logic</strong>, not the style. What loses marks is missing steps (forgetting to initialise, no loop end condition) or a design that doesn't match the requirements.</div>
+        <div><strong>The data-flow test.</strong> If a module needs a value that no earlier module produced, a step is missing. If a module produces a value nothing ever uses, it is doing unnecessary work. Tracing the arrows is the quickest way to catch both — and it is exactly what makes a design <strong>efficient</strong>.</div>
       </div>
 
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🖼️</div>
-        <div class="placeholder-text">Diagram placeholder — Structure diagram with data flow</div>
-        <div class="placeholder-sub">Planned: structure diagram of the stock program above — five modules under a main module, annotated with the data flow in/out of each.</div>
+      <h3 id="refining">How to refine a step</h3>
+      <p>A top-level step like "sort the results" is a whole algorithm hiding inside one box. <strong>Refinement</strong> is breaking it open. Complex problems put people off because they try to refine everything at once — so use the same method every time:</p>
+
+      <div class="example-block">
+        <div class="example-label">A repeatable method for refining any step</div>
+        <ol>
+          <li><strong>Ask whether the step needs refining at all.</strong> If you could sit down and code the box in one or two lines, leave it alone. "Get athlete name and distance" needs no refinement; "sort the results" clearly does.</li>
+          <li><strong>Say what the step does in one sentence, out loud.</strong> "It puts the records in order with the most recent date first." That sentence names the algorithm you need.</li>
+          <li><strong>Decide what has to repeat.</strong> Nearly every Advanced Higher refinement contains a loop. Ask: <em>fixed loop</em> (you know how many times — "for each of the 32 authorities") or <em>conditional loop</em> (you don't — "until the right position is found")?</li>
+          <li><strong>Write the steps for <em>one</em> pass of that loop.</strong> Just one. What happens to a single record, a single reading, a single authority?</li>
+          <li><strong>Add what must happen before and after the loop.</strong> This is where marks are won and lost: initialising counters and totals <em>before</em>, and storing or displaying the result <em>after</em>.</li>
+          <li><strong>Number the sub-steps under the parent.</strong> Step 3 becomes 3.1, 3.2, 3.3… If any sub-step is still too big, refine <em>it</em> the same way (3.4 → 3.4.1, 3.4.2).</li>
+        </ol>
       </div>
+
+      <h3>The most complex refinement — step 3</h3>
+      <p>Applying that method to step 3: it needs a <strong>fixed loop</strong> through every record (we know how many there are), and inside it a <strong>conditional loop</strong> that shifts records along until the right gap appears. That is an <strong>insertion sort</strong>, and because it contains a loop inside a loop it is the most complex box in this design — so it is the one worth drawing in full.</p>
+
+      <img src="../resources/sdd/pb-structure-refine.svg"
+           class="zoomable"
+           alt="Refinement structure diagram for step 3, the insertion sort. Step 3, sort results by date most recent first, sits at the top. Below it is a gold box marked with a loop symbol: 3.1 for each record from the second to the last, a fixed loop. Beneath 3.1 are four boxes: 3.2 copy the current record into temp; 3.3 set pointer to the position before it; 3.4 a second gold loop box, while pointer is at least zero and temp is more recent than resultsArray at pointer; and 3.7 place temp at position pointer plus one. Beneath 3.4 are two further boxes: 3.5 move that record up one position, and 3.6 subtract one from pointer. A note explains that gold boxes with loop symbols are iteration, that 3.1 is a fixed loop and 3.4 a conditional loop nested inside it, and that everything below a box happens inside it while boxes at the same level run left to right."
+           style="width:100%;max-width:1080px;margin:1.25rem auto;display:block;" />
+
+      <p>Steps 1, 2, 4 and 5 would each get their own refinement diagram in a full design — step 2 opening the database connection and running a query, step 4 refining into a find-minimum, step 5 into a formatted display loop. In an exam you are normally asked for <strong>one</strong> refinement, and it will be the one with the algorithm in it.</p>
+
     </article>
 
     <article>
-      <h2 id="class-diagrams">UML Class Diagrams</h2>
-      <p>Where a <a href="../integration/analysis.html#use-case">use case diagram</a> models the <strong>dynamic</strong> behaviour of a system, a <strong>class diagram</strong> models its <strong>static</strong> structure: the classes, what data they hold, what they can do, and how they relate to each other. This page assumes the OO vocabulary — if terms like <em>method</em> or <em>inheritance</em> feel shaky, skim the <a href="oop.html">Object-Oriented Programming</a> page first, then come back.</p>
+      <h2 id="pseudocode">Pseudocode</h2>
+      <p><strong>Pseudocode</strong> carries exactly the same information as a structure diagram — the same steps, the same numbering, the same refinements — but written as lines rather than boxes. It is the notation the exam asks you to <em>produce</em>, because it scales: a design three levels deep is painful to draw and easy to write.</p>
+      <p>Here is the <strong>same design</strong> you have just seen, in pseudocode. Compare it box for box with the diagrams above.</p>
 
-      <h3>Anatomy of a class</h3>
-      <p>A class is drawn as a box with <strong>three sections</strong>:</p>
-      <ol>
-        <li><strong>Class name</strong> — at the top;</li>
-        <li><strong>Instance variables</strong> — each with its <strong>data type</strong> (<code>address: String</code>);</li>
-        <li><strong>Methods</strong> — including the <strong>constructor</strong>, which always has the <strong>same name as the class</strong>.</li>
-      </ol>
-      <p>Every member is marked with its <strong>visibility</strong>: a <strong>−</strong> prefix for <strong>private</strong> (usable only by the owning class) and a <strong>+</strong> prefix for <strong>public</strong> (usable by any class).</p>
-
-      <div class="example-block">
-        <div class="example-label">Example — the House class (estate agency program)</div>
-        <div style="overflow-x:auto;">
-        <table style="max-width:340px;font-family:var(--font-mono);font-size:.85rem;">
-          <thead><tr><th style="text-align:center;">House</th></tr></thead>
-          <tbody>
-            <tr><td>−address: String<br />−town: String<br />−bedrooms: Integer<br />−description: String<br />−houseValue: Integer</td></tr>
-            <tr><td>+house()<br />+setAddress()<br />+getAddress()<br />+updateBedrooms()</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p>All five instance variables are <strong>private</strong> (−), so they can only be reached through the <strong>public</strong> (+) methods. <code>house()</code> is the <strong>constructor</strong> — same name as the class — used to create each individual House object. <code>setAddress()</code> and <code>getAddress()</code> are a <strong>setter and getter</strong> (mutator and accessor): the methods that edit and retrieve the value of the private variable <code>address</code>.</p>
+      <div class="code-block code-plain">
+        <div class="code-label">Top-level design with data flow</div>
+        <pre><code>1. ask the coach for an athlete name and a distance
+      out: athleteName, distance
+2. load all matching results from the database into resultsArray
+      in: athleteName, distance      out: resultsArray, numResults
+3. sort resultsArray by date, most recent first
+      in: numResults                 in/out: resultsArray
+4. find the athlete's personal best
+      in: resultsArray, numResults   out: bestIndex
+5. display the personal best and the three most recent results
+      in: resultsArray, numResults, bestIndex, athleteName, distance</code></pre>
       </div>
 
-      <h3>Inheritance on a class diagram</h3>
-      <p>A <strong>sub-class</strong> inherits all the properties and methods of its <strong>super-class</strong>. On a class diagram, inheritance is shown by an <strong>arrow pointing from the sub-class to the super-class</strong>.</p>
-
-      <h3>Array of objects on a class diagram</h3>
-      <p>An instance variable can itself be an <strong>array of objects</strong> of another class, written as:</p>
-      <div class="code-block">
-        <div class="code-label">Notation</div>
-        <pre><code>offersReceived: Array of Offer[ ]</code></pre>
-      </div>
-      <p>where <code>Offer</code> is another class. The connection between the array of objects and its class is also shown with an arrow.</p>
-
-      <div class="example-block">
-        <div class="example-label">Example — full class diagram for the estate agency</div>
-        <p>The full design has <strong>House</strong> as the super-class, with <strong>ForSale</strong> and <strong>ForRent</strong> as sub-classes (inheritance arrows point up to House). ForSale contains <code>offersReceived: Array of Offer[ ]</code>, so a fourth class, <strong>Offer</strong>, is linked to ForSale by an arrow.</p>
-        <div style="overflow-x:auto;">
-        <table style="font-family:var(--font-mono);font-size:.8rem;">
-          <thead><tr><th style="text-align:center;">ForSale → House</th><th style="text-align:center;">ForRent → House</th><th style="text-align:center;">Offer</th></tr></thead>
-          <tbody>
-            <tr>
-              <td>−askingPrice: Real<br />−closingDate: String<br />−underOffer: Boolean<br />−offersReceived: Array of Offer[ ]<br />−sold: Boolean</td>
-              <td>−rentalCost: Real<br />−deposit: Real<br />−rentalLength: Integer<br />−rented: Boolean</td>
-              <td>−dateOfOffer: String<br />−amountOfOffer: Integer</td>
-            </tr>
-            <tr>
-              <td>+forSale()<br />+updateAskingPrice()<br />+updateSoldStatus()</td>
-              <td>+forRent()<br />+updateRentStatus()</td>
-              <td>+offer()<br />+setOfferDate()<br />+getOfferDate()<br />+setOfferAmount()<br />+getOfferAmount()</td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <p>Because ForSale <strong>inherits</strong> from House, a ForSale object has <em>all nine</em> instance variables — the five from House plus its own four — without House's variables being re-declared. That is the whole point of inheritance: common data and methods are defined once, in the super-class.</p>
+      <div class="code-block code-plain">
+        <div class="code-label">Refinement of step 3 — insertion sort by date</div>
+        <pre><code>3.1 for position = 1 to numResults - 1
+3.2    store resultsArray[position] in temp
+3.3    set pointer = position - 1
+3.4    while pointer &gt;= 0 and temp.date is more recent than resultsArray[pointer].date
+3.5       copy resultsArray[pointer] into resultsArray[pointer + 1]
+3.6       subtract 1 from pointer
+       end while
+3.7    store temp in resultsArray[pointer + 1]
+    end for</code></pre>
       </div>
 
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🖼️</div>
-        <div class="placeholder-text">Diagram placeholder — Estate agency class diagram</div>
-        <div class="placeholder-sub">Planned: proper UML rendering of House / ForSale / ForRent / Offer with inheritance arrows and the array-of-objects link.</div>
+      <p>The numbering matches the refinement diagram exactly, box for box — 3.1 is the outer loop, 3.5 and 3.6 sit inside 3.4, and 3.7 runs once per record after the inner loop has finished. The <code>end while</code> and <code>end for</code> lines are unnumbered here because they close a step rather than being one; numbering them too, as published marking instructions often do, is equally acceptable.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Pseudocode is not the SQA reference language.</strong> Reference language is a <em>programming</em> notation with fixed keywords — it appears in the question paper because exam code has to be language-neutral. Pseudocode is a <em>design</em> notation: ordinary lowercase English, precise about the logic but free about the wording. Write <code>store temp in resultsArray[pointer + 1]</code>, not <code>SET resultsArray[pointer + 1] TO temp</code>. Use exact array positions where the algorithm depends on them, and plain description everywhere else.</div>
       </div>
 
-      <div class="callout callout-warning">
-        <div class="callout-icon">⚠️</div>
-        <div><strong>Checklist for drawing a class diagram in the exam:</strong> class name on top ✔ instance variables <em>with data types</em> ✔ visibility symbols on every member ✔ constructor named after the class ✔ inheritance arrow from sub-class <em>to</em> super-class ✔. Missing data types and missing +/− symbols are the two most common dropped marks.</div>
+      <p>Two details in that refinement are worth copying into your own designs. The whole <strong>record</strong> is copied into <code>temp</code> and moved as a unit — not just the date — so the event and time travel with it. And the loop at 3.4 stops on <em>two</em> conditions: the pointer running off the front of the array, <em>and</em> the correct position being found. Forgetting the first is the classic way to write a sort that crashes.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Pseudocode is not a fixed notation.</strong> More code-like or more English-like are both fine, and marks are for the <strong>logic</strong>, not the style. What loses marks is missing steps — no initialisation, no loop end condition, nothing done with the result — or a design that does not match the requirements. If you can hand your pseudocode to someone who has never seen the problem and they could code it, it is detailed enough.</div>
+      </div>
+
+      <h3 id="design-worked">Worked Example</h3>
+      <p>This is <strong>2023 Question 5</strong> — a full design question worth 13 marks across its parts. Read the scenario, attempt each part yourself, then open the marking instructions. The commentary shows the six-step refining method being applied to an unfamiliar problem.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Design — 2023 Question 5 (EnviroScot Climate Tracker)</div>
+        <p><strong>The scenario and the given structure diagram:</strong></p>
+        <img src="../resources/integrated/worked-examples/ah_design_q1-1.png" class="zoomable" alt="2023 Question 5. EnviroScot has set up 500 weather stations across Scotland to track the effect of climate change. Several weather stations have been placed in each of the 32 local authorities. The rainfall in centimetres for 28 February 2023 from all 500 weather stations has been stored in a CSV file. A structure diagram shows the Climate Tracker program with five modules: read weather data from file, extract unique local authority names, insertion sort local authority names, calculate average rainfall for each local authority, and compare local authority data. The data is read into an array of 500 records called readingsArray with the record structure RECORD reading IS open brace STRING place, STRING authority, INTEGER rainfall close brace. A sample table of data is shown." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+        <p><strong>Before reading any part, orient yourself.</strong> Notice the question has already done the top-level design <em>for</em> you — the five boxes in the structure diagram are the top level, and each part below asks you to refine <em>one</em> of them. That is a very common shape for this question. Note the two data structures and keep them in front of you: <code>readingsArray</code> holds 500 records of <code>{place, authority, rainfall}</code>, and <code>rainfallArray</code> will hold 32 records of <code>{local, averageRainfall}</code>.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a i</span>
+            <span class="qp-title">Extract a unique list of local authority names</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-2.png" class="zoomable" alt="Question 5(a)(i). Using the data in the readingsArray, the program must calculate the average rainfall for each local authority and store the results in an array of 32 records called rainfallArray, with the structure RECORD rainfall IS open brace STRING local, INTEGER averageRainfall close brace. Using pseudocode, design an algorithm that will extract a unique list of local authority names from the readingsArray and store them in the rainfallArray. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+            <p><strong>Say what it does in one sentence:</strong> <em>"Go through the readings, and every time I meet an authority I haven't seen before, add it to the rainfall array."</em> That sentence is the algorithm — now build it one decision at a time. Each stage below adds only the <span style="background:rgba(201,162,39,.35);padding:0 .25rem;">gold</span> lines.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>What repeats?</p>
+            <p>Working through the readings. You could use a fixed loop of 500 — but there are only <strong>32</strong> authorities to find, and once you have them all there is no point reading on. A <strong>conditional loop</strong> is more <strong>efficient</strong>, so start with nothing but the loop:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — the loop</div>
+              <pre><code><span class="ln-new">while numLAFound &lt; 32</span><span class="ln-new">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>What happens on one pass?</p>
+            <p>Look at the authority of the reading you are on, and decide whether it is new. Write the decision before worrying about how to test it:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — the decision</div>
+              <pre><code><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-new">   if the local authority for the current reading is not already stored in the rainfall array then</span><span class="ln-new">   end if</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>What happens when it <em>is</em> new?</p>
+            <p>Store it — and the position to store it in is the count of how many you have found so far, which is also the next free slot. Then increase that count so the next one lands beside it:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — store it</div>
+              <pre><code><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-dim">   if the local authority for the current reading is not already stored in the rainfall array then</span><span class="ln-new">      store that local authority in the rainfall array at numLAFound position</span><span class="ln-new">      add 1 to numLAFound</span><span class="ln-dim">   end if</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>What must happen before the loop?</p>
+            <p>Both counters have to start somewhere. Miss this and the design does not run at all:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — initialise</div>
+              <pre><code><span class="ln-new">set readings position = 0</span><span class="ln-new">set numLAFound = 0</span><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-dim">   if the local authority for the current reading is not already stored in the rainfall array then</span><span class="ln-dim">      store that local authority in the rainfall array at numLAFound position</span><span class="ln-dim">      add 1 to numLAFound</span><span class="ln-dim">   end if</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">5</span>Does anything move it forward?</p>
+            <p>No — and as written this loops forever on reading 0. You must step to the next reading <strong>every</strong> time round, which means <em>outside</em> the <code>if</code>, not inside it. Putting this line in the wrong place is the single most common error in this question:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 5 — the completed answer</div>
+              <pre><code><span class="ln-dim">set readings position = 0</span><span class="ln-dim">set numLAFound = 0</span><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-dim">   if the local authority for the current reading is not already stored in the rainfall array then</span><span class="ln-dim">      store that local authority in the rainfall array at numLAFound position</span><span class="ln-dim">      add 1 to numLAFound</span><span class="ln-dim">   end if</span><span class="ln-new">   add 1 to readings position</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p>Now check it against the three marks: <strong>traversing</strong> the readings array (stages 1 and 5), <strong>identifying</strong> a value as unique (stage 2) and <strong>storing</strong> it in an appropriate position (stage 3). Every mark is accounted for.</p>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-2_ans.png" alt="Marking instructions for 2023 Question 5(a)(i). 1 mark for traversing the readings array, 1 mark for identifying a unique value in the readings array, and 1 mark for storing each unique local authority found in an appropriate position of the rainfall array. The algorithm sets readings position to 0, sets numLAFound to 0, then while numLAFound is less than 32, if the local authority for the current reading is not already stored in the rainfall array then store it at the numLAFound position and add 1 to numLAFound, end if, add 1 to readings position, end while." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a iii</span>
+            <span class="qp-title">Calculate the average rainfall for each local authority</span>
+            <span class="qp-marks">4 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-3.png" class="zoomable" alt="Question 5(a)(iii). In the calculation of the average rainfall for each local authority, any calculated averages with a decimal value must be rounded to the nearest integer. Using pseudocode, design an algorithm to calculate the average rainfall for each local authority and store the results in the rainfallArray. 4 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+            <p><strong>Say what it does in one sentence:</strong> <em>"For each of the 32 authorities, add up the rainfall from every reading belonging to it, then divide by how many readings there were."</em> Read that again and count the repeats — "for each of the 32" is one loop, "every reading" is another <em>inside</em> it. Spotting the <strong>nested loop</strong> is the biggest step in this question.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop — one pass per authority</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — loop the authorities</div>
+              <pre><code><span class="ln-new">for loop1 = 0 to 31</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>The inner loop — check every reading</p>
+            <p>For the one authority the outer loop is currently on, you have to look at all 500 readings to find the ones that belong to it:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — nest the second loop</div>
+              <pre><code><span class="ln-dim">for loop1 = 0 to 31</span><span class="ln-new">   for loop2 = 0 to 499</span><span class="ln-new">   end for</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>What happens on one pass of the inner loop?</p>
+            <p>If this reading belongs to the authority we are working on, add its rainfall to a running total and count it:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — accumulate</div>
+              <pre><code><span class="ln-dim">for loop1 = 0 to 31</span><span class="ln-dim">   for loop2 = 0 to 499</span><span class="ln-new">      if rainfallArray[loop1].local = readingsArray[loop2].authority then</span><span class="ln-new">         add readingsArray[loop2].rainfall to total</span><span class="ln-new">         add 1 to count</span><span class="ln-new">      end if</span><span class="ln-dim">   end for</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>Where do <code>total</code> and <code>count</code> get reset?</p>
+            <p>This is the stage that decides the question. They must be reset <strong>inside the outer loop but before the inner one</strong> — so every authority starts from zero. Reset them above the outer loop instead and the second authority inherits the first one's total, making every answer after the first wrong:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — reset in the right place</div>
+              <pre><code><span class="ln-dim">for loop1 = 0 to 31</span><span class="ln-new">   set total = 0</span><span class="ln-new">   set count = 0</span><span class="ln-dim">   for loop2 = 0 to 499</span><span class="ln-dim">      if rainfallArray[loop1].local = readingsArray[loop2].authority then</span><span class="ln-dim">         add readingsArray[loop2].rainfall to total</span><span class="ln-dim">         add 1 to count</span><span class="ln-dim">      end if</span><span class="ln-dim">   end for</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">5</span>What happens after the inner loop?</p>
+            <p>The total is complete for this authority, so work out the average, <strong>round</strong> it, and store it — still inside the outer loop, because it has to happen once per authority:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 5 — the completed answer</div>
+              <pre><code><span class="ln-dim">for loop1 = 0 to 31</span><span class="ln-dim">   set total = 0</span><span class="ln-dim">   set count = 0</span><span class="ln-dim">   for loop2 = 0 to 499</span><span class="ln-dim">      if rainfallArray[loop1].local = readingsArray[loop2].authority then</span><span class="ln-dim">         add readingsArray[loop2].rainfall to total</span><span class="ln-dim">         add 1 to count</span><span class="ln-dim">      end if</span><span class="ln-dim">   end for</span><span class="ln-new">   set average = total / count, rounded to the nearest whole number</span><span class="ln-new">   store average in the rainfall array at loop1 position</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p>Against the four marks: the <strong>loop of 32</strong> (stage 1), <strong>traversing the readings</strong> to find matches (stages 2–3), <strong>updating a counter</strong> for the number of readings (stage 3) and <strong>calculating the average with rounding</strong> (stage 5).</p>
+            <div class="callout callout-warning">
+              <div class="callout-icon">⚠️</div>
+              <div>The question says averages must be <strong>rounded to the nearest integer</strong> — and the marking instructions state explicitly that <strong>no mark is given for using <code>INT</code></strong>. <code>INT</code> truncates (4.9 becomes 4); rounding gives 5. Read the wording and use <code>ROUND</code>.</div>
+            </div>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-3_ans.png" alt="Marking instructions for 2023 Question 5(a)(iii). 1 mark for the loop needed to process each local authority average, a loop of 32. 1 mark for traversing readingsArray to find each occurrence of unique local authority names. 1 mark for updating a counter to record the number of readings for each local authority. 1 mark for calculation of the average with rounding to the nearest integer, with a note that no mark should be awarded for use of the INT function. The algorithm uses an outer loop from 0 to 31 that resets total, average and count, an inner loop from 0 to 499 that adds matching rainfall to the total and increments count, then sets average to round of total divided by count and stores it in the rainfall array." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Binary search and star-chart output</span>
+            <span class="qp-marks">6 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-4.png" class="zoomable" alt="Question 5(b). The program is required to compare the average rainfall for four local authorities. Users should be able to enter the names of four local authorities. The program will then use the binary search algorithm to find each local authority and its associated average rainfall. The output will be a diagram showing the average rainfall for each of the four local authorities, with sample output showing Borders, Inverclyde, Stirling and Highlands each followed by a row of asterisks. Using pseudocode, design an algorithm to enter the names of the local authorities requested by the user, apply the binary search algorithm to find the rainfall data for each, and display the diagram with one asterisk representing 1 cm of average rainfall. 6 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+            <p>Six marks for one algorithm looks daunting — but the question has already broken it up. <strong>The three bullet points are three sub-designs</strong>: get the input, search, display. Build them in that order and the size stops mattering.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop and the input</p>
+            <p>Everything happens four times, so a fixed loop of 4 wraps the whole thing. The heading, though, appears <strong>once</strong> in the sample output — so it goes <em>above</em> the loop, not inside it:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — heading and input</div>
+              <pre><code><span class="ln-new">display the bar chart heading</span><span class="ln-new">for user = 1 to 4</span><span class="ln-new">   ask the user for the name of a local authority</span><span class="ln-new">   store the value entered in location</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Set up the binary search</p>
+            <p>A binary search needs three things before it starts: the bottom of the range, the top of the range, and a flag saying whether it has found anything yet. There are 32 records, so the range is 0 to 31. These go <strong>inside</strong> the loop of 4 — each new search must start from the full range again:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — initialise the search</div>
+              <pre><code><span class="ln-dim">display the bar chart heading</span><span class="ln-dim">for user = 1 to 4</span><span class="ln-dim">   ask the user for the name of a local authority</span><span class="ln-dim">   store the value entered in location</span><span class="ln-new">   set low = 0</span><span class="ln-new">   set high = 31</span><span class="ln-new">   set found = false</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>The search loop</p>
+            <p>Keep halving until you find it <em>or</em> run out of range — that is two stopping conditions, and both are needed. Inside, jump to the middle of whatever range is left:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the conditional loop</div>
+              <pre><code><span class="ln-dim">   set low = 0</span><span class="ln-dim">   set high = 31</span><span class="ln-dim">   set found = false</span><span class="ln-new">   while found = false and low &lt;= high</span><span class="ln-new">      set mid = (low + high) / 2, rounded down</span><span class="ln-new">   end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>The three outcomes of each halving</p>
+            <p>Compare the middle record with what the user typed. Either it matches, or the target is later in the array, or it is earlier — and each case does something different to the range:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — narrow the range</div>
+              <pre><code><span class="ln-dim">   while found = false and low &lt;= high</span><span class="ln-dim">      set mid = (low + high) / 2, rounded down</span><span class="ln-new">      if rainfallArray[mid].local = location then</span><span class="ln-new">         set found = true</span><span class="ln-new">      else if rainfallArray[mid].local &lt; location then</span><span class="ln-new">         set low = mid + 1</span><span class="ln-new">      else</span><span class="ln-new">         set high = mid - 1</span><span class="ln-new">      end if</span><span class="ln-dim">   end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">5</span>Use the result — the bit people forget</p>
+            <p>The search leaves <code>mid</code> pointing at the record it found. "One asterisk represents 1 cm" means a fixed loop that runs <code>averageRainfall</code> times, printing a star each pass on the <em>same</em> line, with a new line once it finishes. Look back at the sample output and copy its shape exactly:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 5 — the completed answer</div>
+              <pre><code><span class="ln-dim">display the bar chart heading</span><span class="ln-dim">for user = 1 to 4</span><span class="ln-dim">   ask the user for the name of a local authority</span><span class="ln-dim">   store the value entered in location</span><span class="ln-dim">   set low = 0</span><span class="ln-dim">   set high = 31</span><span class="ln-dim">   set found = false</span><span class="ln-dim">   while found = false and low &lt;= high</span><span class="ln-dim">      set mid = (low + high) / 2, rounded down</span><span class="ln-dim">      if rainfallArray[mid].local = location then</span><span class="ln-dim">         set found = true</span><span class="ln-dim">      else if rainfallArray[mid].local &lt; location then</span><span class="ln-dim">         set low = mid + 1</span><span class="ln-dim">      else</span><span class="ln-dim">         set high = mid - 1</span><span class="ln-dim">      end if</span><span class="ln-dim">   end while</span><span class="ln-new">   display location</span><span class="ln-new">   for stars = 1 to the average rainfall found at mid position</span><span class="ln-new">      display "*" on the same line as location</span><span class="ln-new">   end for</span><span class="ln-new">   move to a new line</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p>Six marks, and you can now point at each one: input and heading (stage 1), initialising <code>low</code> and <code>high</code> (stage 2), initialising and updating <code>found</code> and <code>mid</code> (stages 2–4), the conditional loop (stage 3), using the search result in the display (stage 5) and the name-plus-stars output (stage 5).</p>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">💡</div>
+              <div><strong>If you run short of time, attempt every stage roughly rather than perfecting one.</strong> Four of these six marks sit outside the binary search itself — a candidate who writes a flawless search but never displays the stars scores less than one who sketches all five stages.</div>
+            </div>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-4_ans.png" alt="Marking instructions for 2023 Question 5(b). 1 mark for asking the user to enter 4 local authorities and displaying the bar chart heading. 1 mark for correctly initialising and updating found and mid needed for the binary search. 1 mark for the conditional loop needed for the binary search. 1 mark for correctly initialising and updating low and high needed for the binary search. 1 mark for using the result of the binary search in the display. 1 mark for displaying the location name together with stars used to represent the average rainfall. The algorithm displays the bar chart heading, loops four times asking for a local authority name, performs a binary search with low, high, found and mid, then displays the location followed by a loop printing one asterisk per centimetre of average rainfall and a new line." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <p style="margin-top:1rem;"><strong>What to take from this question:</strong> the top level was given, every part was a refinement of one box, and every refinement came down to the same four questions — what repeats, what happens in one pass, what must be set up before, and what must be stored or displayed after.</p>
       </div>
     </article>
 
     <article>
       <h2 id="ui-design">User-Interface Design</h2>
-      <p>At Higher a wireframe showed layout, inputs and outputs. At Advanced Higher a <strong>wireframe</strong> must indicate <strong>five</strong> things:</p>
-      <ul>
-        <li><strong>Visual layout</strong> — where every element sits on the screen;</li>
-        <li><strong>Inputs</strong> — every value the user provides, and the control used to enter it;</li>
-        <li><strong>Validation</strong> — annotated against each input: presence, range, length, restricted choice;</li>
-        <li><strong>Underlying processes</strong> — what happens when each button is pressed ("clicking Search calls the binary search on the stock array");</li>
-        <li><strong>Outputs</strong> — where and how results are displayed.</li>
-      </ul>
-      <div class="example-block">
-        <div class="example-label">Example — annotating a wireframe</div>
-        <p>For the stock search program: a text box labelled <em>itemID</em> (annotation: "input — integer, range check 1000–9999"); a <em>Search</em> button (annotation: "underlying process — binary search of 2D array; displays row if found, error message if not"); an output area (annotation: "output — itemID, price, number in stock").</p>
+      <p>At Higher a wireframe showed layout, inputs and outputs. At Advanced Higher a <strong>wireframe</strong> must indicate <strong>five</strong> things — and the two that are usually missing are validation and underlying processes:</p>
+      <table>
+        <thead><tr><th style="width:24%;">Must show</th><th>What that means in practice</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Visual layout</strong></td><td>Where every element sits, and why — related controls grouped, in the order the user meets them.</td></tr>
+          <tr><td><strong>Inputs</strong></td><td>Every value the user provides <em>and the control used to enter it</em> — text box, drop-down list, typed prompt.</td></tr>
+          <tr><td><strong>Validation</strong></td><td>Annotated against each input: presence check, range, length, restricted choice — plus what the user sees when it fails.</td></tr>
+          <tr><td><strong>Underlying processes</strong></td><td>What actually happens when the button is pressed, named in terms of your design: "reads from the database, insertion sorts by date, finds the fastest".</td></tr>
+          <tr><td><strong>Outputs</strong></td><td>Where each result appears and in what form.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>A graphical interface</h3>
+      <p>The same PB Tracker problem, designed as a windowed application. Every annotation names one of the five:</p>
+      <img src="../resources/sdd/pb-ui-gui.svg"
+           class="zoomable"
+           alt="Annotated GUI wireframe for the PB Tracker. A window titled Westbrae Harriers PB Tracker contains a text box for athlete name, a drop-down for distance, a Look Up button, and below a divider two output areas: a highlighted personal best line and a list of three most recent results. Red annotation boxes point to each element. The name box is labelled input and validation, athleteName, text box, presence check, must not be left blank. The distance drop-down is labelled input and validation, restricted choice, only 100 m to 10 000 m. The button is labelled underlying process, clicking Look Up reads matching results from the database into resultsArray, insertion sorts them by date, then finds the fastest time. The personal best area is labelled output, the fastest time in resultsArray with its event and date. The list is labelled output, the first three records of the sorted array, date, event and time, aligned. A green box at the foot describes the visual layout: inputs grouped top-left in the order they are used, the action button directly beneath them, and outputs below a divider so results never overlap the controls."
+           style="width:100%;max-width:1160px;margin:1.25rem auto;display:block;" />
+
+      <h3>A text-based interface</h3>
+      <p>Plenty of Advanced Higher projects run in a console, and the requirement does not change — a text-based design must show the same five things. Here layout is created by <strong>prompts, blank lines, headings and column alignment</strong> instead of boxes, and validation is shown by including the error message and the re-prompt in the design:</p>
+      <img src="../resources/sdd/pb-ui-text.svg"
+           class="zoomable"
+           alt="Annotated text-based interface design for the PB Tracker. A console window shows a banner reading Westbrae Harriers PB Tracker, then prompts for athlete name and distance. An invalid distance of 50 produces an error message saying 50 is not a track distance, enter 100 to 10000, followed by a re-prompt that accepts 1500. The program then shows a personal best heading with the time, event and date, a three most recent heading with three column-aligned rows, and a final prompt asking whether to look up another athlete. Red annotation boxes label the inputs, the range-check validation with its error message and re-prompt, the underlying process of reading from the database and sorting, the two output blocks, and the restricted-choice Y or N input. A green box describes the visual layout: a banner names the program, prompts run down the screen in the order they happen, and headed indented blocks separate the two outputs."
+           style="width:100%;max-width:1160px;margin:1.25rem auto;display:block;" />
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>A wireframe is a design, not a screenshot.</strong> It is drawn <em>before</em> the program exists, so it should look sketched rather than finished — and the annotations are where the marks are. An unannotated drawing of a window shows visual layout only, which is one of the five things.</div>
       </div>
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🖼️</div>
-        <div class="placeholder-text">Image placeholder — Annotated wireframe example</div>
-        <div class="placeholder-sub">Planned: a hand-drawn style wireframe of the stock search interface with callout annotations for inputs, validation, underlying processes and outputs.</div>
+
+    </article>
+
+    <article>
+      <h2 id="class-diagrams">UML Class Diagrams</h2>
+      <p>Structure diagrams and pseudocode describe a program as a sequence of <strong>steps</strong>. An object-oriented program is not organised that way — it is organised into <strong>classes</strong>, each holding its own data and its own methods. So it needs a different notation: the <strong>UML class diagram</strong>, which models the program's <strong>static structure</strong> — what classes exist, what each one holds and can do, and how they relate.</p>
+      <p>This section assumes you have met object-oriented programming. If <em>class</em>, <em>method</em>, <em>encapsulation</em> or <em>inheritance</em> feel shaky, read the <a href="oop.html">Object-Oriented Programming</a> page first and come back. (Its partner notation, the <a href="../integration/analysis.html#use-case">use case diagram</a>, models <strong>dynamic</strong> behaviour — what the system does when it runs.)</p>
+
+      <p>The PB Tracker, rewritten as an OO program, needs three classes: a <strong>Person</strong>, an <strong>Athlete</strong> (who <em>is</em> a person, with running data added) and a <strong>Result</strong>. Each piece of notation below is shown using those classes.</p>
+
+      <h3>The notation, piece by piece</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:1.25rem 0;">
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">1 — The three compartments</p>
+          <svg viewBox="0 0 300 210" style="width:100%;height:auto;" role="img" aria-label="A class box divided into three compartments: class name at the top, instance variables in the middle, methods at the bottom">
+            <rect x="40" y="14" width="220" height="182" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="40" y="14" width="220" height="34" fill="#00442A"/>
+            <text x="150" y="37" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Result</text>
+            <line x1="40" y1="118" x2="260" y2="118" stroke="#1F2937" stroke-width="1.5"/>
+            <g font-family="Consolas, Menlo, monospace" font-size="12" fill="#1F2937">
+              <text x="54" y="70">&#8722;date: String</text>
+              <text x="54" y="90">&#8722;event: String</text>
+              <text x="54" y="110">&#8722;time: Real</text>
+              <text x="54" y="142">+Result()</text>
+              <text x="54" y="162">+getTime()</text>
+              <text x="54" y="182">+setTime()</text>
+            </g>
+            <text x="8" y="36" font-size="10.5" fill="#1B6B45" font-weight="700">name</text>
+            <text x="4" y="92" font-size="10.5" fill="#1B6B45" font-weight="700">data</text>
+            <text x="0" y="160" font-size="10.5" fill="#1B6B45" font-weight="700">methods</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">A class is one box split into three: the <strong>class name</strong> on top, the <strong>instance variables</strong> in the middle, the <strong>methods</strong> at the bottom. The dividing lines must be there — a single list is not a class diagram.</p>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">2 — Instance variables and data types</p>
+          <svg viewBox="0 0 320 148" style="width:100%;height:auto;" role="img" aria-label="Instance variables each written with a colon and a data type, with the types picked out in gold">
+            <defs><marker id="ivArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#92750A"/></marker></defs>
+            <rect x="12" y="14" width="176" height="110" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <g font-family="Consolas, Menlo, monospace" font-size="13">
+              <text x="26" y="46"><tspan fill="#1F2937">&#8722;date: </tspan><tspan fill="#92750A" font-weight="700">String</tspan></text>
+              <text x="26" y="76"><tspan fill="#1F2937">&#8722;event: </tspan><tspan fill="#92750A" font-weight="700">String</tspan></text>
+              <text x="26" y="106"><tspan fill="#1F2937">&#8722;time: </tspan><tspan fill="#92750A" font-weight="700">Real</tspan></text>
+            </g>
+            <line x1="194" y1="76" x2="216" y2="76" stroke="#92750A" stroke-width="1.4" marker-end="url(#ivArr)"/>
+            <text x="222" y="70" font-size="11" fill="#92750A" font-weight="700">every one needs</text>
+            <text x="222" y="86" font-size="11" fill="#92750A" font-weight="700">a data type</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">Each instance variable is written <code>name: Type</code>. <strong>Missing data types is one of the two commonest dropped marks</strong> — the diagram has to tell a programmer enough to declare the variable.</p>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">3 — Visibility: + and −</p>
+          <svg viewBox="0 0 300 160" style="width:100%;height:auto;" role="img" aria-label="Minus marks private members and plus marks public members">
+            <rect x="20" y="14" width="260" height="130" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <text x="34" y="42" font-family="Consolas, Menlo, monospace" font-size="14" fill="#B91C1C" font-weight="700">&#8722;</text>
+            <text x="52" y="42" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1F2937">time: Real</text>
+            <text x="34" y="70" font-size="11" fill="#B91C1C">private — only this class</text>
+            <text x="34" y="86" font-size="11" fill="#B91C1C">can touch it directly</text>
+            <text x="34" y="116" font-family="Consolas, Menlo, monospace" font-size="14" fill="#1B6B45" font-weight="700">+</text>
+            <text x="52" y="116" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1F2937">getTime()</text>
+            <text x="34" y="134" font-size="11" fill="#1B6B45">public — any class may call it</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">Every member carries a symbol: <strong>−</strong> private, <strong>+</strong> public. Instance variables are normally private and methods public — that is <strong>encapsulation</strong>, and it is why getters and setters exist.</p>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">4 — The constructor</p>
+          <svg viewBox="0 0 300 160" style="width:100%;height:auto;" role="img" aria-label="The constructor has the same name as the class">
+            <rect x="20" y="14" width="260" height="130" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="20" y="14" width="260" height="30" fill="#00442A"/>
+            <text x="150" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Result</text>
+            <line x1="20" y1="76" x2="280" y2="76" stroke="#1F2937" stroke-width="1.5"/>
+            <text x="34" y="64" font-family="Consolas, Menlo, monospace" font-size="12" fill="#8A9199">&#8722;date, event, time</text>
+            <text x="34" y="100" font-family="Consolas, Menlo, monospace" font-size="13" fill="#92750A" font-weight="700">+Result()</text>
+            <text x="34" y="122" font-family="Consolas, Menlo, monospace" font-size="12.5" fill="#1F2937">+getTime()</text>
+            <path d="M 150 30 q 60 30 -34 62" fill="none" stroke="#92750A" stroke-width="1.6" stroke-dasharray="4 3"/>
+            <text x="196" y="70" font-size="10.5" fill="#92750A" font-weight="700">same name</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">The <strong>constructor</strong> creates and initialises each object, and always has <strong>exactly the same name as the class</strong>. It sits first in the methods compartment — if a method shares the class's name, that is how you identify it in a "state the constructor" question.</p>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">5 — Inheritance</p>
+          <svg viewBox="0 0 300 220" style="width:100%;height:auto;" role="img" aria-label="An arrow from the Athlete sub-class pointing up at the Person super-class">
+            <defs><marker id="inh2" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/></marker></defs>
+            <rect x="70" y="14" width="160" height="52" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="70" y="14" width="160" height="30" fill="#00442A"/>
+            <text x="150" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Person</text>
+            <text x="150" y="60" text-anchor="middle" font-size="11" fill="#8A9199" font-family="Consolas, Menlo, monospace">firstName, surname…</text>
+            <rect x="70" y="150" width="160" height="52" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="70" y="150" width="160" height="30" fill="#1B6B45"/>
+            <text x="150" y="171" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Athlete</text>
+            <text x="150" y="196" text-anchor="middle" font-size="11" fill="#8A9199" font-family="Consolas, Menlo, monospace">club, membershipNo…</text>
+            <line x1="150" y1="150" x2="150" y2="72" stroke="#1F2937" stroke-width="2" marker-end="url(#inh2)"/>
+            <text x="162" y="115" font-size="11" fill="#1F2937" font-style="italic">points at the</text>
+            <text x="162" y="129" font-size="11" fill="#1F2937" font-style="italic">super-class</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">A <strong>solid line with a solid arrowhead</strong> runs from the <strong>sub-class</strong> to the <strong>super-class</strong>. Athlete inherits everything Person has, so those variables and methods are <em>not</em> repeated in the Athlete box. Get the arrow the wrong way round and you have said Person is a kind of Athlete.</p>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem;box-shadow:var(--shadow-sm);">
+          <p style="margin:0 0 .5rem;font-weight:700;">6 — Array of objects</p>
+          <svg viewBox="0 0 300 180" style="width:100%;height:auto;" role="img" aria-label="An instance variable holding an array of Result objects, with an arrow to the Result class">
+            <defs><marker id="ao2" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 12 6 L 0 12 z" fill="#92750A"/></marker></defs>
+            <rect x="10" y="30" width="150" height="76" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="10" y="30" width="150" height="28" fill="#1B6B45"/>
+            <text x="85" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Athlete</text>
+            <text x="20" y="76" font-size="10.5" fill="#92750A" font-family="Consolas, Menlo, monospace" font-weight="700">&#8722;results: Array</text>
+            <text x="20" y="92" font-size="10.5" fill="#92750A" font-family="Consolas, Menlo, monospace" font-weight="700">   of Result[ ]</text>
+            <rect x="205" y="30" width="88" height="76" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+            <rect x="205" y="30" width="88" height="28" fill="#1B6B45"/>
+            <text x="249" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Result</text>
+            <text x="249" y="82" text-anchor="middle" font-size="10.5" fill="#8A9199" font-family="Consolas, Menlo, monospace">date, time…</text>
+            <line x1="166" y1="84" x2="199" y2="70" stroke="#92750A" stroke-width="2" marker-end="url(#ao2)"/>
+            <text x="20" y="140" font-size="11" fill="#1F2937">One Athlete object holds many</text>
+            <text x="20" y="156" font-size="11" fill="#1F2937">Result objects inside one variable.</text>
+          </svg>
+          <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">An instance variable can hold many objects of another class, written <code>results: Array of Result[ ]</code>. An arrow links it to the class it stores. This is how an OO design replaces the array of records used in the procedural version.</p>
+        </div>
+
+      </div>
+
+      <h3>Putting it together</h3>
+      <p>Here are all three classes as one diagram. Everything above appears in it exactly once:</p>
+
+      <img src="../resources/sdd/pb-class-diagram.svg"
+           class="zoomable"
+           alt="UML class diagram for the PB Tracker with three classes. Person, the super-class, holds private firstName, surname and dateOfBirth all of type String, and public methods Person, getName, getAge and setSurname. Athlete, a sub-class, holds private membershipNo as Integer, numResults as Integer, results as Array of Result and club as String, with public methods Athlete, addResult, getPersonalBest, sortByDate and getResultCount. A solid arrow runs from Athlete up to Person, pointing at the super-class. Result holds private date and event as String and time as Real, with public methods Result, getTime, getDate, getEvent and setTime. A gold arrow labelled array of objects runs from the results instance variable in Athlete across to the Result class. A note explains that an Athlete object has seven instance variables, its own four plus Person's three, without them being re-declared."
+           style="width:100%;max-width:1080px;margin:1.25rem auto;display:block;" />
+
+      <p>Read it as a sentence: <em>an <strong>Athlete</strong> is a <strong>Person</strong> who has a club, a membership number and a collection of <strong>Results</strong>.</em> Because Athlete inherits from Person, an Athlete object has <strong>seven</strong> instance variables — its own four plus Person's three — even though only four appear in its box. That is the entire point of inheritance: shared data is defined once, in the super-class.</p>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Checklist for drawing a class diagram in the exam:</strong> class name on top ✔ three compartments divided by lines ✔ instance variables <em>with data types</em> ✔ a +/− symbol on <em>every</em> member ✔ constructor named after the class ✔ inheritance arrow pointing from sub-class <em>to</em> super-class ✔ arrays of objects written <code>Array of ClassName[ ]</code> with an arrow to that class ✔. Missing data types and missing visibility symbols are the two most common dropped marks.</div>
+      </div>
+
+      <h3>Worked Example</h3>
+      <p>Class diagram questions usually give you a diagram and ask you to <strong>read</strong> it or <strong>extend</strong> it. Attempt this before expanding it.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Class Diagram — adding a class to an existing diagram (2 marks)</div>
+        <p><strong>The given diagram:</strong> an object-oriented program storing statistics about basketball teams and their players.</p>
+        <img src="../resources/integrated/worked-examples/ah_useCase_q1-1.png" class="zoomable" alt="A simplified UML class diagram for a basketball statistics program. The Score class holds private point as Integer and date as String, with public methods Score and getPoints. The Player class holds private name, scores as an Array of Score, index as Integer and team as String, with public methods Player, addScore, getTotal, editTeam and getName. The Person class holds private first as String, Surname as String and dateofBirth as String, with public methods Person, editFirst, getAge, getName and getTeam. An arrow runs from Player to Person, and a line links Score to Player." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+        <p><strong>The question:</strong></p>
+        <img src="../resources/integrated/worked-examples/ah_useCase_q1-2.png" class="zoomable" alt="Question part ii. The Machine class will have 3 additional private properties: model, releaseYear and displayName, which are all strings apart from releaseYear which is an Integer. It will have 3 additional public methods called Machine, editModel and getReleaseYear. Complete the UML class diagram to include the Machine class, showing all properties and methods. You need only display the names of each class in the existing UML class diagram. 2 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+        <p><strong>First, read what the existing diagram already tells you.</strong> <em>Player</em> has an arrow pointing at <em>Person</em>, so Player is a <strong>sub-class</strong> of Person. <em>Score</em> is linked to Player because Player holds <code>scores: Array of Score[]</code> — an <strong>array of objects</strong>. Those two relationships are the vocabulary you will need to attach the new class.</p>
+        <p>Now build the Machine class one compartment at a time, taking each piece straight from the wording of the question:</p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin:1.25rem 0;">
+
+          <div>
+            <p class="build-step"><span class="bs-num">1</span>The empty box</p>
+            <svg viewBox="0 0 260 250" style="width:100%;height:auto;border:1px solid var(--border);background:#fff;" role="img" aria-label="Stage one: an empty class box with three compartments and the name Machine">
+              <rect x="30" y="86" width="200" height="150" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+              <rect x="30" y="86" width="200" height="30" fill="#00442A"/>
+              <text x="130" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Machine</text>
+              <line x1="30" y1="176" x2="230" y2="176" stroke="#1F2937" stroke-width="1.5"/>
+              <text x="130" y="150" text-anchor="middle" font-size="11" fill="#B9C0BC" font-style="italic" font-family="Segoe UI, Arial, sans-serif">properties</text>
+              <text x="130" y="210" text-anchor="middle" font-size="11" fill="#B9C0BC" font-style="italic" font-family="Segoe UI, Arial, sans-serif">methods</text>
+            </svg>
+            <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">Name on top, then <strong>two dividing lines</strong> making three compartments. Draw this before reading any further — the frame costs nothing and stops you forgetting a section.</p>
+          </div>
+
+          <div>
+            <p class="build-step"><span class="bs-num">2</span>Properties</p>
+            <svg viewBox="0 0 260 250" style="width:100%;height:auto;border:1px solid var(--border);background:#fff;" role="img" aria-label="Stage two: the three private properties added with minus symbols and data types">
+              <rect x="30" y="86" width="200" height="150" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+              <rect x="30" y="86" width="200" height="30" fill="#00442A"/>
+              <text x="130" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Machine</text>
+              <line x1="30" y1="176" x2="230" y2="176" stroke="#1F2937" stroke-width="1.5"/>
+              <g font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1F2937">
+                <text x="40" y="136"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>model: <tspan fill="#92750A" font-weight="700">String</tspan></text>
+                <text x="40" y="154"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>releaseYear: <tspan fill="#92750A" font-weight="700">Integer</tspan></text>
+                <text x="40" y="172"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>displayName: <tspan fill="#92750A" font-weight="700">String</tspan></text>
+              </g>
+              <text x="130" y="210" text-anchor="middle" font-size="11" fill="#B9C0BC" font-style="italic" font-family="Segoe UI, Arial, sans-serif">methods</text>
+            </svg>
+            <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">The question says <em>private</em>, so a <strong>−</strong> on each. It gives the types too: everything is String "apart from releaseYear which is an Integer" — read that sentence carefully, it is deliberately worded to catch skimming.</p>
+          </div>
+
+          <div>
+            <p class="build-step"><span class="bs-num">3</span>Methods</p>
+            <svg viewBox="0 0 260 250" style="width:100%;height:auto;border:1px solid var(--border);background:#fff;" role="img" aria-label="Stage three: the three public methods added with plus symbols, the constructor first">
+              <rect x="30" y="86" width="200" height="150" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+              <rect x="30" y="86" width="200" height="30" fill="#00442A"/>
+              <text x="130" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Machine</text>
+              <line x1="30" y1="176" x2="230" y2="176" stroke="#1F2937" stroke-width="1.5"/>
+              <g font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1F2937">
+                <text x="40" y="136"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>model: String</text>
+                <text x="40" y="154"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>releaseYear: Integer</text>
+                <text x="40" y="172"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>displayName: String</text>
+                <text x="40" y="196"><tspan fill="#1B6B45" font-weight="700">+</tspan><tspan fill="#92750A" font-weight="700">Machine()</tspan></text>
+                <text x="40" y="214"><tspan fill="#1B6B45" font-weight="700">+</tspan>editModel()</text>
+                <text x="40" y="232"><tspan fill="#1B6B45" font-weight="700">+</tspan>getReleaseYear()</text>
+              </g>
+            </svg>
+            <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">Public, so a <strong>+</strong> on each. <code>Machine()</code> shares the class's name, which makes it the <strong>constructor</strong> — it goes first. That completes the <strong>first mark</strong>.</p>
+          </div>
+
+          <div>
+            <p class="build-step"><span class="bs-num">4</span>The relationship</p>
+            <svg viewBox="0 0 260 250" style="width:100%;height:auto;border:1px solid var(--border);background:#fff;" role="img" aria-label="Stage four: an inheritance arrow added from Machine pointing up at the Person class">
+              <defs><marker id="mchInh" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/></marker></defs>
+              <rect x="70" y="12" width="120" height="32" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+              <text x="130" y="33" text-anchor="middle" font-size="13" font-weight="700" fill="#002D1C" font-family="Segoe UI, Arial, sans-serif">Person</text>
+              <line x1="130" y1="86" x2="130" y2="50" stroke="#1F2937" stroke-width="2" marker-end="url(#mchInh)"/>
+              <text x="140" y="72" font-size="10" fill="#1B6B45" font-weight="700" font-family="Segoe UI, Arial, sans-serif">inherits</text>
+              <rect x="30" y="86" width="200" height="150" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+              <rect x="30" y="86" width="200" height="30" fill="#00442A"/>
+              <text x="130" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, Arial, sans-serif">Machine</text>
+              <line x1="30" y1="176" x2="230" y2="176" stroke="#1F2937" stroke-width="1.5"/>
+              <g font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1F2937">
+                <text x="40" y="136"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>model: String</text>
+                <text x="40" y="154"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>releaseYear: Integer</text>
+                <text x="40" y="172"><tspan fill="#B91C1C" font-weight="700">&#8722;</tspan>displayName: String</text>
+                <text x="40" y="196"><tspan fill="#1B6B45" font-weight="700">+</tspan>Machine()</text>
+                <text x="40" y="214"><tspan fill="#1B6B45" font-weight="700">+</tspan>editModel()</text>
+                <text x="40" y="232"><tspan fill="#1B6B45" font-weight="700">+</tspan>getReleaseYear()</text>
+              </g>
+            </svg>
+            <p style="font-size:.85rem;color:var(--text-muted);margin:.5rem 0 0;">The question says the properties are "<strong>additional</strong>" — additional to <em>something</em>. Machine is another sub-class of <strong>Person</strong>, so an arrow runs from Machine <em>pointing at</em> Person, exactly as Player's does. That single word is the <strong>second mark</strong>.</p>
+          </div>
+
+        </div>
+
+        <p>The instruction "you need only display the names of each class in the existing UML class diagram" is a time-saver, not a trick — redraw Score, Player and Person as name-only boxes and spend the time on Machine and the arrow.</p>
+        <img src="../resources/integrated/worked-examples/ah_useCase_q1-2_ans.png" class="zoomable" alt="Marking instructions. The answer diagram shows name-only boxes for Score, Person and Player with the existing arrows, plus a full Machine class box containing private model as String, releaseYear as Integer and displayName as String, and public methods Machine, editModel and getReleaseYear, with an inheritance arrow from Machine pointing at Person. 1 mark for the Machine class with correct properties and methods, and 1 mark for inheritance indicated correctly." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
       </div>
     </article>
 
     <article>
       <h2 id="test-yourself">Test Yourself</h2>
       <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+
+      <div class="practice-question">
+        <div class="q-label">Data Flow — 2 marks</div>
+        <p>A program reads 200 exam marks from a database into an array of records called <code>marksArray</code>, sorts them into descending order, and then displays the top ten.</p>
+        <p>The top-level design contains a module <em>"Sort marksArray into descending order"</em>.</p>
+        <p>State the data flowing <strong>in</strong> to and <strong>out</strong> of this module, justifying your answer. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li><strong>In:</strong> <code>marksArray</code> (and the number of records) — the module cannot sort data it has not been given. <strong>(1 mark)</strong></li>
+              <li><strong>Out:</strong> <code>marksArray</code> — the same structure comes back <em>changed</em>, so it flows both in and out. <strong>(1 mark)</strong></li>
+            </ul>
+            <p>Accept "in/out" or "by reference" for the array. Do not accept an output of "the top ten" — that is a different module.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Refining a Step — 4 marks</div>
+        <p>A leisure centre stores 400 swim times in an array of records called <code>swimArray</code>, each record holding <code>{ STRING swimmer, STRING stroke, REAL time }</code>.</p>
+        <p>Using pseudocode, design an algorithm to calculate and display the <strong>average time for the front crawl</strong>, rounded to one decimal place. <strong>(4 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Award 1 mark for each of:</p>
+            <ul>
+              <li><strong>Initialising</strong> a running total <em>and</em> a counter to 0 before the loop.</li>
+              <li><strong>Traversing</strong> all 400 records with a fixed loop.</li>
+              <li><strong>Conditionally</strong> adding the time to the total and 1 to the counter only when <code>stroke = "front crawl"</code>.</li>
+              <li><strong>Calculating</strong> total ÷ counter, <strong>rounding to one decimal place</strong>, and displaying it after the loop.</li>
+            </ul>
+            <div class="code-block code-plain">
+              <div class="code-label">One possible answer</div>
+              <pre><code>1. set total = 0
+2. set count = 0
+3. for index = 0 to 399
+4.    if swimArray[index].stroke = "front crawl" then
+5.       add swimArray[index].time to total
+6.       add 1 to count
+7.    end if
+8. end for
+9. display total / count, rounded to one decimal place</code></pre>
+            </div>
+            <p>Watch the counter: dividing by 400 instead of <code>count</code> is the commonest error, and loses the final mark.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Wireframe Requirements — 2 marks</div>
+        <p>A candidate submits a neat drawing of their program's window showing a text box, a button and a results area, with no other detail.</p>
+        <p>State <strong>two</strong> things the wireframe must also indicate at Advanced Higher, and give an example of each for this interface. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <p>Any two from, <strong>1 mark</strong> each (must name the requirement <em>and</em> exemplify it):</p>
+            <ul>
+              <li><strong>Validation</strong> — e.g. the text box annotated "presence check: must not be blank" or "range check 1–100".</li>
+              <li><strong>Underlying processes</strong> — e.g. the button annotated "performs a binary search of the sorted array and returns the matching record".</li>
+              <li><strong>Inputs</strong> — e.g. naming the variable the text box supplies and the control type used.</li>
+              <li><strong>Outputs</strong> — e.g. the results area annotated with exactly which fields are displayed.</li>
+            </ul>
+            <p>The drawing already shows <strong>visual layout</strong>, so that alone earns nothing here.</p>
+          </div>
+        </details>
+      </div>
 
       <div class="practice-question">
         <div class="q-label">Reading a Class Diagram — 3 marks</div>
@@ -240,16 +779,18 @@
       </div>
 
       <div class="practice-question">
-        <div class="q-label">Inheritance on a Diagram — 2 marks</div>
-        <p>A veterinary program has a <code>Animal</code> class (instance variables: name, age, owner) and a <code>Dog</code> class (instance variables: breed, microchipNo) which inherits from Animal.</p>
+        <div class="q-label">Inheritance and Arrays of Objects — 3 marks</div>
+        <p>A veterinary program has an <code>Animal</code> class (instance variables: name, age, owner) and a <code>Dog</code> class (instance variables: breed, microchipNo) which inherits from Animal. Each Dog also stores every vaccination it has had, using a <code>Vaccination</code> class.</p>
         <p>(a) State how the inheritance would be shown on a UML class diagram. <strong>(1 mark)</strong><br />
-           (b) State how many instance variables a Dog object has, justifying your answer. <strong>(1 mark)</strong></p>
+           (b) State how many instance variables a Dog object has, justifying your answer. <strong>(1 mark)</strong><br />
+           (c) State how the vaccinations would be recorded as an instance variable of Dog. <strong>(1 mark)</strong></p>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>(a) An <strong>arrow from the Dog (sub-)class pointing to the Animal (super-)class</strong>. <strong>(1 mark)</strong></li>
-              <li>(b) <strong>Five</strong> — Dog inherits name, age and owner from Animal and adds breed and microchipNo. <strong>(1 mark)</strong></li>
+              <li>(a) A <strong>solid line with a solid arrowhead from the Dog (sub-)class pointing at the Animal (super-)class</strong>. <strong>(1 mark)</strong></li>
+              <li>(b) <strong>Five</strong> — Dog inherits name, age and owner from Animal and adds breed and microchipNo. <strong>(1 mark)</strong> <em>(Six is also acceptable once part (c) is added.)</em></li>
+              <li>(c) As an <strong>array of objects</strong>, e.g. <code>−vaccinations: Array of Vaccination[ ]</code>, with an arrow linking it to the Vaccination class. <strong>(1 mark)</strong></li>
             </ul>
           </div>
         </details>

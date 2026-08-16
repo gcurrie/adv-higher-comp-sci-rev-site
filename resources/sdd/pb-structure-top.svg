@@ -1,0 +1,114 @@
+<svg viewBox="0 0 1180 640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" role="img" aria-label="Top-level structure diagram for the PB Tracker lookup with data flow">
+  <defs>
+    <marker id="dfIn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B6B45"/>
+    </marker>
+    <marker id="dfOut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#92750A"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="640" fill="#ffffff"/>
+  <text x="590" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#002D1C">PB Tracker — top-level design with data flow</text>
+
+  <!-- main module -->
+  <rect x="470" y="44" width="240" height="62" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <text x="590" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#1F2937">Look Up</text>
+  <text x="590" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#1F2937">Personal Best</text>
+
+  <!-- connectors -->
+  <g stroke="#1F2937" stroke-width="2" fill="none">
+    <line x1="590" y1="106" x2="590" y2="140"/>
+    <line x1="130" y1="140" x2="1050" y2="140"/>
+    <line x1="130" y1="140" x2="130" y2="380"/>
+    <line x1="360" y1="140" x2="360" y2="380"/>
+    <line x1="590" y1="140" x2="590" y2="380"/>
+    <line x1="820" y1="140" x2="820" y2="380"/>
+    <line x1="1050" y1="140" x2="1050" y2="380"/>
+  </g>
+
+  <!-- data flow arrows on the connectors: green down = in, gold up = out -->
+  <g stroke-width="1.6">
+    <!-- 1 -->
+    <line x1="146" y1="300" x2="146" y2="200" stroke="#92750A" marker-end="url(#dfOut)"/>
+    <!-- 2 -->
+    <line x1="344" y1="200" x2="344" y2="300" stroke="#1B6B45" marker-end="url(#dfIn)"/>
+    <line x1="376" y1="300" x2="376" y2="200" stroke="#92750A" marker-end="url(#dfOut)"/>
+    <!-- 3 -->
+    <line x1="574" y1="200" x2="574" y2="300" stroke="#1B6B45" marker-end="url(#dfIn)"/>
+    <line x1="606" y1="300" x2="606" y2="200" stroke="#92750A" marker-end="url(#dfOut)"/>
+    <!-- 4 -->
+    <line x1="804" y1="200" x2="804" y2="300" stroke="#1B6B45" marker-end="url(#dfIn)"/>
+    <line x1="836" y1="300" x2="836" y2="200" stroke="#92750A" marker-end="url(#dfOut)"/>
+    <!-- 5 -->
+    <line x1="1034" y1="200" x2="1034" y2="300" stroke="#1B6B45" marker-end="url(#dfIn)"/>
+  </g>
+
+  <!-- module boxes -->
+  <g stroke="#1F2937" stroke-width="2" fill="#ffffff">
+    <rect x="25" y="380" width="210" height="86"/>
+    <rect x="255" y="380" width="210" height="86"/>
+    <rect x="485" y="380" width="210" height="86"/>
+    <rect x="715" y="380" width="210" height="86"/>
+    <rect x="945" y="380" width="210" height="86"/>
+  </g>
+
+  <g font-size="13.5" fill="#1F2937" text-anchor="middle">
+    <text x="130" y="410">1. Get athlete</text><text x="130" y="428">name and</text><text x="130" y="446">distance</text>
+    <text x="360" y="410">2. Load results</text><text x="360" y="428">from database</text><text x="360" y="446">into resultsArray</text>
+    <text x="590" y="410">3. Sort results</text><text x="590" y="428">by date, most</text><text x="590" y="446">recent first</text>
+    <text x="820" y="419">4. Find the</text><text x="820" y="437">personal best</text>
+    <text x="1050" y="410">5. Display PB</text><text x="1050" y="428">and the three</text><text x="1050" y="446">recent results</text>
+  </g>
+
+  <!-- data flow detail bands -->
+  <g>
+    <rect x="25" y="478" width="210" height="120" fill="#F7F9F8" stroke="#D7DDD9"/>
+    <rect x="255" y="478" width="210" height="120" fill="#F7F9F8" stroke="#D7DDD9"/>
+    <rect x="485" y="478" width="210" height="120" fill="#F7F9F8" stroke="#D7DDD9"/>
+    <rect x="715" y="478" width="210" height="120" fill="#F7F9F8" stroke="#D7DDD9"/>
+    <rect x="945" y="478" width="210" height="120" fill="#F7F9F8" stroke="#D7DDD9"/>
+  </g>
+
+  <g font-size="11.5" font-family="Consolas, Menlo, monospace">
+    <!-- 1 -->
+    <text x="37" y="498" fill="#8A9199">in:  —</text>
+    <text x="37" y="520" fill="#92750A" font-weight="700">out:</text>
+    <text x="37" y="538" fill="#92750A">athleteName,</text>
+    <text x="37" y="554" fill="#92750A">distance</text>
+    <!-- 2 -->
+    <text x="267" y="498" fill="#1B6B45" font-weight="700">in:</text>
+    <text x="267" y="516" fill="#1B6B45">athleteName,</text>
+    <text x="267" y="532" fill="#1B6B45">distance</text>
+    <text x="267" y="554" fill="#92750A" font-weight="700">out:</text>
+    <text x="267" y="572" fill="#92750A">resultsArray,</text>
+    <text x="267" y="588" fill="#92750A">numResults</text>
+    <!-- 3 -->
+    <text x="497" y="498" fill="#1B6B45" font-weight="700">in:</text>
+    <text x="497" y="516" fill="#1B6B45">resultsArray,</text>
+    <text x="497" y="532" fill="#1B6B45">numResults</text>
+    <text x="497" y="554" fill="#92750A" font-weight="700">out:</text>
+    <text x="497" y="572" fill="#92750A">resultsArray</text>
+    <text x="497" y="588" fill="#8A9199">(sorted)</text>
+    <!-- 4 -->
+    <text x="727" y="498" fill="#1B6B45" font-weight="700">in:</text>
+    <text x="727" y="516" fill="#1B6B45">resultsArray,</text>
+    <text x="727" y="532" fill="#1B6B45">numResults</text>
+    <text x="727" y="554" fill="#92750A" font-weight="700">out:</text>
+    <text x="727" y="572" fill="#92750A">bestIndex</text>
+    <!-- 5 -->
+    <text x="957" y="498" fill="#1B6B45" font-weight="700">in:</text>
+    <text x="957" y="516" fill="#1B6B45">resultsArray,</text>
+    <text x="957" y="532" fill="#1B6B45">numResults,</text>
+    <text x="957" y="548" fill="#1B6B45">bestIndex</text>
+    <text x="957" y="570" fill="#8A9199">out: —</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="12">
+    <line x1="430" y1="618" x2="430" y2="628" stroke="#1B6B45" stroke-width="1.6" marker-end="url(#dfIn)"/>
+    <text x="444" y="628" fill="#1F2937">data flowing IN to the module</text>
+    <line x1="700" y1="628" x2="700" y2="618" stroke="#92750A" stroke-width="1.6" marker-end="url(#dfOut)"/>
+    <text x="714" y="628" fill="#1F2937">data flowing OUT of the module</text>
+  </g>
+</svg>

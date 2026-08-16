@@ -1849,12 +1849,67 @@ details.practice-question .pq-body > *:first-child { margin-top: 0; }
   line-height: 1.7;
 }
 
-.code-block code {
+/* The inline-<code> rules above (.content-area article code) are more
+   specific than a bare ".code-block code", so without matching their
+   specificity here every code block would paint a light-green inline
+   chip over its own dark background and force the text dark green,
+   hiding the syntax highlighting. Keep these selectors in step with
+   the inline-code rules. */
+.code-block code,
+.content-area article .code-block code,
+.content-area article pre > code,
+.content-article .code-block code,
+.content-article pre > code {
   background: none;
   color: inherit;
   padding: 0;
   font-size: inherit;
   border-radius: 0;
+}
+
+/* Lines added at the current stage of a step-by-step build. Marked with
+   a gold bar and a lifted background so the reader can see at a glance
+   what each stage contributed. Applied by hand as <span class="ln-new">
+   around whole lines inside a code block. */
+.code-block .ln-new,
+.code-block .ln-dim {
+  display: block;
+  /* Bleed into the pre's padding so the band spans the full width, and
+     grow with the content so it still covers horizontally scrolled lines. */
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+  padding-left: calc(1.25rem - 3px);
+  border-left: 3px solid transparent;
+  min-width: max-content;
+}
+
+.code-block .ln-new {
+  background: rgba(201, 162, 39, .16);
+  border-left-color: var(--gold);
+}
+
+.code-block .ln-dim { opacity: .5; }
+
+/* Build-stage caption above a progressive code block. */
+.build-step {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin: 1.1rem 0 .35rem;
+}
+
+.build-step .bs-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  background: var(--gold);
+  color: var(--green-dark);
+  margin-right: .5rem;
 }
 
 /* ── Syntax highlighting tokens ──────────────────────────── */

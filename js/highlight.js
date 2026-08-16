@@ -129,13 +129,24 @@
            el.classList.contains('language-sql');
   }
 
+  /* Design pseudocode is structured English, not a language: its "keywords"
+     (if, for, while, in, is, not) are ordinary words that would be coloured
+     mid-sentence, which reads as noise. Blocks marked .code-plain opt out
+     of highlighting entirely and render as plain text. */
+  function isPlain(el) {
+    return !!(el.closest && el.closest('.code-plain')) ||
+           el.classList.contains('code-plain');
+  }
+
   function run() {
     const targets = new Map(); // element -> isSql
     document.querySelectorAll('.code-block pre').forEach(function (pre) {
       const el = pre.querySelector('code') || pre;
+      if (isPlain(pre) || isPlain(el)) return;
       if (!targets.has(el)) targets.set(el, isSql(pre));
     });
     document.querySelectorAll('.content-article pre > code, .content-area pre > code').forEach(function (code) {
+      if (isPlain(code)) return;
       if (!targets.has(code)) targets.set(code, isSql(code));
     });
     targets.forEach(function (sql, el) { highlightElement(el, sql); });
