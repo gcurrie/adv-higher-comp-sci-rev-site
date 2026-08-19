@@ -19,7 +19,7 @@
   <div class="inner">
     <div class="hero-badge">Software Design &amp; Development</div>
     <h1>Data Structures</h1>
-    <p>Records and arrays of records recapped, 2D arrays introduced, and the operation of single and double linked lists.</p>
+    <p>Parallel arrays and arrays of records recapped, 2D arrays and arrays of objects introduced, and the operation of single and double linked lists explained.</p>
   </div>
 </section>
 <main class="page-content">
@@ -39,8 +39,9 @@
         <div class="sidebar-title">On this page</div>
         <ul>
           <li><a href="#intro">Introduction</a></li>
-          <li><a href="#records">Recap — Records &amp; Arrays of Records</a></li>
-          <li><a href="#arrays-2d">1D Recap → 2D Arrays</a></li>
+          <li><a href="#recap">Higher Recap</a></li>
+          <li><a href="#arrays-2d">2D Arrays</a></li>
+          <li><a href="#array-of-objects">Array of Objects</a></li>
           <li><a href="#linked-lists">Linked Lists</a></li>
           <li><a href="#test-yourself">Test Yourself</a></li>
         </ul>
@@ -50,240 +51,1627 @@
 
     <article>
       <h2 id="intro">Data Structures at Advanced Higher</h2>
-      <p>At Higher you stored data in <strong>parallel 1D arrays</strong>, <strong>records</strong> and <strong>arrays of records</strong>. All three are still required at Advanced Higher, joined by two new structures: the <strong>2D array</strong> (which you must implement) and the <strong>linked list</strong> (which you must be able to <em>describe and exemplify</em> — but not implement). A third new structure, the <strong>array of objects</strong>, belongs to object-oriented programming and is covered on the <a href="oop.html#array-of-objects">OOP page</a>.</p>
+
+      <p>A <strong>data structure</strong> is simply an organised way of holding related data in memory. Choosing the right one is one of the things that separates an Advanced Higher solution from a Higher one — and both the question paper and the project will ask you to <em>justify</em> your choice, not just use it.</p>
+
+      <p>Three structures come <strong>straight back from Higher</strong> and are used freely in Advanced Higher questions without being re-explained:</p>
+      <ul>
+        <li><strong>1D arrays</strong> — a single list of values, all of the same data type;</li>
+        <li><strong>parallel 1D arrays</strong> — several 1D arrays where the <em>same index</em> links related values together;</li>
+        <li><strong>records</strong> and <strong>arrays of records</strong> — a record groups fields of <em>different</em> types under one name, and an array of records stores a list of them.</li>
+      </ul>
+
+      <p>Three more are <strong>new at Advanced Higher</strong>:</p>
+      <ul>
+        <li>the <strong>2D array</strong> — a grid of values addressed by <em>two</em> indices, which you must be able to <strong>implement</strong>;</li>
+        <li>the <strong>array of objects</strong> — a list of objects created from a class, which belongs with object-oriented programming and is covered in detail on the <a href="oop.html">Object-Oriented Programming page</a>;</li>
+        <li>the <strong>linked list</strong>, in both <strong>single</strong> and <strong>double</strong> forms — which you must be able to <strong>describe and exemplify</strong>, but <em>not</em> implement in code.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Know what is asked of each structure.</strong> For 2D arrays and arrays of records you must be able to <strong>write code and designs</strong>. For linked lists the course specification asks only that you can <strong>describe and exemplify their operation</strong> — draw and read node diagrams, explain what changes when an item is inserted or deleted, and argue about efficiency. No linked-list code is required, and none is given on this page.</div>
+      </div>
 
       <h3>Key Terms</h3>
       <div class="key-terms">
+        <div class="key-term"><div class="term">Data Structure</div><div class="def">An organised way of storing related data items in memory so they can be accessed and processed efficiently.</div></div>
+        <div class="key-term"><div class="term">1D Array</div><div class="def">A list of values of a single data type, accessed by one index: <code>scores[4]</code>.</div></div>
+        <div class="key-term"><div class="term">Parallel 1D Arrays</div><div class="def">Two or more 1D arrays in which the same index position refers to the same real-world item.</div></div>
         <div class="key-term"><div class="term">Record</div><div class="def">A collection of named fields that can each hold a different data type.</div></div>
-        <div class="key-term"><div class="term">Array of Records</div><div class="def">A list of records — element by index, field by name: <code>stock[3].price</code>.</div></div>
+        <div class="key-term"><div class="term">Array of Records</div><div class="def">A list of records — index chooses the record, field name chooses the value: <code>stock[3].price</code>.</div></div>
         <div class="key-term"><div class="term">2D Array</div><div class="def">A grid of values, all of one data type, accessed with two indices: <code>grid[row][column]</code>.</div></div>
-        <div class="key-term"><div class="term">Linked List</div><div class="def">A dynamic data structure where each node stores a data item and a pointer to the next node.</div></div>
-        <div class="key-term"><div class="term">Node</div><div class="def">One element of a linked list — the data item plus its pointer(s).</div></div>
-        <div class="key-term"><div class="term">Head</div><div class="def">The start of a linked list. The last node points to NULL.</div></div>
-        <div class="key-term"><div class="term">Pointer</div><div class="def">The memory address of the next (or, in a double linked list, previous) node.</div></div>
-        <div class="key-term"><div class="term">Dynamic Data Structure</div><div class="def">Has no fixed size — grows and shrinks as required, unlike an array whose size is set at declaration.</div></div>
+        <div class="key-term"><div class="term">Array of Objects</div><div class="def">A list of objects created from a class, each holding its own instance variables and methods.</div></div>
+        <div class="key-term"><div class="term">Linked List</div><div class="def">A dynamic data structure in which each node stores a data item and the address of the next node.</div></div>
+        <div class="key-term"><div class="term">Node</div><div class="def">One element of a linked list — the data item plus its pointer(s), with its own memory address.</div></div>
+        <div class="key-term"><div class="term">Head</div><div class="def">A pointer holding the memory address of the <em>first</em> node in a linked list.</div></div>
+        <div class="key-term"><div class="term">Pointer</div><div class="def">A value holding the memory address of another node.</div></div>
+        <div class="key-term"><div class="term">Null</div><div class="def">The value stored in the final pointer of a list to show there is no next node — the end of the list.</div></div>
+        <div class="key-term"><div class="term">Traverse</div><div class="def">To visit each element of a structure in turn. A single linked list can only be traversed in one direction.</div></div>
+        <div class="key-term"><div class="term">Static Data Structure</div><div class="def">Has a fixed size, set when it is declared, and occupies a contiguous block of memory — for example an array.</div></div>
+        <div class="key-term"><div class="term">Dynamic Data Structure</div><div class="def">Has no fixed size — it grows and shrinks as the program runs, for example a linked list.</div></div>
       </div>
     </article>
 
     <article>
-      <h2 id="records">Recap — Records &amp; Arrays of Records</h2>
-      <p>Quick reminder from Higher, because Advanced Higher questions still use these freely. A <strong>record</strong> groups related fields of <em>different</em> data types under one name; an <strong>array of records</strong> stores a list of them:</p>
+      <h2 id="recap">Higher Recap — Parallel Arrays &amp; Arrays of Records</h2>
+      <p>Advanced Higher questions use both of these without explanation, so they need to be automatic. What <em>is</em> new is being asked to <strong>choose between them and justify it</strong>.</p>
+
+      <h3>Parallel 1D arrays</h3>
+      <p>Parallel 1D arrays store related data in <strong>separate arrays</strong>, linked only by the fact that the same <strong>index position</strong> in every array refers to the same real-world thing. If <code>pupilName[3]</code> is "Aisha", then <code>averageScore[3]</code> is Aisha's average score.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — three parallel arrays</div>
+        <pre><code>DECLARE pupilName AS ARRAY OF STRING INITIALLY [""] * 5
+DECLARE yearGroup AS ARRAY OF STRING INITIALLY [""] * 5
+DECLARE averageScore AS ARRAY OF INTEGER INITIALLY [0] * 5
+
+SET pupilName[3] TO "Aisha"
+SET yearGroup[3] TO "S6"
+SET averageScore[3] TO 67
+
+# index 3 in all three arrays describes the same pupil
+SEND pupilName[3] &amp; " scored " &amp; averageScore[3] TO DISPLAY</code></pre>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The weakness of parallel arrays:</strong> nothing in the program actually ties the three arrays together. If you sort <code>averageScore</code> without sorting the other two in exactly the same way, every pupil is instantly attached to the wrong score. This "falling out of step" risk is the standard exam criticism of parallel arrays.</div>
+      </div>
+
+      <h3>Records and arrays of records</h3>
+      <p>A <strong>record</strong> fixes that problem by grouping the fields for one item into a <em>single</em> value with a name of its own. An <strong>array of records</strong> then stores a list of them — so one index gives you the whole pupil, not just one of their attributes.</p>
+
+      <img src="../resources/sdd/array-of-records-declaration.svg"
+           class="zoomable"
+           alt="Two SQA reference language declarations shown one above the other and colour-coded. Step 1 declares the record: DECLARE pupilRecord AS RECORD with the fields STRING pupilName, STRING yearGroup and INT averageScore, with the record name pupilRecord in dark green, the field names in mid green and the data types in blue. Step 2 declares an array of that record: DECLARE pupilArray AS ARRAY OF RECORD pupilRecord, size 5, with the array name pupilArray in purple, the record name pupilRecord again in dark green and the size 5 in gold. A curved arrow runs from pupilRecord in the first declaration to pupilRecord in the second, showing that the record must be defined before an array of it can be declared."
+           style="width:100%;max-width:1080px;margin:1.25rem auto;display:block;" />
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — the same five pupils as one array of records</div>
+        <pre><code>RECORD pupilRecord IS {STRING pupilName, STRING yearGroup, INTEGER averageScore}
+
+DECLARE pupilArray AS ARRAY OF pupilRecord INITIALLY [ ] * 5
+
+SET pupilArray[3].pupilName TO "Aisha"
+SET pupilArray[3].yearGroup TO "S6"
+SET pupilArray[3].averageScore TO 67
+
+# one index now gives the whole pupil
+SEND pupilArray[3].pupilName &amp; " scored " &amp; pupilArray[3].averageScore TO DISPLAY</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">Python — records are usually written as a simple class</div>
+        <pre><code>class PupilRecord:
+    def __init__(self, pupilName="", yearGroup="", averageScore=0):
+        self.pupilName = pupilName
+        self.yearGroup = yearGroup
+        self.averageScore = averageScore
+
+pupilArray = [PupilRecord() for i in range(5)]
+
+pupilArray[3].pupilName = "Aisha"
+pupilArray[3].yearGroup = "S6"
+pupilArray[3].averageScore = 67</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Two ways of writing the same declaration.</strong> The diagram above uses the <code>DECLARE pupilRecord AS RECORD (...)</code> form you may have met at Higher; the code beside it uses the <code>RECORD pupilRecord IS { ... }</code> form used in recent Advanced Higher papers. Both describe exactly the same structure, and marks are awarded for the <strong>structure</strong> — a named record with correctly typed fields, and an array declared to hold it — not for the punctuation.</div>
+      </div>
+
+      <h3>Choosing between them</h3>
+      <table>
+        <thead><tr><th></th><th>Parallel 1D arrays</th><th>Array of records</th></tr></thead>
+        <tbody>
+          <tr><td><strong>How data is linked</strong></td><td>By index position only — nothing enforces it</td><td>By the record itself — the fields are one value</td></tr>
+          <tr><td><strong>Sorting</strong></td><td>Every array must be re-ordered identically or the data corrupts</td><td>Move one record and all of its fields move with it</td></tr>
+          <tr><td><strong>Passing to a procedure</strong></td><td>Every array must be passed as a separate parameter</td><td>One record, or one array, passes as a single parameter</td></tr>
+          <tr><td><strong>Mixed data types</strong></td><td>Fine — each array has its own type</td><td>Fine — each field has its own type</td></tr>
+          <tr><td><strong>Best suited to</strong></td><td>Small programs, or when one attribute is processed on its own</td><td>Anything where the attributes belong to one real-world item</td></tr>
+        </tbody>
+      </table>
+      <p>In an Advanced Higher answer, the winning phrase is usually: <em>"an array of records keeps all the data for one item together, so records cannot become mismatched when the data is sorted or passed between procedures."</em></p>
+
+      <h3>Worked Example — an array of records in the exam</h3>
+      <p>This is <strong>2023 Question 5</strong>, the EnviroScot climate tracker — a question built entirely on two arrays of records. Each part is <strong>walked through step by step</strong>, then a <strong>full sample answer</strong> is given for you to compare yours against. The <a href="design.html#design-worked">Design page</a> covers the same question from the point of view of the design <em>method</em>.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Array of Records — 2023 Question 5 (EnviroScot Climate Tracker)</div>
+        <p><strong>The scenario and its data structures:</strong></p>
+        <img src="../resources/integrated/worked-examples/ah_design_q1-1.png" class="zoomable" alt="2023 Question 5. EnviroScot has set up 500 weather stations across Scotland to track the effect of climate change. Several weather stations have been placed in each of the 32 local authorities. The rainfall in centimetres for 28 February 2023 from all 500 weather stations has been stored in a CSV file. A structure diagram shows the Climate Tracker program with five modules: read weather data from file, extract unique local authority names, insertion sort local authority names, calculate average rainfall for each local authority, and compare local authority data. The data is read into an array of 500 records called readingsArray with the record structure RECORD reading IS open brace STRING place, STRING authority, INTEGER rainfall close brace. A sample table of data is shown." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <p><strong>Read the two record structures before anything else.</strong> Almost every mark in this question depends on knowing which array holds what:</p>
+        <ul>
+          <li><code>readingsArray</code> — <strong>500</strong> records of <code>{STRING place, STRING authority, INTEGER rainfall}</code>. One record per weather station reading, and several records share the same <code>authority</code>.</li>
+          <li><code>rainfallArray</code> — <strong>32</strong> records of <code>{STRING local, INTEGER averageRainfall}</code>. One record per local authority, and it starts empty.</li>
+        </ul>
+        <p>Notice the shape of the problem: <strong>500 records in, 32 records out</strong>. That mismatch is why every part below needs a loop, and why part (a)(iii) needs a loop <em>inside</em> a loop.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a i</span>
+            <span class="qp-title">Extract a unique list of local authority names</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-2.png" class="zoomable" alt="Question 5(a)(i). Using the data in the readingsArray, the program must calculate the average rainfall for each local authority and store the results in an array of 32 records called rainfallArray, with the structure RECORD rainfall IS open brace STRING local, INTEGER averageRainfall close brace. Using pseudocode, design an algorithm that will extract a unique list of local authority names from the readingsArray and store them in the rainfallArray. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Say what it does in one sentence:</strong> <em>"Go through the readings, and every time I meet an authority I have not seen before, add it to the rainfall array."</em> That sentence is the algorithm — now build it one decision at a time. Each stage adds only the <span style="background:rgba(201,162,39,.35);padding:0 .25rem;">gold</span> lines.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>What repeats, and what stops it?</p>
+            <p>You are working through <code>readingsArray</code> — but you do not need all 500. There are only <strong>32</strong> authorities, and once all 32 are found there is nothing left to look for. So the loop is <strong>conditional</strong>, bounded by the size of the <em>output</em> array, not the input:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — the loop</div>
+              <pre><code><span class="ln-new">while numLAFound &lt; 32</span><span class="ln-new">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>What happens on one pass?</p>
+            <p>Look at the <code>authority</code> field of the reading you are on and decide whether it is new. This is where the record structure earns its keep — you reach one field of one record with <code>readingsArray[readingsPosition].authority</code>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — the decision</div>
+              <pre><code><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-new">   if readingsArray[readingsPosition].authority is not already stored in rainfallArray then</span><span class="ln-new">   end if</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>What happens when it <em>is</em> new?</p>
+            <p>Store it. The position to store it at is <code>numLAFound</code> — the count of what you have found so far <em>is</em> the next free slot. One variable doing two jobs is the neatest part of this answer:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — store it in the next free slot</div>
+              <pre><code><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-dim">   if readingsArray[readingsPosition].authority is not already stored in rainfallArray then</span><span class="ln-new">      set rainfallArray[numLAFound].local = readingsArray[readingsPosition].authority</span><span class="ln-new">      set numLAFound = numLAFound + 1</span><span class="ln-dim">   end if</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>What initialises, and what moves it forward?</p>
+            <p>Both counters must start at 0, and the reading position must advance <strong>every</strong> time round — <em>outside</em> the <code>if</code>, not inside it. Put that line in the wrong place and the algorithm loops forever on reading 0. It is the single most common error on this question:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — initialise and advance</div>
+              <pre><code><span class="ln-new">set readingsPosition = 0</span><span class="ln-new">set numLAFound = 0</span><span class="ln-dim">while numLAFound &lt; 32</span><span class="ln-dim">   if readingsArray[readingsPosition].authority is not already stored in rainfallArray then</span><span class="ln-dim">      set rainfallArray[numLAFound].local = readingsArray[readingsPosition].authority</span><span class="ln-dim">      set numLAFound = numLAFound + 1</span><span class="ln-dim">   end if</span><span class="ln-new">   set readingsPosition = readingsPosition + 1</span><span class="ln-dim">end while</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 3 marks</div>
+                  <pre><code>set readingsPosition = 0
+set numLAFound = 0
+
+while numLAFound &lt; 32
+   if readingsArray[readingsPosition].authority is not already stored in rainfallArray then
+      set rainfallArray[numLAFound].local = readingsArray[readingsPosition].authority
+      set numLAFound = numLAFound + 1
+   end if
+   set readingsPosition = readingsPosition + 1
+end while</code></pre>
+                </div>
+                <p><strong>Where the three marks are:</strong> <strong>traversing</strong> the readings array (the loop plus the advancing position), <strong>identifying</strong> a value as unique (the <code>if</code>), and <strong>storing</strong> it in an appropriate position of the rainfall array (the assignment at <code>numLAFound</code>). All three are present, so this is a full-mark answer.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-2_ans.png" alt="Marking instructions for 2023 Question 5(a)(i). 1 mark for traversing the readings array, 1 mark for identifying a unique value in the readings array, and 1 mark for storing each unique local authority found in an appropriate position of the rainfall array. The algorithm sets readings position to 0, sets numLAFound to 0, then while numLAFound is less than 32, if the local authority for the current reading is not already stored in the rainfall array then store it at the numLAFound position and add 1 to numLAFound, end if, add 1 to readings position, end while." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a iii</span>
+            <span class="qp-title">Calculate the average rainfall for each local authority</span>
+            <span class="qp-marks">4 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-3.png" class="zoomable" alt="Question 5(a)(iii). In the calculation of the average rainfall for each local authority, any calculated averages with a decimal value must be rounded to the nearest integer. Using pseudocode, design an algorithm to calculate the average rainfall for each local authority and store the results in the rainfallArray. 4 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Say what it does in one sentence:</strong> <em>"For each of the 32 authorities, add up the rainfall from every reading belonging to it, then divide by how many readings there were."</em> Read that again and count the repeats — "for each of the 32" is one loop, and "every reading" is another <em>inside</em> it. Spotting the <strong>nested loop</strong> is the biggest step here.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop — one pass per authority</p>
+            <p>This time the count is known exactly, so a <strong>fixed</strong> loop of 32 is right. It walks <code>rainfallArray</code>, which already holds the authority names from part (a)(i):</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — loop the output array</div>
+              <pre><code><span class="ln-new">for authority = 0 to 31</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>The inner loop — find this authority's readings</p>
+            <p>For the authority you are on, check all 500 readings and act on the ones that match. The comparison is between a field of <em>one</em> array of records and a field of the <em>other</em>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — the nested loop and the match</div>
+              <pre><code><span class="ln-dim">for authority = 0 to 31</span><span class="ln-new">   for reading = 0 to 499</span><span class="ln-new">      if readingsArray[reading].authority = rainfallArray[authority].local then</span><span class="ln-new">      end if</span><span class="ln-new">   end for</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>Accumulate the total and the count</p>
+            <p>Every match contributes its rainfall to a running total, and increases a count of how many readings this authority has. You need <em>both</em> — an average needs a numerator and a denominator:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — accumulate</div>
+              <pre><code><span class="ln-dim">for authority = 0 to 31</span><span class="ln-dim">   for reading = 0 to 499</span><span class="ln-dim">      if readingsArray[reading].authority = rainfallArray[authority].local then</span><span class="ln-new">         set total = total + readingsArray[reading].rainfall</span><span class="ln-new">         set count = count + 1</span><span class="ln-dim">      end if</span><span class="ln-dim">   end for</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>Reset, then calculate and store</p>
+            <p><strong>This is where the question is won or lost.</strong> <code>total</code> and <code>count</code> must be reset <em>inside</em> the outer loop, once per authority. Reset them before the outer loop and every average after the first is a running total, not an average. Then divide, round, and store the result in the <code>averageRainfall</code> field:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — the completed answer</div>
+              <pre><code><span class="ln-dim">for authority = 0 to 31</span><span class="ln-new">   set total = 0</span><span class="ln-new">   set count = 0</span><span class="ln-dim">   for reading = 0 to 499</span><span class="ln-dim">      if readingsArray[reading].authority = rainfallArray[authority].local then</span><span class="ln-dim">         set total = total + readingsArray[reading].rainfall</span><span class="ln-dim">         set count = count + 1</span><span class="ln-dim">      end if</span><span class="ln-dim">   end for</span><span class="ln-new">   set rainfallArray[authority].averageRainfall = round(total / count)</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 4 marks</div>
+                  <pre><code>for authority = 0 to 31
+   set total = 0
+   set count = 0
+
+   for reading = 0 to 499
+      if readingsArray[reading].authority = rainfallArray[authority].local then
+         set total = total + readingsArray[reading].rainfall
+         set count = count + 1
+      end if
+   end for
+
+   set rainfallArray[authority].averageRainfall = round(total / count)
+end for</code></pre>
+                </div>
+                <p><strong>Where the four marks are:</strong> the <strong>loop of 32</strong> processing each authority; <strong>traversing readingsArray</strong> to find each occurrence of that authority; <strong>updating a counter</strong> of how many readings it had; and <strong>calculating the average with rounding</strong>. Note the marking instructions specifically refuse the mark for using an <code>INT</code> function — that <em>truncates</em> rather than rounds, so 4.8 would become 4 instead of 5.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-3_ans.png" alt="Marking instructions for 2023 Question 5(a)(iii). 1 mark for the loop needed to process each local authority average, a loop of 32. 1 mark for traversing readingsArray to find each occurrence of unique local authority names. 1 mark for updating a counter to record the number of readings for each local authority. 1 mark for calculation of the average with rounding to the nearest integer, with a note that no mark should be awarded for use of the INT function. The algorithm uses an outer loop from 0 to 31 that resets total, average and count, an inner loop from 0 to 499 that adds matching rainfall to the total and increments count, then sets average to round of total divided by count and stores it in the rainfall array." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Binary search the array of records and display a bar chart</span>
+            <span class="qp-marks">6 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/integrated/worked-examples/ah_design_q1-4.png" class="zoomable" alt="Question 5(b). The program is required to compare the average rainfall for four local authorities. Users should be able to enter the names of four local authorities. The program will then use the binary search algorithm to find each local authority and its associated average rainfall. The output will be a diagram showing the average rainfall for each of the four local authorities, with sample output showing Borders, Inverclyde, Stirling and Highlands each followed by a row of asterisks. Using pseudocode, design an algorithm to enter the names of the local authorities requested by the user, apply the binary search algorithm to find the rainfall data for each, and display the diagram with one asterisk representing 1 cm of average rainfall. 6 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Six marks means six jobs.</strong> Read the question as a list: ask for four names, search for each one, and display a row of asterisks for each. The search is a <strong>binary search</strong>, which the question names for you — so the structure of the answer is a loop of four, containing a search, containing a display.</p>
+            <p><strong>Why the structure matters here.</strong> The search compares against <code>rainfallArray[mid].local</code> — the <em>search field</em> — but what you want back is <code>rainfallArray[mid].averageRainfall</code>, a <em>different field of the same record</em>. That is the whole payoff of an array of records: find the record once, and every field is yours. It also explains module 3 of the structure diagram — a binary search needs <strong>sorted</strong> data, and the sort must move whole <em>records</em>, or every authority is detached from its rainfall.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop and the heading</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — four authorities</div>
+              <pre><code><span class="ln-new">display "Average rainfall — each * = 1 cm"</span><span class="ln-new">for entry = 0 to 3</span><span class="ln-new">   receive searchName from keyboard</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Set up the binary search</p>
+            <p>A binary search needs four variables before it starts: the bottom of the range, the top of the range, a flag, and the midpoint. The range is the whole 32-record array:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — initialise the search</div>
+              <pre><code><span class="ln-dim">for entry = 0 to 3</span><span class="ln-dim">   receive searchName from keyboard</span><span class="ln-new">   set low = 0</span><span class="ln-new">   set high = 31</span><span class="ln-new">   set found = false</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>The search loop</p>
+            <p>Halve the range each pass: calculate the midpoint, compare the <code>local</code> field, and discard whichever half cannot contain the name. The loop ends when the name is found <em>or</em> the range collapses:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the conditional loop</div>
+              <pre><code><span class="ln-dim">   set found = false</span><span class="ln-new">   while low &lt;= high and found = false</span><span class="ln-new">      set mid = round down of (low + high) / 2</span><span class="ln-new">      if rainfallArray[mid].local = searchName then</span><span class="ln-new">         set found = true</span><span class="ln-new">      else if rainfallArray[mid].local &lt; searchName then</span><span class="ln-new">         set low = mid + 1</span><span class="ln-new">      else</span><span class="ln-new">         set high = mid - 1</span><span class="ln-new">      end if</span><span class="ln-new">   end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>Use the result — the other field of the record</p>
+            <p>When the search succeeds, <code>mid</code> is the position of the record. Display the name, then loop once per centimetre of its <code>averageRainfall</code> printing an asterisk:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — the display</div>
+              <pre><code><span class="ln-dim">   end while</span><span class="ln-new">   if found = true then</span><span class="ln-new">      display rainfallArray[mid].local followed by a space</span><span class="ln-new">      for star = 1 to rainfallArray[mid].averageRainfall</span><span class="ln-new">         display "*" on the same line</span><span class="ln-new">      end for</span><span class="ln-new">      start a new line</span><span class="ln-new">   end if</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 6 marks</div>
+                  <pre><code>display "Average rainfall — each * = 1 cm"
+
+for entry = 0 to 3
+   receive searchName from keyboard
+
+   set low = 0
+   set high = 31
+   set found = false
+
+   while low &lt;= high and found = false
+      set mid = round down of (low + high) / 2
+      if rainfallArray[mid].local = searchName then
+         set found = true
+      else if rainfallArray[mid].local &lt; searchName then
+         set low = mid + 1
+      else
+         set high = mid - 1
+      end if
+   end while
+
+   if found = true then
+      display rainfallArray[mid].local followed by a space
+      for star = 1 to rainfallArray[mid].averageRainfall
+         display "*" on the same line
+      end for
+      start a new line
+   end if
+end for</code></pre>
+                </div>
+                <p><strong>Where the six marks are:</strong> asking for four authorities and displaying the heading; initialising and updating <code>found</code> and <code>mid</code>; the conditional loop for the search; initialising and updating <code>low</code> and <code>high</code>; using the result of the search in the display; and displaying the name together with the asterisks. The <code>if found = true</code> guard is what turns "I did a search" into "I used the result of the search".</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/integrated/worked-examples/ah_design_q1-4_ans.png" alt="Marking instructions for 2023 Question 5(b). 1 mark for asking the user to enter 4 local authorities and displaying the bar chart heading. 1 mark for correctly initialising and updating found and mid needed for the binary search. 1 mark for the conditional loop needed for the binary search. 1 mark for correctly initialising and updating low and high needed for the binary search. 1 mark for using the result of the binary search in the display. 1 mark for displaying the location name together with stars used to represent the average rainfall. The algorithm displays the bar chart heading, loops four times asking for a local authority name, performs a binary search with low, high, found and mid, then displays the location followed by a loop printing one asterisk per centimetre of average rainfall and a new line." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="arrays-2d">2D Arrays</h2>
+
+      <p>A <strong>1D array</strong> is a list — one index, one dimension. A <strong>2D array</strong> is a <strong>grid</strong>: every element still holds the same data type, but each one is addressed by <strong>two</strong> indices, <strong>row first, then column</strong>.</p>
+
+      <p>Reach for a 2D array whenever the real-world data is naturally a grid or a table:</p>
+      <ul>
+        <li>a <strong>cinema seating plan</strong> — rows of seats, each either booked or free;</li>
+        <li>a <strong>game board</strong> — noughts and crosses, chess, or the robot game in the worked example below;</li>
+        <li>a <strong>timetable</strong> — periods down, days across;</li>
+        <li><strong>rainfall or temperature readings</strong> — one row per weather station, one column per month;</li>
+        <li>a <strong>bitmap image</strong> — one element per pixel.</li>
+      </ul>
+
+      <p>The example used throughout this section is a cinema seating plan for a small screen: <strong>5 rows of 8 seats</strong>, each element holding either <code>"Booked"</code> or an empty string.</p>
+
+      <img src="../resources/sdd/2d-array-anatomy.svg"
+           class="zoomable"
+           alt="A grid of 5 rows by 8 columns representing the array seatPlan, which stores a cinema seating plan as strings. Column indices 0 to 7 run across the top and row indices 0 to 4 run down the left side. A bracket above the grid labels the column index as which seat along the row, and a bracket to the left labels the row index as which row of the cinema. Seven cells are shaded green and contain the word Booked and the remaining cells are white and empty. The cell in row 2, column 5 is highlighted in gold and contains Booked, and the row label 2 and column label 5 are also highlighted in gold to show how the two indices select it. A panel underneath shows the reference seatPlan index 2 index 5, explains that this means row 2, the third row, and column 5, the sixth seat, giving the value Booked, and warns that row comes first and then column because swapping the two indices is the classic exam error."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <h3>Declaring a 2D array</h3>
+      <p>A 2D array is declared as an <strong>array of arrays</strong>: the outer size is the number of <strong>rows</strong>, and the inner size is the number of <strong>columns</strong> in each row.</p>
+
       <div class="code-block">
         <div class="code-label">SQA Reference Language</div>
-        <pre><code>RECORD Student IS {STRING name, INTEGER mark, BOOLEAN passed}
-
-DECLARE pupils AS ARRAY OF Student INITIALLY [ ] * 20
-
-SET pupils[0].name TO "Aisha"
-SET pupils[0].mark TO 67</code></pre>
+        <pre><code># 5 rows, each holding 8 columns, every element a STRING
+DECLARE seatPlan AS ARRAY OF ARRAY OF STRING INITIALLY [ [""] * 8 ] * 5</code></pre>
       </div>
+
       <div class="code-block">
         <div class="code-label">Python</div>
-        <pre><code>class Student:
-    def __init__(self, name="", mark=0, passed=False):
-        self.name = name
-        self.mark = mark
-        self.passed = passed
-
-pupils = [Student() for i in range(20)]
-
-pupils[0].name = "Aisha"
-pupils[0].mark = 67</code></pre>
-      </div>
-      <p>Notice the access pattern: <strong>index</strong> chooses the record, <strong>field name</strong> chooses the value — <code>pupils[0].mark</code>. Compare this with parallel 1D arrays, where the same index across <em>several</em> arrays links related data. Being able to argue <em>which structure suits which problem</em> is an Advanced Higher skill: records keep an item's data together and pass through parameters as one value; parallel arrays let you sort one attribute quickly but risk the arrays falling out of step.</p>
-    </article>
-
-    <article>
-      <h2 id="arrays-2d">From 1D Arrays to 2D Arrays</h2>
-      <p>A <strong>1D array</strong> is a list of values of one data type, accessed by a single index — <code>scores[4]</code>. A <strong>2D array</strong> extends this to a <strong>grid</strong>: every value still has the same data type, but each element is addressed by <strong>two indices</strong> — <strong>row first, then column</strong>.</p>
-
-      <div class="example-block">
-        <div class="example-label">Picture it — a 2D array of test scores</div>
-        <p><code>scores[3][2]</code> is the value in <strong>row 3, column 2</strong>. If each row is a pupil and each column a test, then row 3 holds one pupil's four test scores, and column 2 holds every pupil's score on test 2.</p>
-        <table style="max-width:420px;text-align:center;">
-          <thead><tr><th></th><th>[0]</th><th>[1]</th><th>[2]</th><th>[3]</th></tr></thead>
-          <tbody>
-            <tr><td><strong>[0]</strong></td><td>67</td><td>72</td><td>58</td><td>81</td></tr>
-            <tr><td><strong>[1]</strong></td><td>45</td><td>51</td><td>60</td><td>49</td></tr>
-            <tr><td><strong>[2]</strong></td><td>90</td><td>88</td><td>93</td><td>85</td></tr>
-            <tr><td><strong>[3]</strong></td><td>71</td><td>64</td><td><strong>77</strong></td><td>70</td></tr>
-          </tbody>
-        </table>
-        <p><code>scores[3][2]</code> = <strong>77</strong>.</p>
+        <pre><code># outer comprehension builds the rows, inner one builds the columns
+seatPlan = [["" for seat in range(8)] for row in range(5)]</code></pre>
       </div>
 
-      <h3>Declaring and traversing a 2D array</h3>
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The Python trap:</strong> <code>seatPlan = [[""] * 8] * 5</code> looks equivalent but is not. It creates five references to the <em>same</em> row, so booking one seat appears to book that seat in all five rows. Always build the rows with a comprehension, as above.</div>
+      </div>
+
+      <h3>Populating a 2D array</h3>
+
+      <p><strong>1 — Setting exact positions.</strong> Assign to one element by giving both indices:</p>
       <div class="code-block">
         <div class="code-label">SQA Reference Language</div>
-        <pre><code>DECLARE scores AS ARRAY OF ARRAY OF INTEGER INITIALLY [ [0]*4 ]*5
+        <pre><code>SET seatPlan[0][0] TO "Booked"
+SET seatPlan[0][1] TO "Booked"
+SET seatPlan[2][5] TO "Booked"
 
-# nested loops — outer loop rows, inner loop columns
-FOR row FROM 0 TO 4 DO
-    FOR column FROM 0 TO 3 DO
-        SEND scores[row][column] TO DISPLAY
+SEND seatPlan[2][5] TO DISPLAY      # displays Booked</code></pre>
+      </div>
+
+      <p><strong>2 — Filling every element with nested loops.</strong> The <strong>outer</strong> loop steps through the rows and the <strong>inner</strong> loop steps through the columns of the current row, so the inner loop runs from start to finish once for every single row:</p>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — clear the whole seating plan</div>
+        <pre><code>FOR row FROM 0 TO 4 DO
+    FOR seat FROM 0 TO 7 DO
+        SET seatPlan[row][seat] TO ""
     END FOR
 END FOR</code></pre>
       </div>
       <div class="code-block">
         <div class="code-label">Python</div>
-        <pre><code>scores = [[0 for c in range(4)] for r in range(5)]
-
-# nested loops — outer loop rows, inner loop columns
-for row in range(5):
-    for column in range(4):
-        print(scores[row][column])</code></pre>
+        <pre><code>for row in range(5):
+    for seat in range(8):
+        seatPlan[row][seat] = ""</code></pre>
       </div>
 
-      <div class="callout callout-warning">
-        <div class="callout-icon">⚠️</div>
-        <div><strong>The classic error:</strong> in Python, <code>scores = [[0]*4]*5</code> creates five references to the <em>same</em> row — change one element and all five rows change. Use a list comprehension as above. In the exam, the classic error is swapping row and column indices — always say to yourself "<em>row, then column</em>".</div>
-      </div>
-
-      <h3>Typical 2D array processing</h3>
+      <p><strong>3 — Filling every element with random data.</strong> Exactly the same nested loops, but the value assigned is generated rather than fixed. Here every seat is independently given roughly a 30% chance of already being booked, which is a quick way to generate test data:</p>
       <div class="code-block">
-        <div class="code-label">SQA Reference Language — total of one row, and of one column</div>
-        <pre><code># total of pupil 2's scores (fixed row, loop columns)
-DECLARE rowTotal INITIALLY 0
-FOR column FROM 0 TO 3 DO
-    SET rowTotal TO rowTotal + scores[2][column]
+        <div class="code-label">SQA Reference Language — random data in every element</div>
+        <pre><code>FOR row FROM 0 TO 4 DO
+    FOR seat FROM 0 TO 7 DO
+        IF RANDOM(1, 100) &lt;= 30 THEN
+            SET seatPlan[row][seat] TO "Booked"
+        ELSE
+            SET seatPlan[row][seat] TO ""
+        END IF
+    END FOR
+END FOR</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python</div>
+        <pre><code>import random
+
+for row in range(5):
+    for seat in range(8):
+        if random.randint(1, 100) &lt;= 30:
+            seatPlan[row][seat] = "Booked"
+        else:
+            seatPlan[row][seat] = ""</code></pre>
+      </div>
+
+      <p><strong>4 — Placing a fixed number of values at random positions.</strong> This is a different problem and needs a different shape of code — and it is the one the exam asks for below. You are not visiting every element, so there are <strong>no nested loops</strong>. Instead you loop <em>as many times as there are items to place</em>, generate a random row and column each time, and <strong>check the position is empty</strong> before using it, repeating until it is:</p>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — book 6 seats at random, no seat twice</div>
+        <pre><code>REPEAT 6 TIMES
+    DECLARE placed INITIALLY false
+    REPEAT
+        DECLARE randomRow INITIALLY RANDOM(0, 4)
+        DECLARE randomSeat INITIALLY RANDOM(0, 7)
+        IF seatPlan[randomRow][randomSeat] = "" THEN
+            SET seatPlan[randomRow][randomSeat] TO "Booked"
+            SET placed TO true
+        END IF
+    UNTIL placed = true
+END REPEAT</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Read the question for which of these it wants.</strong> "Give every element a random value" means <strong>nested loops</strong>. "Place six robots at random empty positions" means a <strong>fixed loop of six</strong> with an <strong>inner conditional loop</strong> that keeps trying until it finds an empty cell. Marks are lost every year by writing nested loops for the second one.</div>
+      </div>
+
+      <h3>Processing a 2D array</h3>
+      <p>Every standard algorithm you already know transfers straight across. The only new decision is <strong>which index is fixed and which is looped</strong>:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — one row, one column, and the whole grid</div>
+        <pre><code># 1. How many seats are booked in row 2? (fix the row, loop the columns)
+DECLARE rowCount INITIALLY 0
+FOR seat FROM 0 TO 7 DO
+    IF seatPlan[2][seat] = "Booked" THEN
+        SET rowCount TO rowCount + 1
+    END IF
 END FOR
 
-# average of test 1 (fixed column, loop rows)
-DECLARE colTotal INITIALLY 0
+# 2. Is seat 5 taken in every row? (fix the column, loop the rows)
+DECLARE allTaken INITIALLY true
 FOR row FROM 0 TO 4 DO
-    SET colTotal TO colTotal + scores[row][1]
+    IF seatPlan[row][5] &lt;&gt; "Booked" THEN
+        SET allTaken TO false
+    END IF
 END FOR
-SEND colTotal / 5 TO DISPLAY</code></pre>
+
+# 3. How many seats are booked altogether? (nested loops, visit everything)
+DECLARE total INITIALLY 0
+FOR row FROM 0 TO 4 DO
+    FOR seat FROM 0 TO 7 DO
+        IF seatPlan[row][seat] = "Booked" THEN
+            SET total TO total + 1
+        END IF
+    END FOR
+END FOR
+SEND total &amp; " of 40 seats are booked" TO DISPLAY</code></pre>
       </div>
-      <p>Everything you know about <strong>standard algorithms</strong> transfers: a search or find-max over a 2D array simply fixes one index and loops the other, or nests two loops to visit every element.</p>
+
+      <p><strong>Searching for a position</strong> is the other pattern worth having ready. To find <em>where</em> something is, nested loops run until it is found and both indices are stored — because the answer to "where is it?" in a 2D array is always <em>two</em> numbers:</p>
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — find the first free seat</div>
+        <pre><code>DECLARE foundRow INITIALLY -1
+DECLARE foundSeat INITIALLY -1
+FOR row FROM 0 TO 4 DO
+    FOR seat FROM 0 TO 7 DO
+        IF seatPlan[row][seat] = "" AND foundRow = -1 THEN
+            SET foundRow TO row
+            SET foundSeat TO seat
+        END IF
+    END FOR
+END FOR</code></pre>
+      </div>
 
       <div class="interactive-block">
-        <div class="ib-label">Interactive — planned</div>
-        <p class="ib-title">2D Array Visualiser</p>
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">2D Array Index Explorer</p>
         <div class="ib-body">
-          <p class="ib-intro">Placeholder for a visualiser: type an index pair and watch the matching cell highlight; step through nested loops and watch the traversal order light up row by row.</p>
+          <p class="ib-intro">The same <code>seatPlan</code> as above, but live. Build a reference with the steppers to see which seat it reaches, or click any seat to get the reference that reaches it &mdash; <strong>row first, then column</strong>. Then fix one index and step along the other, with the matching reference language loop updating as it runs.</p>
+          <iframe src="../resources/sdd/visualisers/2d-array-explorer.html"
+                  title="2D array index explorer &mdash; interactive"
+                  loading="lazy"
+                  style="height:1320px"></iframe>
         </div>
       </div>
 
-      <h3>Worked Examples — 2D arrays in the exam</h3>
-      <p>This 2022 question works a 2D array hard across several parts. Attempt each part before expanding.</p>
-
-      <div class="worked-example">
-        <div class="q-label">2D Arrays — 2022 Question 5 (part 1)</div>
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1.png" alt="2022 Question 5 part 1 — a program using a 2D array." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <p><strong>Read the declaration first</strong> — establish what each row and each column represents before touching the code. Then trace the indices carefully: which index is fixed, which is looped?</p>
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1-1_ans.png" alt="Marking instructions for 2022 Question 5 part 1 (first part)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-1-2_ans.png" alt="Marking instructions for 2022 Question 5 part 1 (second part)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      <h3>Worked Example — 2D arrays in the exam</h3>
+      <p>This is <strong>2022 Question 5</strong>, worth <strong>14 marks</strong>, and it works a 2D array hard from declaration through to a full movement algorithm. Every part is walked through and answered in full.</p>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div>The sample answers below deliberately <strong>alternate between SQA Reference Language and Python</strong>. Every one of these questions says "using a programming language of your choice", and the marking instructions accept any language — so use whichever you write most fluently, and make sure you can read the other.</div>
       </div>
 
       <div class="worked-example">
-        <div class="q-label">2D Arrays — 2022 Question 5 (parts 2 &amp; 3)</div>
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-2.png" alt="2022 Question 5 part 2." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-3.png" alt="2022 Question 5 part 3." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <p>Part 3 asks you to <strong>write code</strong> — remember marks are for demonstrating understanding of the 2D array processing (correct indices, correct loop bounds), not for perfect syntax in any particular language.</p>
-        <img src="../resources/sdd/questions/sdd_2d_2022_q5-3_ans.png" alt="Marking instructions for 2022 Question 5 part 3." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <div class="q-label">2D Arrays — 2022 Question 5 (Robot Game)</div>
+        <p><strong>The scenario:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_2d_q1-1.png" class="zoomable" alt="2022 Question 5. A new computer game is being developed. During the game a player must avoid being captured by a group of robots. The game will be played on a 10 by 10 grid. The player and robots can move horizontally, vertically or diagonally to an adjacent position on the grid. After each player move the robots will move closer to the player. A player wins the game when all the robots are destroyed. Robots will be destroyed when two or more robots collide, leaving a pile of rubble in their place, and any robot that collides with a pile of rubble will also be destroyed. When any robot moves to the same position as the player, the player is captured and the game is over." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+        <p><strong>Before reading any part, decide what the array holds.</strong> A 10 by 10 grid of <strong>strings</strong>, where each element holds <code>"Player"</code>, <code>"Robot"</code>, <code>"Rubble"</code> or <code>""</code> for an empty square. Every part of this question is then a matter of reading or writing those strings at the right pair of indices.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a i</span>
+            <span class="qp-title">State two additional functional requirements</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-2.png" class="zoomable" alt="Question 5(a). When the game is implemented, a 2-D array of string values is used to store the positions of the player and the robots. Part (i): State two additional functional requirements for this game. 2 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p class="build-step"><span class="bs-num">1</span>What counts as a functional requirement?</p>
+            <p>A statement of what the program <strong>must do</strong> — a job it has to perform. The marking note is explicit that it must relate to the <strong>data structure or the logic</strong> of the solution, so "the game must be fun", "it should load quickly" and "it must have good graphics" all earn nothing.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Mine the scenario for rules</p>
+            <p>Every rule the question states is a job the program must do. Underline them: movement is to an <em>adjacent</em> position; robots are destroyed when two <em>collide</em>, leaving rubble; a robot hitting <em>rubble</em> is destroyed; a robot reaching the <em>player</em> ends the game; destroying <em>all</em> robots wins it.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>Add the one the array itself demands</p>
+            <p>The grid is 10 by 10, so both indices must stay between 0 and 9. Nothing in the scenario says so explicitly, which is exactly why it is an <strong>additional</strong> requirement — and it is the strongest answer available, because it comes from the data structure.</p>
+            <p>Write each one as a full sentence beginning "the program must…". A bare noun phrase such as "collision detection" is too vague to earn the mark.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p><strong>1.</strong> The program must prevent the player or any robot from moving to a position outside the 10 by 10 grid — both the row and the column index must remain between 0 and 9.</p>
+                <p><strong>2.</strong> The program must detect when two or more robots move to the same position, destroy those robots and replace them with a pile of rubble at that position.</p>
+                <p style="margin-top:.6rem;"><em>Either of these would also be accepted:</em> the program must detect when a robot moves to the player's position and end the game; the program must detect when all robots have been destroyed and declare that the player has won.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_2d_q1-2_ans.png" alt="Marking instructions for 2022 Question 5(a)(i). Acceptable answers include: player and robot movements must not go beyond the dimensions of the game board; the game must check for robot collisions and for capturing the player; the game must check for player win and game over. 1 mark each for any two additional functional requirements. Other answers possible. Note: functional requirements must relate to data structure and or logic of the solution." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a ii</span>
+            <span class="qp-title">Declare a 2D array to represent the game board</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-3.png" class="zoomable" alt="Question 5(a)(ii). Using a programming language of your choice, write code to declare a 2-D array to represent the game board. 1 mark." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p class="build-step"><span class="bs-num">1</span>One mark, two things to get right</p>
+            <p>The <strong>dimensions</strong> and the <strong>data type</strong>. The dimensions come from the scenario — a 10 by 10 grid — and the type comes from the stem of part (a), which told you it is "a 2-D array of <strong>string</strong> values". Miss either and the mark is gone.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Write it as an array of arrays</p>
+            <p>The outer size is the number of rows and the inner size is the number of columns in each row. Initialising every element to an empty string is worth doing, because "empty square" is a state the rest of the question relies on.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block">
+                  <div class="code-label">SQA Reference Language — 1 mark</div>
+                  <pre><code>DECLARE board AS ARRAY OF ARRAY OF STRING INITIALLY [ [""] * 10 ] * 10</code></pre>
+                </div>
+                <p>10 rows, each of 10 columns, every element a <code>STRING</code> initialised to empty. A Python answer such as <code>board = [["" for column in range(10)] for row in range(10)]</code> earns the same mark.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_2d_q1-3_ans.png" alt="Marking instructions for 2022 Question 5(a)(ii). For example: DECLARE board AS ARRAY OF ARRAY OF STRING INITIALLY empty strings, with 10 rows and 10 columns. 1 mark for correct dimensions and string type. Accept valid declaration of 2D array with correct dimensions in any programming language." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a iii</span>
+            <span class="qp-title">Assign 'Robot' to six random, empty locations</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-4.png" class="zoomable" alt="Question 5(a)(iii). Using a programming language of your choice, write code to assign the value Robot to six random, empty locations on the board. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Read the three marks off the question first:</strong> <em>six</em> gives you a fixed loop, <em>empty</em> gives you a check, and <em>random</em> gives you the assignment. That is the whole shape of the answer, and it is <strong>not</strong> nested loops — you are placing six values, not visiting all one hundred squares.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>What repeats? Six robots</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — the fixed loop</div>
+              <pre><code><span class="ln-new">for robot = 0 to 5</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Pick a random square</p>
+            <p>A position in a 2D array is <em>two</em> numbers, so you need two random values, each in the range 0 to 9:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — a random position</div>
+              <pre><code><span class="ln-dim">for robot = 0 to 5</span><span class="ln-new">   set randomRow = random number from 0 to 9</span><span class="ln-new">   set randomCol = random number from 0 to 9</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>Only use it if it is empty</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the check</div>
+              <pre><code><span class="ln-dim">   set randomCol = random number from 0 to 9</span><span class="ln-new">   if board[randomRow][randomCol] = "" then</span><span class="ln-new">      set board[randomRow][randomCol] = "Robot"</span><span class="ln-new">   end if</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>What if it is <em>not</em> empty?</p>
+            <p>As it stands, a robot that picks an occupied square is simply never placed — and you end up with fewer than six. The fix is an <strong>inner conditional loop</strong> that keeps generating positions <em>until</em> an empty one is found:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — keep trying until placed</div>
+              <pre><code><span class="ln-dim">for robot = 0 to 5</span><span class="ln-new">   set placed = false</span><span class="ln-new">   repeat</span><span class="ln-dim">      set randomRow = random number from 0 to 9</span><span class="ln-dim">      set randomCol = random number from 0 to 9</span><span class="ln-dim">      if board[randomRow][randomCol] = "" then</span><span class="ln-dim">         set board[randomRow][randomCol] = "Robot"</span><span class="ln-new">         set placed = true</span><span class="ln-dim">      end if</span><span class="ln-new">   until placed = true</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block">
+                  <div class="code-label">Python — 3 marks</div>
+                  <pre><code>import random
+
+for robot in range(6):                              # fixed loop of six
+    placed = False
+    while not placed:
+        randomRow = random.randint(0, 9)
+        randomCol = random.randint(0, 9)
+        if board[randomRow][randomCol] == "":       # check it is empty
+            board[randomRow][randomCol] = "Robot"   # assign
+            placed = True</code></pre>
+                </div>
+                <p><strong>Where the three marks are:</strong> the <strong>fixed loop</strong> generating six robot positions; <strong>checking</strong> the randomly selected position is empty; and <strong>assigning</strong> to a random position within the grid. The marking instructions add that candidates are not penalised for using a 1-to-10 grid instead of 0-to-9, provided the rest of their answer is consistent with it.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_2d_q1-4_ans.png" alt="Marking instructions for 2022 Question 5(a)(iii). The answer repeats 6 times: declare empty initially false, then repeat, declare randomX initially RANDOM(10) minus 1, declare randomY initially RANDOM(10) minus 1, if board at randomX randomY equals empty string then set board at randomX randomY to Robot and set empty to true, end if, until empty equals true, end repeat. 1 mark for fixed loop to generate 6 robot positions, 1 mark for checking randomly selected position is empty, and 1 mark for assignment to random position within the grid. Note: candidates should not be penalised if they do not subtract 1 to generate a 0 to 9 grid if their subsequent answers indicate use of a 1 to 10 grid." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Implement the moveUp procedure</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p><strong>The grid at the start of a game, and the partially completed procedure:</strong></p>
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-5.png" class="zoomable" alt="The grid below represents the contents of the 2-D array at the start of a game. A 10 by 10 grid is shown with Robot in several cells and Player in one cell near the middle. Movement of the player is controlled using several procedures. Partially completed code for the moveUp procedure is shown: PROCEDURE moveUp, then a placeholder to find player row and column, then IF a placeholder for the player is not already on the top row THEN, a placeholder to move the player up one row, END IF, END PROCEDURE." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-6.png" class="zoomable" alt="Question 5(b). Using a programming language of your choice, write code to implement this procedure. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>The question has done the hard part for you.</strong> The three placeholders in the given code are the three marks — so replace them one at a time and stop.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>&lt;find player row and column&gt;</p>
+            <p>The program does not store where the player is, so it must <strong>search the whole grid</strong> for the element equal to <code>"Player"</code>. Searching a 2D array means <strong>nested loops</strong> — this is the one place in the question where they belong:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — search for the player</div>
+              <pre><code><span class="ln-new">for row = 0 to 9</span><span class="ln-new">   for column = 0 to 9</span><span class="ln-new">      if board[row][column] = "Player" then</span><span class="ln-new">      end if</span><span class="ln-new">   end for</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>&lt;the player is not already on the top row&gt;</p>
+            <p>The top row is row <strong>0</strong>, so the test is <code>row &lt;&gt; 0</code>. This is the bounds check from part (a)(i) actually being implemented — without it the player at row 0 would be moved to row −1 and the program would crash:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — the bounds check</div>
+              <pre><code><span class="ln-dim">      if board[row][column] = "Player"</span><span class="ln-new">                              and row &lt;&gt; 0 then</span><span class="ln-dim">      end if</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>&lt;move the player up one row&gt;</p>
+            <p><strong>Two assignments, not one.</strong> Write <code>"Player"</code> into the square above, <em>and</em> clear the square it came from. Forgetting to clear the old position leaves a trail of players down the board and loses the mark:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — move, then clear</div>
+              <pre><code><span class="ln-dim">      if board[row][column] = "Player" and row &lt;&gt; 0 then</span><span class="ln-new">         set board[row - 1][column] = "Player"</span><span class="ln-new">         set board[row][column] = ""</span><span class="ln-dim">      end if</span></code></pre>
+            </div>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">💡</div>
+              <div><strong>Why "up" is <code>row - 1</code>, and a subtlety worth knowing.</strong> Row 0 is drawn at the top, so moving up means a <em>lower</em> row index. Notice this also makes the algorithm safe: the loop counts rows upwards, so the player is moved into a row that has <em>already</em> been checked and cannot be found and moved a second time. Written as <code>moveDown</code> with <code>row + 1</code>, the very same code would drag the player all the way to the bottom of the board in one call — which is why a real solution would exit the loops once the player is found.</div>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block">
+                  <div class="code-label">SQA Reference Language — 3 marks</div>
+                  <pre><code>PROCEDURE moveUp()
+    FOR row FROM 0 TO 9 DO
+        FOR column FROM 0 TO 9 DO
+            IF board[row][column] = "Player" AND row &lt;&gt; 0 THEN
+                SET board[row - 1][column] TO "Player"
+                SET board[row][column] TO ""
+            END IF
+        END FOR
+    END FOR
+END PROCEDURE</code></pre>
+                </div>
+                <p><strong>Where the three marks are:</strong> getting the location of the player using a <strong>nested loop</strong>; <strong>checking</strong> that the player is not already on the top row; and <strong>setting the new location</strong> by changing the row position by −1 <em>and</em> removing the player from the previous position.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_2d_q1-5_ans.png" alt="Marking instructions for 2022 Question 5(b). PROCEDURE moveUp, FOR row equals 0 to 9 DO, FOR column equals 0 to 9 DO, IF board at row column equals Player AND row is not equal to 0 THEN, SET board at row minus 1 column TO Player, SET board at row column TO empty string, END IF, END FOR, END FOR, END PROCEDURE. An alternative solution loops from 1 to 9. 1 mark for getting location of player using nested loop, 1 mark for checking that player is not already on the top row, and 1 mark for setting new location by changing row position by minus 1 and removing from previous position. Note: if a candidate is using a different grid layout, setting board at row plus 1 column to Player would be appropriate." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">c</span>
+            <span class="qp-title">Move a robot towards the player, handling collisions and capture</span>
+            <span class="qp-marks">5 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p><strong>The robot movement rules, shown as two grids:</strong></p>
+            <img src="../resources/sdd/worked-examples/ah_2d_q1-7.png" class="zoomable" alt="Whenever a player moves up one row, all the robots will move closer to the player. The first grid shows the new position of the player after one move and the existing positions of the robots, with an arrowhead on each robot showing the cell it will move to. Two robots in shaded cells at the right of the grid will move into the same cell, which will result in a collision, so those robots will be destroyed and replaced with a pile of rubble. The second grid shows the state of the game after all of the robot moves have been completed, with the surviving robots in their new positions, the player unmoved, and a cell labelled Rubble where the two robots collided." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+            <p>The question asks you to design the algorithm that <strong>moves one robot closer to the player</strong> and deals with whatever it lands on.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Clear where it is now</p>
+            <p>Do this <strong>first</strong>. Move the robot before clearing its old square and it appears twice on the board:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — vacate the old square</div>
+              <pre><code><span class="ln-new">set board[robotRow][robotCol] = ""</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Step one square closer</p>
+            <p>Handle the row and the column <strong>separately</strong>: if the player is above, decrease the row; if below, increase it; then the same for the column. Because the two are decided independently, a robot that differs in both moves <strong>diagonally</strong> — which is exactly what the scenario allows, with no extra code:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — calculate the new position</div>
+              <pre><code><span class="ln-dim">set board[robotRow][robotCol] = ""</span><span class="ln-new">if playerRow &lt; robotRow then set robotRow = robotRow - 1</span><span class="ln-new">else if playerRow &gt; robotRow then set robotRow = robotRow + 1</span><span class="ln-new">if playerCol &lt; robotCol then set robotCol = robotCol - 1</span><span class="ln-new">else if playerCol &gt; robotCol then set robotCol = robotCol + 1</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>Ask what is already at the destination</p>
+            <p><strong>This is the structural insight.</strong> The last three marks are all the same question — <em>what is stored at the square the robot has moved to?</em> So they are one multi-branch decision on <code>board[robotRow][robotCol]</code>, not three unrelated tests. Reading the destination element <em>before</em> writing to it is the whole technique:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — one decision, four outcomes</div>
+              <pre><code><span class="ln-new">if board[robotRow][robotCol] = "" then</span><span class="ln-new">   set board[robotRow][robotCol] = "Robot"</span><span class="ln-new">else if board[robotRow][robotCol] = "Robot" then</span><span class="ln-new">   set board[robotRow][robotCol] = "Rubble"</span><span class="ln-new">else if board[robotRow][robotCol] = "Player" then</span><span class="ln-new">   display "Game over — you have been captured"</span><span class="ln-new">end if</span></code></pre>
+            </div>
+            <p>A robot moving onto existing <strong>rubble</strong> is also destroyed — but since the square is already <code>"Rubble"</code> and stays <code>"Rubble"</code>, nothing needs to happen. The marking instructions confirm that branch is <em>not required</em> for full marks.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 5 marks</div>
+                  <pre><code>set board[robotRow][robotCol] = ""
+
+if playerRow &lt; robotRow then
+   set robotRow = robotRow - 1
+else if playerRow &gt; robotRow then
+   set robotRow = robotRow + 1
+end if
+
+if playerCol &lt; robotCol then
+   set robotCol = robotCol - 1
+else if playerCol &gt; robotCol then
+   set robotCol = robotCol + 1
+end if
+
+if board[robotRow][robotCol] = "" then
+   set board[robotRow][robotCol] = "Robot"
+else if board[robotRow][robotCol] = "Robot" then
+   set board[robotRow][robotCol] = "Rubble"
+else if board[robotRow][robotCol] = "Player" then
+   display "Game over — you have been captured"
+end if</code></pre>
+                </div>
+                <p><strong>Where the five marks are:</strong> <strong>clearing</strong> the robot's current position; <strong>calculating</strong> a new position closer to the player; <strong>assigning</strong> the robot to the new position; <strong>checking for a collision</strong> with another robot and creating rubble; and <strong>checking for capture</strong> of the player.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_2d_q1-7_ans.png" alt="Marking instructions for 2022 Question 5(c). Step 1 sets board at robotX robotY to an empty string. Steps 2 to 5 adjust the robot position: if playerX is less than robotX then subtract 1 from robot row, if playerX is greater than robotX then add 1 to robotX, if playerY is greater than robotY then add 1 to robotY, if playerY is less than robotY then subtract 1 from robotY. Steps 6 and 7: if board at the new robot position is an empty string then set it to Robot. Steps 8 and 9: else if it equals Robot then set it to Rubble. Steps 10 and 11: else if it equals Rubble then set it to Rubble. Steps 12 to 14: else if it equals Player then display a game over message, end if. 1 mark for clearing current position of the robot, 1 mark for calculating new robot position closer to the player, 1 mark for assignment of robot to the new position, 1 mark for checking for collision with another robot and creation of pile of rubble, and 1 mark for checking for player capture. Note: steps 10 and 11 are not required in the solution." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
     </article>
 
     <article>
-      <h2 id="linked-lists">Linked Lists (Single &amp; Double)</h2>
-      <p>A <strong>linked list</strong> is a <strong>dynamic data structure</strong>. Unlike a 1D array — which stores each element <em>sequentially</em> in memory and typically has a fixed size set at declaration — a linked list has <strong>no fixed size</strong>: it grows and shrinks as required. Each element, called a <strong>node</strong>, has its own address in memory and stores two things:</p>
+      <h2 id="array-of-objects">Array of Objects</h2>
+      <p>The third new structure at Advanced Higher is the <strong>array of objects</strong>. It looks and behaves much like an array of records — one index selects one item, and a dot selects something within it — but each element is an <strong>object created from a class</strong>, so it carries its own <strong>methods</strong> as well as its own data:</p>
+
+      <div class="code-block">
+        <div class="code-label">Array of records vs array of objects</div>
+        <pre><code>SET total TO total + resultsArray[3].time        # a record: data only
+
+SET total TO total + resultsArray[3].getTime()  # an object: ask it for the data</code></pre>
+      </div>
+
+      <p>That difference matters because the object controls access to its own data through its methods, which is the principle of <strong>encapsulation</strong>. Arrays of objects are also how one class holds many of another — an <code>Athlete</code> object holding an array of <code>Result</code> objects, for example — which is what the <strong>UML class diagram</strong> in the exam is showing you.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>Arrays of objects are covered in full — with class definitions, constructors, instance variables, methods and worked examples — on the <a href="oop.html">Object-Oriented Programming page</a>. The <a href="design.html">Design page</a> covers how they are represented in a UML class diagram.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="linked-lists">Linked Lists</h2>
+
+      <p>Every structure so far has been an <strong>array</strong> — a fixed number of elements sitting in one contiguous block of memory, where element 4 is physically next to element 5. A <strong>linked list</strong> abandons both of those ideas.</p>
+
+      <p>A linked list is built from <strong>nodes</strong>. Each node sits at its <strong>own memory address</strong>, anywhere in memory, and stores two things:</p>
       <ul>
         <li>the <strong>data item</strong> itself;</li>
-        <li>a <strong>pointer</strong> — the address of the <em>next</em> node.</li>
+        <li>a <strong>pointer</strong> — the memory address of the <em>next</em> node.</li>
       </ul>
-      <p>The start of the list is the <strong>HEAD</strong>, and the final node's pointer is <strong>NULL</strong>. To find any item, you must start at the HEAD and follow the pointers node by node — a linked list is a <strong>linear</strong> structure that a single linked list can only <strong>traverse in one direction</strong>.</p>
+      <p>A separate pointer called the <strong>head</strong> holds the address of the first node, and the last node's pointer holds <strong>Null</strong> to mark the end. Because the nodes are joined by addresses rather than by position, the list has <strong>no fixed size</strong>: it grows and shrinks as the program runs. That makes it a <strong>dynamic data structure</strong>, where an array is a <strong>static</strong> one.</p>
 
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🖼️</div>
-        <div class="placeholder-text">Diagram placeholder — Single linked list</div>
-        <div class="placeholder-sub">Planned: four nodes ("Computing" → "Science" → "is" → "fun") with memory addresses, HEAD label and NULL terminator.</div>
-      </div>
+      <h3>A single linked list</h3>
+      <p>In a <strong>single</strong> linked list each node points only to the <em>next</em> node, so the list can be <strong>traversed in one direction only</strong> — start at the head and follow the pointers until you reach Null.</p>
 
-      <h3>Why bother? Insertion and deletion</h3>
-      <p>This is the heart of every linked-list exam question. To <strong>insert</strong> into a 1D array at a given position, every element beyond that point must be <strong>shifted along</strong> one place in memory; the same applies to deletion. In a linked list, the data <strong>never moves</strong>:</p>
+      <p>Here a radio station stores the songs listeners have requested. New requests join the <strong>end</strong> of the queue and songs are played from the <strong>front</strong>, so the station only ever needs to move forwards through the list — which is exactly why a single linked list suits it:</p>
+
+      <img src="../resources/sdd/single-linked-list.svg"
+           class="zoomable"
+           alt="Four nodes drawn left to right, each made of three parts: a memory address across the top, and beneath it a data item and a pointer side by side. A label reading Head points with an arrow to the first node. The first node has address 412, data Anthem and pointer 268. The second has address 268, data Skyfall and pointer 531. The third has address 531, data Yellow and pointer 187. The fourth has address 187, data Titanium and a pointer leading to Null. An arrow leaves each pointer and curves into the address of the next node. Small labels identify the three parts of a node as memory address, data item and pointer."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p><strong>Read the diagram as a set of instructions.</strong> The head holds 412, so the first song is the one stored at address 412 — "Anthem". Its pointer holds 268, so the next song is at address 268 — "Skyfall". Follow 531, then 187, and that node's pointer is Null, so "Titanium" is the last request in the queue. Notice that the addresses are in no particular order: 412, 268, 531, 187. The nodes are scattered through memory and it makes no difference at all, because the <em>pointers</em> define the order, not the addresses.</p>
+
+      <h4>Exemplifying the operation — a new request arrives</h4>
+      <p>A listener requests "Vertigo". The program creates a node for it at whatever memory address happens to be free — here <strong>356</strong> — and joins it to the end of the queue:</p>
+
+      <img src="../resources/sdd/single-linked-list-insert.svg"
+           class="zoomable"
+           alt="Two versions of the same single linked list, before and after a new request is added. The before list has four nodes: address 412 holding Anthem pointing to 268, address 268 holding Skyfall pointing to 531, address 531 holding Yellow pointing to 187, and address 187 holding Titanium with a pointer of Null. Head points to node 412. The after list has five nodes. The first three are unchanged. Node 187, holding Titanium, now has its pointer highlighted in gold and holding 356 instead of Null, and a gold arrow runs from it to a new gold-outlined node at address 356 holding Vertigo, whose pointer is Null. A note explains that a new node was created at address 356 holding Vertigo with its pointer set to Null, and that the pointer of node 187 changed from Null to 356, with nothing else moving."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p><strong>Exactly two things happen:</strong></p>
       <ul>
-        <li><strong>Insert:</strong> create the new node anywhere in memory, then update <strong>one pointer</strong> — the previous node now points to the new node, and the new node points to the one that follows;</li>
-        <li><strong>Delete:</strong> update the previous node's pointer to skip the deleted node, and free its memory.</li>
+        <li>a new node is created at address <strong>356</strong> holding "Vertigo", and its pointer is set to <strong>Null</strong> because it is now the last node;</li>
+        <li>the pointer of node <strong>187</strong> changes from <strong>Null</strong> to <strong>356</strong>.</li>
       </ul>
-      <p>Because only pointers change, inserting and deleting are <strong>more efficient</strong> in a linked list than in an array. One more difference worth quoting: a linked list can store data of <strong>multiple data types</strong>, where a 1D array is usually limited to one.</p>
+      <p>Nothing else changes. The four existing songs stay exactly where they were in memory, and the head still holds 412. <strong>No data has moved</strong> — one pointer was rewritten and one node was created.</p>
 
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🎬</div>
-        <div class="placeholder-text">Animation placeholder — Inserting &amp; deleting a node</div>
-        <div class="placeholder-sub">Planned: step-through animation — insert "really" between "is" and "fun" (new node at address 555, one pointer redirected), then delete "Science" (pointer bypasses the node, memory freed).</div>
-      </div>
+      <h4>Exemplifying the operation — a song is played</h4>
+      <p>When "Anthem" is played it is removed from the front. That is a <strong>one-line change too</strong>: the <strong>head</strong> is updated from 412 to <strong>268</strong>, so the list now begins at "Skyfall", and the memory used by node 412 is freed. Again no data is moved and no other node is touched.</p>
+      <p>Removing a node from the <em>middle</em> works the same way. If "Yellow" (531) were cancelled, the pointer of the node <em>before</em> it — node 268 — would be changed from 531 to <strong>187</strong>, so the list skips straight over it, and node 531's memory would be freed.</p>
 
-      <h3>Double linked lists</h3>
-      <p>A <strong>double linked list</strong> adds a <strong>second pointer</strong> to every node, storing the address of the <strong>previous</strong> node. The trade-offs:</p>
+      <h3>Why use a linked list at all?</h3>
+      <p>This is the comparison the exam wants, and it is always about <strong>insertion and deletion</strong>.</p>
+      <p>To insert an item into the middle of a <strong>1D array</strong>, every element after that point must be <strong>physically shifted along one place</strong> in memory to open up a gap — and deleting means shifting them all back again. In a list of a thousand items that can be hundreds of moves for a single insertion. In a <strong>linked list</strong> the data never moves: creating the node and rewriting <strong>one pointer</strong> is the entire operation, no matter how long the list is.</p>
+      <table>
+        <thead><tr><th></th><th>1D array</th><th>Linked list</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Size</strong></td><td>Static — fixed when declared, and may be part-empty or run out</td><td>Dynamic — grows and shrinks as needed</td></tr>
+          <tr><td><strong>Memory layout</strong></td><td>One contiguous block</td><td>Nodes scattered anywhere, joined by pointers</td></tr>
+          <tr><td><strong>Inserting / deleting</strong></td><td>All later elements must be shifted</td><td>Rewrite one pointer — no data moves</td></tr>
+          <tr><td><strong>Finding item <em>n</em></strong></td><td>Immediate — go straight to the index</td><td>Must traverse from the head, following each pointer in turn</td></tr>
+          <tr><td><strong>Extra memory</strong></td><td>Stores only the data</td><td>Each node also stores a pointer</td></tr>
+        </tbody>
+      </table>
+      <p>So the trade-off is real in both directions: linked lists win on <strong>insertion and deletion</strong>, arrays win on <strong>direct access</strong>. A question that stresses frequent insertions and removals wants a linked list; one that stresses jumping straight to a numbered item wants an array.</p>
+
+      <h3>A double linked list</h3>
+      <p>A <strong>double</strong> linked list adds a <strong>second pointer</strong> to every node, holding the address of the <strong>previous</strong> node. Each node therefore stores three things: the previous pointer, the data item, and the next pointer.</p>
+
+      <p>Here a photo gallery viewer holds the images the user is browsing. The user can click "next" or "back" at any point, so the program has to move through the list in <strong>both</strong> directions — which a single linked list cannot do:</p>
+
+      <img src="../resources/sdd/double-linked-list.svg"
+           class="zoomable"
+           alt="Four nodes drawn left to right, each with a memory address across the top and three cells beneath it: a previous pointer, a data item and a next pointer. Node 601 holds beach.jpg with a previous pointer of Null and a next pointer of 745. Node 745 holds sunset.jpg with previous 601 and next 318. Node 318 holds harbour.jpg with previous 745 and next 522. Node 522 holds castle.jpg with previous 318 and a next pointer of Null. Head points to node 601. Arrows above the row run forwards from each next pointer to the following node, and arrows below the row run backwards from each previous pointer to the preceding node."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p><strong>Read the two ends carefully.</strong> The <em>first</em> node's previous pointer is <strong>Null</strong> — there is nothing before it — and the <em>last</em> node's next pointer is <strong>Null</strong>. Every other node holds two real addresses, so from any node you can reach both of its neighbours immediately.</p>
+
+      <h4>Exemplifying the operation — deleting a photograph</h4>
+      <p>The user deletes <em>harbour.jpg</em>, which is stored at address <strong>318</strong>, from the middle of the list:</p>
+
+      <img src="../resources/sdd/double-linked-list-delete.svg"
+           class="zoomable"
+           alt="The same double linked list shown before and after the node at address 318, holding harbour.jpg, is deleted. In the before version the four nodes are linked in both directions: 601 beach.jpg, 745 sunset.jpg, 318 harbour.jpg and 522 castle.jpg. In the after version node 318 is greyed out and crossed through, labelled removed, memory freed. The next pointer of node 745 is highlighted in gold and now holds 522 instead of 318, with a gold arrow arcing over the removed node to node 522. The previous pointer of node 522 is highlighted in gold and now holds 745 instead of 318, with a gold arrow running back beneath the removed node to node 745. A note explains that the next pointer of node 745 changed from 318 to 522 so the list skips the deleted node going forwards, that the previous pointer of node 522 changed from 318 to 745 so it also skips it going backwards, and that node 318 is then freed."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p><strong>Two pointers change:</strong></p>
+      <ul>
+        <li>the <strong>next</strong> pointer of node <strong>745</strong> changes from 318 to <strong>522</strong>, so moving forwards now skips the deleted node;</li>
+        <li>the <strong>previous</strong> pointer of node <strong>522</strong> changes from 318 to <strong>745</strong>, so moving backwards skips it too.</li>
+      </ul>
+      <p>Node 318 is then removed and its memory freed. Once again <strong>no data has moved</strong> — <em>beach.jpg</em>, <em>sunset.jpg</em> and <em>castle.jpg</em> are still at exactly the same addresses.</p>
+
+      <p><strong>Here is the crucial advantage.</strong> To delete node 318 you must change the pointer of the node <em>before</em> it. In a <strong>single</strong> linked list nothing in node 318 tells you what comes before it, so the program has to go back to the head and traverse the whole list again just to find node 745. In a <strong>double</strong> linked list node 318 already holds that address in its previous pointer — so both neighbours are found <strong>instantly, with no traversal at all</strong>.</p>
+
+      <h3>Single or double?</h3>
       <table>
         <thead><tr><th></th><th>Single linked list</th><th>Double linked list</th></tr></thead>
         <tbody>
-          <tr><td><strong>Traversal</strong></td><td>One direction only (HEAD → NULL)</td><td><strong>Both directions</strong></td></tr>
-          <tr><td><strong>Memory</strong></td><td>One pointer per node</td><td>Extra memory — <strong>two pointers</strong> per node</td></tr>
-          <tr><td><strong>Deleting a known node</strong></td><td>Must traverse from the HEAD to find the <em>previous</em> node's pointer</td><td>More efficient — the previous node is found instantly via the previous pointer</td></tr>
-          <tr><td><strong>Inserting</strong></td><td>Traverse until the position is found</td><td>No traversal needed to insert at the start, at the end, or before/after a given node</td></tr>
+          <tr><td><strong>Pointers per node</strong></td><td>One — the next node</td><td>Two — the next and the previous node</td></tr>
+          <tr><td><strong>Traversal</strong></td><td>Forwards only, from the head</td><td><strong>Forwards and backwards</strong>, from any node</td></tr>
+          <tr><td><strong>Deleting a known node</strong></td><td>Must traverse from the head to find the previous node</td><td>More efficient — the previous node's address is already stored</td></tr>
+          <tr><td><strong>Inserting before a known node</strong></td><td>Must traverse from the head to find the position</td><td>No traversal needed</td></tr>
+          <tr><td><strong>Memory</strong></td><td>Less — one pointer per node</td><td>More — an extra pointer in <em>every</em> node</td></tr>
+          <tr><td><strong>Choose it when…</strong></td><td>The data is only ever processed in one direction, such as a queue</td><td>The user or program must move both ways, such as a gallery, browser history or undo feature</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout-info">
         <div class="callout-icon">ℹ️</div>
-        <div><strong>Scope check:</strong> you must be able to <strong>describe and exemplify the operation</strong> of linked lists — drawing and interpreting node/pointer diagrams and explaining efficiency. You do <strong>not</strong> need to implement them in code, so no pseudocode or program designs are required for this topic.</div>
+        <div><strong>Scope check.</strong> You must be able to <strong>describe and exemplify the operation</strong> of single and double linked lists — reading and drawing node diagrams, explaining what changes on insertion and deletion, and justifying the choice of structure. You are <strong>not</strong> required to implement one, so no code, pseudocode or program designs are needed for this topic.</div>
       </div>
 
-      <h3>Worked Example</h3>
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Linked List Operation Animator</p>
+        <div class="ib-body">
+          <p class="ib-intro">Insert and delete nodes in a single or double linked list and watch <strong>exactly which pointers change</strong>. Every operation is broken into the individual pointer changes an exam answer has to name &mdash; step through them one at a time, and the commentary gives you the sentence that would earn the mark.</p>
+          <iframe src="../resources/sdd/visualisers/linked-list-animator.html"
+                  title="Linked list operation animator &mdash; interactive"
+                  loading="lazy"
+                  style="height:1080px"></iframe>
+        </div>
+      </div>
+
+      <h3>Worked Examples — linked lists in the exam</h3>
+      <p>Three questions in the style the SQA uses, each walked through and then answered in full. Because no code is required, the "answer" here is a <strong>sentence</strong> — and the sample answers below show the exact phrasing that earns the mark.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>The formula for every "describe the changes" answer.</strong> Name the <strong>node</strong> by its memory address, name <strong>which pointer</strong> changes, and give the <strong>old and new values</strong> — <em>"the pointer of node 208 is changed from 476 to 129"</em>. Then add whether the <strong>head</strong> changes and whether a node is <strong>removed and its memory freed</strong>. Answers like "the list joins back up" describe the effect, not the change, and earn nothing.</div>
+      </div>
+
       <div class="worked-example">
-        <div class="q-label">Linked Lists — 2023 Question 2</div>
-        <img src="../resources/sdd/questions/sdd_link-list_2023_q2.png" alt="2023 Question 2 — a linked list question." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <p><strong>Approach:</strong> sketch the nodes with their pointers before answering. For any insert/delete question, identify <em>which pointers change</em> — and remember the efficiency argument: no data is moved, only pointers are updated.</p>
-        <img src="../resources/sdd/questions/sdd_link-list_2023_q2_ans.png" alt="Marking instructions for 2023 Question 2." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <div class="q-label">Linked Lists — Worked Example 1 (Takeaway Collection Queue)</div>
+        <p>A takeaway uses a <strong>single linked list</strong> to hold the orders waiting to be collected. Completed orders are removed from the <strong>front</strong> of the list, and newly placed orders are added to the <strong>end</strong>. If a customer cancels, their order is removed from wherever it sits in the list.</p>
+        <img src="../resources/sdd/ll-orders.svg" class="zoomable" alt="Four nodes drawn left to right under the heading collectionQueue, orders waiting to be collected. Each node shows a memory address across the top and a data item and pointer beneath. Head points to the first node. Node 314 holds Order 4471 and points to 208. Node 208 holds Order 4472 and points to 476. Node 476 holds Order 4473 and points to 129. Node 129 holds Order 4474 and its pointer leads to Null." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a</span>
+            <span class="qp-title">Explain why a single linked list is suitable rather than a double</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>Find the direction of travel in the scenario</p>
+            <p>Orders are removed from the <em>front</em> and added to the <em>end</em>. Trace that: the program starts at the head and works towards Null, and never needs to step back towards the head. Nothing in the scenario moves backwards.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Turn that into a cost</p>
+            <p>If nothing moves backwards, a previous pointer in every node would be <strong>stored and never used</strong> — memory spent for no benefit. That is the justification, and it must be stated, not implied.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"The queue is only ever processed in <strong>one direction</strong> — orders are taken from the front and added to the end, so the program never needs to move backwards through the list. A single linked list is therefore sufficient, and a double linked list would use additional memory storing a previous pointer in every node that would never be used."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for an explanation indicating that <strong>traversing in one direction is all that is needed</strong>.</li>
+                  <li><em>Also acceptable:</em> a double linked list would require additional memory for a second pointer in every node.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b i</span>
+            <span class="qp-title">Describe the changes when Order 4471 is collected</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>Locate the node</p>
+            <p>Order 4471 is at address <strong>314</strong> — and the head points at it, so this is a removal from the <strong>front</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Which pointer changes?</p>
+            <p>There is no node before it, so <em>no node's pointer changes at all</em>. The only thing pointing at 314 is the <strong>head</strong>, so the head is what must be updated. Its new value is whatever node 314 was pointing at — <strong>208</strong>.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"The <strong>head</strong> is changed from 314 to <strong>208</strong>, so the list now starts at the node holding Order 4472. The node at memory location 314 is removed from the list and its memory is freed."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for <strong>updating the head</strong> to memory location 208 and removing the node holding Order 4471.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b ii</span>
+            <span class="qp-title">Describe the changes when the customer who placed Order 4473 cancels</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>Locate the node, and the one before it</p>
+            <p>Order 4473 is at <strong>476</strong>, in the middle of the list. To remove it you must change the pointer of the node <em>before</em> it — read the diagram backwards to find which node points at 476, and that is node <strong>208</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>What does it point at instead?</p>
+            <p>Whatever the removed node was pointing at — <strong>129</strong>. So the list steps straight over the cancelled order.</p>
+            <p><em>Worth noticing:</em> finding node 208 required starting at the head and following pointers, because node 476 holds no address of what comes before it. In a double linked list that search would not be needed — this is precisely the efficiency difference between the two.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"The pointer of the node at memory location <strong>208</strong> is changed from 476 to <strong>129</strong>, so the list now skips over the cancelled order and links Order 4472 directly to Order 4474. The node at memory location 476 is removed from the list and its memory is freed."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for <strong>updating the pointer of node 208</strong> to 129 and removing the node at 476.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b iii</span>
+            <span class="qp-title">Describe the changes when a new Order 4475 is placed, stored at location 683</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>Find the end of the list</p>
+            <p>New orders join the end. Follow the pointers to the node whose pointer is <strong>Null</strong> — node <strong>129</strong>, holding Order 4474.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Two pointers, not one</p>
+            <p>Adding to the end always involves <em>both</em> the old last node and the new node. Node 129's pointer stops being Null and becomes 683; and the new node becomes the last, so <strong>its</strong> pointer is set to Null. Candidates routinely give the first and forget the second.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"A new node is created at memory location <strong>683</strong> holding Order 4475. The pointer of the node at memory location <strong>129</strong> is changed from Null to <strong>683</strong>, and the pointer of the new node at 683 is set to <strong>Null</strong>, as it is now the last node in the list."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for <strong>updating the pointer of node 129</strong> to 683 <strong>and</strong> setting the pointer of the new node to Null.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Linked Lists — Worked Example 2 (Presentation Software)</div>
+        <p>A presentation program stores each slide of a presentation as a node in a linked list. While presenting, the user can move to the <strong>next</strong> slide or return to the <strong>previous</strong> slide at any time.</p>
+        <img src="../resources/sdd/ll-slides.svg" class="zoomable" alt="Four nodes drawn left to right under the heading slideDeck, a presentation the user can step through. Each node has a memory address across the top and three cells beneath: a previous pointer, a data item and a next pointer. Head points to the first node. Node 702 holds Slide 1 with previous Null and next 855. Node 855 holds Slide 2 with previous 702 and next 419. Node 419 holds Slide 3 with previous 855 and next 260. Node 260 holds Slide 4 with previous 419 and next Null. Arrows above the row run forwards between the nodes and arrows below the row run backwards." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a</span>
+            <span class="qp-title">State the type of linked list used and justify your answer</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>One mark states it, one mark justifies it</p>
+            <p>Two marks for a one-word answer would be generous — so the second mark is always the <em>reason</em>. Answer both halves explicitly.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Quote the evidence from the scenario</p>
+            <p>"Return to the <strong>previous</strong> slide" is the phrase that decides it. Moving backwards is impossible in a single linked list without going back to the head and traversing the whole list again — so each node must store the address of the one before it.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"A <strong>double</strong> linked list. The user must be able to return to the <strong>previous</strong> slide as well as move to the next one, so the list has to be traversed in <strong>both directions</strong>. Each node therefore stores a pointer to the previous node as well as to the next; with a single linked list the program would have to return to the head and traverse the whole list to find the preceding slide."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for stating a <strong>double</strong> linked list.</li>
+                  <li>1 mark for a justification referring to movement in <strong>both directions</strong> / the need for a previous pointer.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Describe the changes when a new slide is inserted between Slide 2 and Slide 3</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p>The new slide is stored at memory location <strong>533</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Name the two neighbours</p>
+            <p>Slide 2 is at <strong>855</strong> and Slide 3 is at <strong>419</strong>. The new node goes between them, so those are the only two existing nodes that change.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Set the new node's own two pointers</p>
+            <p>Work outwards from the new node first. It needs to know both of its neighbours: previous = <strong>855</strong>, next = <strong>419</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>Redirect the pointer that used to cross the gap — in each direction</p>
+            <p>Node 855's <strong>next</strong> pointer currently reaches over to 419; it must now stop at 533. Node 419's <strong>previous</strong> pointer currently reaches back to 855; it must now stop at 533. That is three distinct changes for three marks — and note that inserting into a double linked list touches <strong>more</strong> pointers than into a single one, which is the price of the second direction.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"A new node is created at memory location <strong>533</strong>. Its <strong>previous</strong> pointer is set to <strong>855</strong> and its <strong>next</strong> pointer is set to <strong>419</strong>."</p>
+                <p>"The <strong>next</strong> pointer of the node at <strong>855</strong> is changed from 419 to <strong>533</strong>."</p>
+                <p>"The <strong>previous</strong> pointer of the node at <strong>419</strong> is changed from 855 to <strong>533</strong>."</p>
+                <p>"No slide data is moved and the head pointer is unchanged."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for creating the node at 533 with its <strong>previous</strong> pointer set to 855 and its <strong>next</strong> pointer set to 419.</li>
+                  <li>1 mark for changing the <strong>next</strong> pointer of node 855 to 533.</li>
+                  <li>1 mark for changing the <strong>previous</strong> pointer of node 419 to 533.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+
+      <div class="worked-example">
+        <div class="q-label">Linked Lists — Worked Example 3 (Sorting a List of Towns)</div>
+        <p>A single linked list is used to store town names. The contents of each node are a memory address, a data item and a pointer. The four nodes below have been created, but their pointers have not yet been set.</p>
+        <img src="../resources/sdd/ll-sorted-towns.svg" class="zoomable" alt="Four nodes are shown side by side, each with a memory address across the top and a data item and an empty pointer cell beneath. Node 640 holds Perth, node 318 holds Ayr, node 905 holds Nairn and node 172 holds Dundee. All four pointer cells are blank. A caption states that the list is to be sorted into alphabetical order of town name." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a</span>
+            <span class="qp-title">State the value stored in the head pointer of the sorted list</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p class="build-step"><span class="bs-num">1</span>Sort the names, ignoring the addresses</p>
+            <p>Alphabetically: <strong>Ayr</strong>, Dundee, Nairn, Perth. The addresses play no part in the ordering — a very common slip is to sort by address instead.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Translate the first name back into an address</p>
+            <p>The head holds an <strong>address</strong>, never a data item. Ayr is stored at <strong>318</strong>. Writing "Ayr" here scores nothing.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"<strong>318</strong> — the memory address of the node holding <em>Ayr</em>, which comes first alphabetically."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for <strong>318</strong>. Do not accept "Ayr" — the head stores a memory address.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Complete the table to show the pointer of each node in the sorted list</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <p>Copy and complete:</p>
+            <table style="max-width:320px;">
+              <thead><tr><th>Node</th><th>Pointer</th></tr></thead>
+              <tbody>
+                <tr><td>640</td><td></td></tr>
+                <tr><td>318</td><td></td></tr>
+                <tr><td>905</td><td></td></tr>
+                <tr><td>172</td><td></td></tr>
+              </tbody>
+            </table>
+
+            <p class="build-step"><span class="bs-num">1</span>Write the sorted order out as a chain</p>
+            <p>Do this on paper before touching the table — names first, then addresses underneath:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">The chain</div>
+              <pre><code>Ayr   →  Dundee  →  Nairn  →  Perth  →  Null
+318   →  172     →  905    →  640    →  Null</code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Read each node's pointer straight off the chain</p>
+            <p>Every node's pointer is simply <em>the address of whatever follows it</em>. The table lists the nodes in their original order, not the sorted order, so fill it in one row at a time rather than working down the chain — that mismatch is what the question is testing.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>Do not forget the end</p>
+            <p>Perth is last alphabetically, so node <strong>640</strong> gets <strong>Null</strong>. This is the most commonly dropped mark on this style of question, and here it is worth a mark on its own.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <table style="max-width:320px;">
+                  <thead><tr><th>Node</th><th>Pointer</th></tr></thead>
+                  <tbody>
+                    <tr><td>640 <em>(Perth)</em></td><td><strong>Null</strong></td></tr>
+                    <tr><td>318 <em>(Ayr)</em></td><td><strong>172</strong></td></tr>
+                    <tr><td>905 <em>(Nairn)</em></td><td><strong>640</strong></td></tr>
+                    <tr><td>172 <em>(Dundee)</em></td><td><strong>905</strong></td></tr>
+                  </tbody>
+                </table>
+                <p>Reading it back as a check: head 318 (Ayr) &rarr; 172 (Dundee) &rarr; 905 (Nairn) &rarr; 640 (Perth) &rarr; Null. Alphabetical, and every node appears exactly once.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for the pointers of nodes <strong>318</strong>, <strong>905</strong> and <strong>172</strong> correct.</li>
+                  <li>1 mark for the pointer of node <strong>640</strong> correctly set to <strong>Null</strong>.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
     </article>
 
     <article>
       <h2 id="test-yourself">Test Yourself</h2>
-      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+      <p>One or more questions for every worked example above. <strong>Write your answer out in full first</strong> — then open the walkthrough to see how the answer is reached and compare it with a full-mark response. Reading an answer always feels easier than producing one, and only one of those is what the exam asks for.</p>
+
+      <h3>Parallel arrays and arrays of records</h3>
 
       <div class="practice-question">
-        <div class="q-label">2D Array Indices — 2 marks</div>
-        <p>A 2D array is declared to store the rainfall (in mm) for 12 months across 5 years: <code>rainfall[year][month]</code>.</p>
-        <p>(a) Write the reference for the rainfall in the <em>third</em> year, <em>first</em> month (assume indices start at 0). <strong>(1 mark)</strong><br />
-        (b) State the loop structure needed to total the rainfall for month 6 across all five years. <strong>(1 mark)</strong></p>
+        <div class="q-label">Choosing a Structure — 3 marks</div>
+        <p>A running club stores data on <strong>200 athletes</strong>. For each athlete the program must hold their <strong>name</strong>, their <strong>club</strong> and their <strong>best time in seconds</strong>. The data will be sorted into order of best time so that a ranking can be displayed.</p>
+        <p>(a) Using a programming language of your choice, declare a suitable data structure to hold this data. <strong>(2 marks)</strong><br />
+        (b) Explain why this structure is more suitable than three parallel 1D arrays. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — how many marks, and for what?</strong> Two marks for a declaration means <em>two</em> things are being declared: the <strong>record</strong> itself, and the <strong>array</strong> of it. Give only the array and you cap yourself at one mark.</p>
+            <p><strong>Step 2 — pick the field types from the question.</strong> Name and club are text, so <code>STRING</code>. A time in seconds may have decimals, so <code>REAL</code> is safer than <code>INTEGER</code> — a personal best of 11.42 seconds cannot be stored as a whole number.</p>
+            <p><strong>Step 3 — the justification is about the sort.</strong> The question deliberately says the data <em>will be sorted</em>. That is the hook: it is the operation that breaks parallel arrays, so name it explicitly rather than giving a generic "records are tidier".</p>
+            <div class="code-block">
+              <div class="code-label">Sample Answer (a) — Python</div>
+              <pre><code>class Athlete:
+    def __init__(self, name="", club="", bestTime=0.0):
+        self.name = name
+        self.club = club
+        self.bestTime = bestTime
+
+athleteArray = [Athlete() for i in range(200)]</code></pre>
+            </div>
+            <p><strong>Sample Answer (b):</strong> "The data is going to be <strong>sorted</strong> by best time. In an array of records all three fields move together as a single record, so an athlete can never become attached to another athlete's time or club. With three parallel arrays, all three would have to be re-ordered in exactly the same way, and any failure to do so would corrupt the data."</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>(a) <code>rainfall[2][0]</code> — row (year) index 2, column (month) index 0. <strong>(1 mark)</strong></li>
-              <li>(b) A single loop over the year index with the month index fixed: <code>FOR year FROM 0 TO 4: total = total + rainfall[year][6]</code>. <strong>(1 mark)</strong></li>
+              <li>(a) 1 mark for a <strong>record</strong> with three correctly typed fields; 1 mark for an <strong>array of 200</strong> of that record. Accept any language. <strong>(2 marks)</strong></li>
+              <li>(b) 1 mark for a justification referring to the fields staying together when <strong>sorted</strong> / parallel arrays falling out of step. <strong>(1 mark)</strong></li>
+              <li><em>Also acceptable for (b):</em> the whole structure can be passed to a procedure as a single parameter rather than three.</li>
             </ul>
           </div>
         </details>
       </div>
 
       <div class="practice-question">
-        <div class="q-label">Linked List vs Array — 2 marks</div>
-        <p>A music streaming app stores a queue of upcoming tracks. Users constantly insert tracks into the middle of the queue and remove tracks from it.</p>
-        <p>Explain why a linked list is more suitable than a 1D array for storing this queue. <strong>(2 marks)</strong></p>
+        <div class="q-label">Traversing an Array of Records — 4 marks</div>
+        <p>Using the <code>athleteArray</code> from the previous question, use pseudocode to design an algorithm that finds and displays the <strong>name and club</strong> of the athlete with the <strong>fastest</strong> (lowest) best time.</p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Say what it does in one sentence:</strong> <em>"Assume the first athlete is the fastest, then check every other athlete and remember any that is faster."</em> This is the standard <strong>find minimum</strong> algorithm — the only new part is that it runs over records.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>What repeats?</p>
+            <p>Every athlete after the first. You know there are 200, so a <strong>fixed</strong> loop:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — traverse</div>
+              <pre><code><span class="ln-new">for position = 1 to 199</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Store the <em>position</em>, not the time</p>
+            <p>This is the decision the marks hinge on. If you only remember the fastest <strong>time</strong>, you cannot display the name and club at the end. Remember <strong>where</strong> the record is instead, and every field remains reachable:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — compare and remember the position</div>
+              <pre><code><span class="ln-new">set fastestPosition = 0</span><span class="ln-dim">for position = 1 to 199</span><span class="ln-new">   if athleteArray[position].bestTime &lt; athleteArray[fastestPosition].bestTime then</span><span class="ln-new">      set fastestPosition = position</span><span class="ln-new">   end if</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>Use the position after the loop</p>
+            <p>Display <em>two different fields</em> of the one record you found — which is the whole reason an array of records was chosen:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the completed answer</div>
+              <pre><code><span class="ln-dim">end for</span><span class="ln-new">display athleteArray[fastestPosition].name and athleteArray[fastestPosition].club</span></code></pre>
+            </div>
+
+            <div class="code-block code-plain">
+              <div class="code-label">Sample Answer — pseudocode, 4 marks</div>
+              <pre><code>set fastestPosition = 0
+
+for position = 1 to 199
+   if athleteArray[position].bestTime &lt; athleteArray[fastestPosition].bestTime then
+      set fastestPosition = position
+   end if
+end for
+
+display athleteArray[fastestPosition].name and athleteArray[fastestPosition].club</code></pre>
+            </div>
+            <p><strong>Check it against the marks:</strong> initialised before the loop, a fixed loop traversing the array, the correct <em>field</em> compared and the position updated, and two fields of the found record displayed. Starting the loop at 1 rather than 0 is a small refinement — position 0 is already the assumed fastest, so comparing it with itself achieves nothing.</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>Inserting/deleting in a 1D array requires <strong>all elements beyond that point to be shifted</strong> in memory <strong>(1 mark)</strong>;</li>
-              <li>in a linked list only a <strong>pointer is updated</strong> and no data moves — so frequent insertions/deletions are more efficient. (Also acceptable: a linked list is dynamic so the queue can grow/shrink without a fixed size.) <strong>(1 mark)</strong></li>
+              <li>1 mark for <strong>initialising</strong> the best position before the loop.</li>
+              <li>1 mark for a <strong>fixed loop</strong> traversing the array.</li>
+              <li>1 mark for <strong>comparing the correct field</strong> of the current record with the best so far and updating it.</li>
+              <li>1 mark for <strong>displaying two fields of the found record</strong> after the loop.</li>
+              <li><em>Note:</em> storing the fastest <em>time</em> alone rather than the <em>position</em> loses the final mark, because the name and club can then no longer be retrieved.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <h3>2D arrays</h3>
+
+      <div class="practice-question">
+        <div class="q-label">Declaring and Populating a 2D Array — 4 marks</div>
+        <p>A multi-storey car park has <strong>6 levels</strong>, each with <strong>40 spaces</strong>. A program stores the registration of the car in each space, or an empty string if the space is free.</p>
+        <p>(a) Write code to declare a suitable 2D array. <strong>(1 mark)</strong><br />
+        (b) Write code to set every space in the car park to empty. <strong>(1 mark)</strong><br />
+        (c) Write code to place the registration <code>"SK73 XYZ"</code> in a randomly chosen <strong>free</strong> space. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — decide which is the row and which is the column.</strong> Levels come first because a level <em>contains</em> spaces: 6 rows of 40 columns, giving <code>carPark[level][space]</code>. Getting this the wrong way round makes every later part wrong.</p>
+            <p><strong>Step 2 — parts (b) and (c) are different shapes, and that is the point.</strong> Part (b) touches <strong>every</strong> element, so it is <strong>nested loops</strong>. Part (c) places <strong>one</strong> value, so it is a <strong>conditional loop</strong> that retries until it finds a free space. Writing nested loops for (c) is the classic error.</p>
+            <p><strong>Step 3 — for (c), remember two random numbers.</strong> A position in a 2D array is a pair, so generate a random level <em>and</em> a random space, then test that pair.</p>
+            <div class="code-block">
+              <div class="code-label">Sample Answer — SQA Reference Language, 4 marks</div>
+              <pre><code># (a) 6 levels of 40 spaces
+DECLARE carPark AS ARRAY OF ARRAY OF STRING INITIALLY [ [""] * 40 ] * 6
+
+# (b) empty every space — nested loops visit all 240 elements
+FOR level FROM 0 TO 5 DO
+    FOR space FROM 0 TO 39 DO
+        SET carPark[level][space] TO ""
+    END FOR
+END FOR
+
+# (c) park one car at a random free space — conditional loop, not nested loops
+DECLARE parked INITIALLY false
+REPEAT
+    DECLARE randomLevel INITIALLY RANDOM(0, 5)
+    DECLARE randomSpace INITIALLY RANDOM(0, 39)
+    IF carPark[randomLevel][randomSpace] = "" THEN
+        SET carPark[randomLevel][randomSpace] TO "SK73 XYZ"
+        SET parked TO true
+    END IF
+UNTIL parked = true</code></pre>
+            </div>
+            <p><strong>Why (c) needs the flag:</strong> without <code>parked</code> there is no way to end the loop, and without the <code>IF</code> the car could be parked on top of another. The two marks are exactly those two ideas.</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for correct dimensions (6 &times; 40) and string type. <strong>(1 mark)</strong></li>
+              <li>(b) 1 mark for <strong>nested loops</strong> covering both dimensions with the assignment inside. <strong>(1 mark)</strong></li>
+              <li>(c) 1 mark for generating a random level and space inside a <strong>conditional loop</strong> that repeats until a free space is found; 1 mark for <strong>checking the space is empty</strong> and then assigning the registration. <strong>(2 marks)</strong></li>
+              <li><em>Note for (c):</em> nested loops are not appropriate — only one value is being placed.</li>
             </ul>
           </div>
         </details>
       </div>
 
       <div class="practice-question">
-        <div class="q-label">Double Linked List — 2 marks</div>
-        <p>State <strong>one advantage</strong> and <strong>one disadvantage</strong> of a double linked list compared to a single linked list. <strong>(2 marks)</strong></p>
+        <div class="q-label">Processing a 2D Array — 4 marks</div>
+        <p>Using the <code>carPark</code> array from the previous question:</p>
+        <p>(a) Write code to count and display how many spaces are occupied on <strong>level 3</strong>. <strong>(2 marks)</strong><br />
+        (b) Explain why a procedure that finds a free space must return <strong>two</strong> values. <strong>(1 mark)</strong><br />
+        (c) State the index pair that refers to the <strong>last</strong> space on the <strong>top</strong> level. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — for (a), ask which index is fixed.</strong> "On level 3" fixes the <em>row</em> at 3, so only the space index varies. That means a <strong>single</strong> loop, not nested loops — a mistake worth a mark here.</p>
+            <p><strong>Step 2 — "occupied" is the opposite of empty.</strong> A space holds a registration when it is <em>not</em> the empty string, so test <code>&lt;&gt; ""</code> rather than trying to list every possible registration.</p>
+            <p><strong>Step 3 — for (c), count carefully from zero.</strong> Six levels are indexed 0 to 5, so the top is <strong>5</strong>; forty spaces are indexed 0 to 39, so the last is <strong>39</strong>. Answering <code>[6][40]</code> is the off-by-one this part is designed to catch.</p>
+            <div class="code-block">
+              <div class="code-label">Sample Answer (a) — Python, 2 marks</div>
+              <pre><code>occupied = 0
+
+for space in range(40):            # level index fixed at 3
+    if carPark[3][space] != "":
+        occupied = occupied + 1
+
+print("Spaces occupied on level 3:", occupied)</code></pre>
+            </div>
+            <p><strong>Sample Answer (b):</strong> "A position in a 2D array is identified by <strong>two</strong> indices — the level and the space. One value alone could not say where the free space is, because a space number is meaningless without knowing which level it is on."</p>
+            <p><strong>Sample Answer (c):</strong> <code>carPark[5][39]</code> — level index 5 (the sixth and highest level) and space index 39 (the fortieth space).</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li><strong>Advantage:</strong> it can be traversed in both directions / removing or inserting at a known node is more efficient because the previous node is found via the previous pointer. <strong>(1 mark)</strong></li>
-              <li><strong>Disadvantage:</strong> it requires additional memory, as an extra pointer is stored in every node. <strong>(1 mark)</strong></li>
+              <li>(a) 1 mark for a <strong>single loop</strong> over the space index with the level index <strong>fixed at 3</strong>; 1 mark for correctly testing the element is not empty, incrementing an initialised counter and displaying it. <strong>(2 marks)</strong></li>
+              <li>(b) 1 mark for identifying that a position needs <strong>two indices</strong> — row and column. <strong>(1 mark)</strong></li>
+              <li>(c) 1 mark for <code>carPark[5][39]</code>. <strong>(1 mark)</strong></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <h3>Linked lists</h3>
+
+      <div class="practice-question">
+        <div class="q-label">Single Linked List Operations — 3 marks</div>
+        <p>A helpdesk stores support tickets waiting to be answered in a <strong>single linked list</strong>. The current contents are:</p>
+        <table style="max-width:420px;">
+          <thead><tr><th>Memory address</th><th>Data item</th><th>Pointer</th></tr></thead>
+          <tbody>
+            <tr><td>905</td><td>Ticket 21</td><td>431</td></tr>
+            <tr><td>431</td><td>Ticket 22</td><td>760</td></tr>
+            <tr><td>760</td><td>Ticket 23</td><td>288</td></tr>
+            <tr><td>288</td><td>Ticket 24</td><td>Null</td></tr>
+          </tbody>
+        </table>
+        <p>The head pointer holds <strong>905</strong>.</p>
+        <p>(a) Describe the changes that take place when <strong>Ticket 21</strong> is answered and removed. <strong>(1 mark)</strong><br />
+        (b) Describe the changes that take place when <strong>Ticket 23</strong> is withdrawn by the customer. <strong>(1 mark)</strong><br />
+        (c) Describe the changes that take place when <strong>Ticket 25</strong>, stored at location <strong>117</strong>, is added to the end of the list. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — sketch the chain before answering anything.</strong> Head &rarr; 905 &rarr; 431 &rarr; 760 &rarr; 288 &rarr; Null. Every part below is answered by looking at what points <em>at</em> the node in question.</p>
+            <p><strong>Step 2 — classify each part.</strong> (a) is a removal from the <strong>front</strong>, so the <em>head</em> changes and no node's pointer does. (b) is a removal from the <strong>middle</strong>, so the node <em>before</em> it changes. (c) is an addition at the <strong>end</strong>, so <em>two</em> pointer values are involved.</p>
+            <p><strong>Step 3 — for (b), find the predecessor by reading the table backwards.</strong> Which node holds 760 in its pointer? Node <strong>431</strong>. That is the one that changes; node 760 itself is simply discarded.</p>
+            <p><strong>Sample Answer (a):</strong> "The <strong>head</strong> is changed from 905 to <strong>431</strong>, so the list now starts at Ticket 22. The node at 905 is removed and its memory is freed."</p>
+            <p><strong>Sample Answer (b):</strong> "The pointer of the node at <strong>431</strong> is changed from 760 to <strong>288</strong>, so the list skips over the withdrawn ticket and links Ticket 22 directly to Ticket 24. The node at 760 is removed and its memory is freed."</p>
+            <p><strong>Sample Answer (c):</strong> "A new node is created at <strong>117</strong> holding Ticket 25. The pointer of the node at <strong>288</strong> is changed from Null to <strong>117</strong>, and the pointer of the new node is set to <strong>Null</strong>, as it is now the last node."</p>
+            <p>In all three cases <strong>no data is moved</strong> — only pointers are rewritten. Saying so costs a few words and shows you understand why a linked list was chosen.</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for <strong>updating the head</strong> to 431 and removing the node at 905.</li>
+              <li>(b) 1 mark for <strong>updating the pointer of node 431</strong> to 288 and removing the node at 760.</li>
+              <li>(c) 1 mark for <strong>updating the pointer of node 288</strong> to 117 <strong>and</strong> setting the new node's pointer to Null.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Sorting a Linked List — 2 marks</div>
+        <p>A single linked list stores four product codes: <strong>BX12</strong> at address 540, <strong>AR09</strong> at address 226, <strong>DQ44</strong> at address 871 and <strong>CM31</strong> at address 195. The list is to be sorted into <strong>alphabetical order of product code</strong>.</p>
+        <p>State the value of the <strong>head</strong> pointer and the value of the pointer stored in <strong>each node</strong> of the sorted list. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — sort the codes, ignoring the addresses entirely.</strong> AR09, BX12, CM31, DQ44. The addresses are arbitrary and play no part in the ordering.</p>
+            <p><strong>Step 2 — write the chain out with both rows.</strong> Doing this on paper first turns the rest into copying:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">The chain</div>
+              <pre><code>AR09  →  BX12  →  CM31  →  DQ44  →  Null
+226   →  540   →  195   →  871   →  Null</code></pre>
+            </div>
+            <p><strong>Step 3 — each node's pointer is the address of whatever follows it.</strong> Read them straight off the bottom row, and give the last node <strong>Null</strong>.</p>
+            <p><strong>Sample Answer:</strong> Head = <strong>226</strong>.</p>
+            <table style="max-width:320px;">
+              <thead><tr><th>Node</th><th>Pointer</th></tr></thead>
+              <tbody>
+                <tr><td>540 <em>(BX12)</em></td><td><strong>195</strong></td></tr>
+                <tr><td>226 <em>(AR09)</em></td><td><strong>540</strong></td></tr>
+                <tr><td>871 <em>(DQ44)</em></td><td><strong>Null</strong></td></tr>
+                <tr><td>195 <em>(CM31)</em></td><td><strong>871</strong></td></tr>
+              </tbody>
+            </table>
+            <p>Check by following it: 226 &rarr; 540 &rarr; 195 &rarr; 871 &rarr; Null gives AR09, BX12, CM31, DQ44 — alphabetical, with every node used exactly once.</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for the <strong>head</strong> set to 226 and the pointers of nodes 226, 540 and 195 correct.</li>
+              <li>1 mark for the pointer of node <strong>871</strong> correctly set to <strong>Null</strong>.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Double Linked Lists — 3 marks</div>
+        <p>A web browser stores the pages a user has visited in a <strong>double linked list</strong> so that the back and forward buttons both work.</p>
+        <p>(a) State <strong>one advantage</strong> of a double linked list over a single linked list. <strong>(1 mark)</strong><br />
+        (b) State <strong>one disadvantage</strong>. <strong>(1 mark)</strong><br />
+        (c) A page stored at address <strong>604</strong> sits between the pages at addresses <strong>318</strong> and <strong>977</strong>. Describe the changes that take place when the page at 604 is deleted from the history. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — advantages and disadvantages both come from the same fact:</strong> there is an extra pointer in every node. That buys you backward movement; it costs you memory. Say which side of that trade you are describing.</p>
+            <p><strong>Step 2 — for (c), the node being deleted has two neighbours, so two pointers change.</strong> Ask the question in each direction separately: going <em>forwards</em>, what used to lead into 604? Node 318's next pointer. Going <em>backwards</em>, what used to lead into 604? Node 977's previous pointer. Each is redirected past the deleted node.</p>
+            <p><strong>Sample Answer (a):</strong> "It can be traversed in <strong>both directions</strong>. Because each node stores the address of the previous node as well as the next, the program can move backwards from any node without returning to the head and traversing the whole list."</p>
+            <p><strong>Sample Answer (b):</strong> "It requires <strong>more memory</strong>, because an additional pointer must be stored in every node in the list."</p>
+            <p><strong>Sample Answer (c):</strong> "The <strong>next</strong> pointer of the node at <strong>318</strong> is changed from 604 to <strong>977</strong>, and the <strong>previous</strong> pointer of the node at <strong>977</strong> is changed from 604 to <strong>318</strong>. The node at 604 is then removed from the list and its memory is freed. No page data is moved."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for traversal in <strong>both directions</strong> / finding the previous node without traversing from the head.</li>
+              <li>(b) 1 mark for <strong>additional memory</strong> used by the extra pointer in every node.</li>
+              <li>(c) 1 mark for changing the <strong>next</strong> pointer of 318 to 977 <strong>and</strong> the <strong>previous</strong> pointer of 977 to 318.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <h3>Bringing it together</h3>
+
+      <div class="practice-question">
+        <div class="q-label">Selecting and Justifying a Structure — 4 marks</div>
+        <p>For each of the following, name the most suitable data structure and justify your choice.</p>
+        <p>(a) Storing which seats are sold for every performance of a play — 30 performances, 250 seats each. <strong>(2 marks)</strong><br />
+        (b) Storing a print queue in which jobs are added at the end, removed from the front, and frequently cancelled from the middle. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — the second mark is always the justification, so plan two sentences per part.</strong> Name the structure, then give a reason that points at something specific in the scenario. "It is the best one for the job" is not a reason.</p>
+            <p><strong>Step 2 — for (a), look for a fixed grid.</strong> Two dimensions (performance and seat), both sizes known in advance and unchanging, and you need to check any single seat immediately. That is a <strong>2D array</strong>: static size is an advantage here, not a limitation.</p>
+            <p><strong>Step 3 — for (b), look for the words "added", "removed" and "frequently".</strong> Frequent insertion and deletion is the signature of a <strong>linked list</strong>. Then decide single or double by asking whether anything moves backwards — nothing does, so <strong>single</strong> is enough, and choosing double would waste memory.</p>
+            <p><strong>Sample Answer (a):</strong> "A <strong>2D array</strong>. The data is naturally a grid of a fixed, known size — one row per performance and one column per seat — so it can be declared as 30 by 250 at the start. Any seat can then be checked or sold immediately from its two indices, without searching."</p>
+            <p><strong>Sample Answer (b):</strong> "A <strong>single linked list</strong>. Jobs are inserted and deleted frequently, and in a linked list this only requires a pointer to be updated, whereas a 1D array would have to shift every later element along in memory each time. It is also dynamic, so the queue is not limited to a fixed size. A single list is sufficient because the queue is only ever processed from front to back."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for a <strong>2D array</strong>; 1 mark for a justification referring to fixed-size grid data and/or immediate access by two indices. <strong>(2 marks)</strong></li>
+              <li>(b) 1 mark for a <strong>linked list</strong> (accept single); 1 mark for a justification referring to efficient insertion/deletion without shifting elements and/or its dynamic size. <strong>(2 marks)</strong></li>
+              <li><em>Note:</em> the justification mark must refer to a property of the data or the operations, not simply restate the choice.</li>
             </ul>
           </div>
         </details>

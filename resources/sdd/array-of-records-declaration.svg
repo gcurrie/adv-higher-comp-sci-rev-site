@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 460" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="aorTitle aorDesc">
+  <title id="aorTitle">From Record to Array of Records</title>
+  <desc id="aorDesc">Two SQA reference language declarations shown one above the other and colour-coded. Step 1 declares the record: DECLARE pupilRecord AS RECORD (STRING: pupilName, STRING: yearGroup, INT: averageScore), with the record name pupilRecord in dark green, the field names pupilName, yearGroup and averageScore in mid green, and the data types STRING, STRING and INT in blue. Step 2 declares the array of that record: DECLARE pupilArray AS ARRAY OF RECORD pupilRecord {} * 5, with the array name pupilArray in purple, the record name pupilRecord again in dark green, and the size 5 in gold. A curved arrow runs from pupilRecord in the first declaration down to pupilRecord in the second, showing that the array is built from the record and the name must match exactly. Labels beneath the second line point out that pupilArray is the array's own name and must differ from the record's name, and that the 5 is how many records the array holds.</desc>
+
+  <defs>
+    <marker id="aorArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00442A"/>
+    </marker>
+  </defs>
+
+  <!-- panel -->
+  <rect x="1" y="1" width="1138" height="458" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="2"/>
+
+  <!-- heading -->
+  <text x="570" y="48" text-anchor="middle" font-size="26" font-weight="800" fill="#00442A" letter-spacing="-0.4">From Record to Array of Records</text>
+  <text x="570" y="74" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="2.2" fill="#1B6B45"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">THE RECORD NAME IS THE THREAD THAT LINKS THE TWO DECLARATIONS</text>
+
+  <!-- ================= colour key ================= -->
+  <rect x="60"  y="98" width="92" height="24" fill="#00442A"/>
+  <text x="106" y="114" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.1" fill="#FFFFFF"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">RECORD NAME</text>
+  <rect x="164" y="98" width="60" height="24" fill="#1B6B45"/>
+  <text x="194" y="114" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.1" fill="#FFFFFF"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">FIELDS</text>
+  <rect x="236" y="98" width="86" height="24" fill="#1E40AF"/>
+  <text x="279" y="114" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.1" fill="#FFFFFF"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">DATA TYPES</text>
+  <rect x="334" y="98" width="86" height="24" fill="#6A1B9A"/>
+  <text x="377" y="114" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.1" fill="#FFFFFF"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">ARRAY NAME</text>
+  <rect x="432" y="98" width="48" height="24" fill="#92750A"/>
+  <text x="456" y="114" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.1" fill="#FFFFFF"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">SIZE</text>
+
+  <!-- ================= step 1 — the record ================= -->
+  <text x="60" y="170" font-size="10" font-weight="700" letter-spacing="1.6" fill="#4A5568"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">STEP 1</text>
+  <text x="60" y="186" font-size="11.5" font-style="italic" fill="#4A5568">the record</text>
+  <rect x="180" y="146" width="900" height="52" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2"/>
+  <text x="204" y="178" font-size="15" xml:space="preserve"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace"><tspan fill="#4A5568">DECLARE </tspan><tspan fill="#00442A" font-weight="700">pupilRecord</tspan><tspan fill="#4A5568"> AS RECORD (</tspan><tspan fill="#1E40AF" font-weight="700">STRING</tspan><tspan fill="#4A5568">: </tspan><tspan fill="#1B6B45" font-weight="700">pupilName</tspan><tspan fill="#4A5568">, </tspan><tspan fill="#1E40AF" font-weight="700">STRING</tspan><tspan fill="#4A5568">: </tspan><tspan fill="#1B6B45" font-weight="700">yearGroup</tspan><tspan fill="#4A5568">, </tspan><tspan fill="#1E40AF" font-weight="700">INT</tspan><tspan fill="#4A5568">: </tspan><tspan fill="#1B6B45" font-weight="700">averageScore</tspan><tspan fill="#4A5568">)</tspan></text>
+  <line id="ul1" x1="276" y1="186" x2="375" y2="186" stroke="#00442A" stroke-width="2.5"/>
+
+  <!-- ================= the through line ================= -->
+  <path d="M 325 190 C 325 226, 595 222, 595 254" fill="none" stroke="#00442A" stroke-width="2.5"
+        stroke-dasharray="6 4" marker-end="url(#aorArrow)"/>
+  <text x="626" y="228" font-size="13" font-weight="700" fill="#00442A">The array is built FROM this record &#8212;</text>
+  <text x="626" y="246" font-size="13" fill="#1A1A1A">the name must match exactly.</text>
+
+  <!-- ================= step 2 — the array ================= -->
+  <text x="60" y="286" font-size="10" font-weight="700" letter-spacing="1.6" fill="#4A5568"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace">STEP 2</text>
+  <text x="60" y="302" font-size="11.5" font-style="italic" fill="#4A5568">the array</text>
+  <rect x="180" y="262" width="900" height="52" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2"/>
+  <text x="204" y="294" font-size="15" xml:space="preserve"
+        font-family="'JetBrains Mono','Cascadia Code',Consolas,'Courier New',monospace"><tspan fill="#4A5568">DECLARE </tspan><tspan fill="#6A1B9A" font-weight="700">pupilArray</tspan><tspan fill="#4A5568"> AS ARRAY OF RECORD </tspan><tspan fill="#00442A" font-weight="700">pupilRecord</tspan><tspan fill="#4A5568"> {} * </tspan><tspan fill="#92750A" font-weight="700">5</tspan></text>
+  <line id="ul2a" x1="276" y1="302" x2="366" y2="302" stroke="#6A1B9A" stroke-width="2.5"/>
+  <line id="ul2b" x1="546" y1="302" x2="645" y2="302" stroke="#00442A" stroke-width="2.5"/>
+  <line id="ul2c" x1="699" y1="302" x2="708" y2="302" stroke="#92750A" stroke-width="2.5"/>
+
+  <!-- callouts under the second line -->
+  <line x1="321" y1="306" x2="321" y2="322" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="276" y="338" font-size="12.5" fill="#6A1B9A">the array's own name &#8212; must differ from the record's</text>
+  <line x1="703" y1="306" x2="703" y2="322" stroke="#92750A" stroke-width="1.5"/>
+  <text x="664" y="338" font-size="12.5" fill="#92750A">how many records it holds</text>
+
+  <!-- ================= caption ================= -->
+  <rect x="60" y="364" width="1020" height="56" fill="#FEF3C7" stroke="#C9A227" stroke-width="2"/>
+  <text x="570" y="388" text-anchor="middle" font-size="12.5" fill="#1A1A1A">Declare the <tspan font-weight="700">record</tspan> first, then declare an <tspan font-weight="700">array of</tspan> that record. The array reuses the record's name, so if you rename one you must rename the other.</text>
+  <text x="570" y="407" text-anchor="middle" font-size="12.5" fill="#1A1A1A">The two names must be <tspan font-weight="700">different</tspan> from each other, and the size is always given to you in the question.</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 600" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Adding a node to the end of a single linked list</title>
+  <desc id="d">Two versions of the same single linked list, before and after a new request is added. The before list has four nodes: address 412 holding Anthem pointing to 268, address 268 holding Skyfall pointing to 531, address 531 holding Yellow pointing to 187, and address 187 holding Titanium with a pointer of Null. Head points to node 412. The after list has five nodes. The first three are unchanged. Node 187, holding Titanium, now has its pointer highlighted in gold and holding 356 instead of Null, and a gold arrow runs from it to a new gold-outlined node at address 356 holding Vertigo, whose pointer is Null. A note explains that a new node was created at address 356 holding Vertigo with its pointer set to Null, and that the pointer of node 187 changed from Null to 356, with nothing else moving.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00442A"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#C9A227"/>
+    </marker>
+    <marker id="lead" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A5568"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="600" fill="#FFFFFF"/>
+  <text x="590" y="40" font-size="25" fill="#00442A" text-anchor="middle" font-weight="800">Adding a request to the queue</text>
+  <text x="590" y="68" font-size="14.5" fill="#4A5568" text-anchor="middle">A listener requests &#8220;Vertigo&#8221;. It is stored at memory address 356 and joins the end of the queue.</text>
+  <text x="60" y="104" font-size="13" fill="#4A5568" text-anchor="start" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">BEFORE</text>
+  <text x="58" y="144.0" font-size="16" fill="#00442A" text-anchor="middle" font-weight="800">Head</text>
+  <path d="M92,138.0 L146,138.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="150" y="120" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="225.0" y="145" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">412</text>
+  <rect x="150" y="156" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="202.0" y="183" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Anthem</text>
+  <rect x="254" y="156" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="277.0" y="183" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">268</text>
+  <path d="M300,177.0 L318,177.0 L318,138.0 L338,138.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="342" y="120" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="417.0" y="145" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">268</text>
+  <rect x="342" y="156" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="394.0" y="183" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Skyfall</text>
+  <rect x="446" y="156" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="469.0" y="183" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">531</text>
+  <path d="M492,177.0 L510,177.0 L510,138.0 L530,138.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="534" y="120" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="609.0" y="145" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">531</text>
+  <rect x="534" y="156" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="586.0" y="183" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Yellow</text>
+  <rect x="638" y="156" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="661.0" y="183" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">187</text>
+  <path d="M684,177.0 L702,177.0 L702,138.0 L722,138.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="726" y="120" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="801.0" y="145" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">187</text>
+  <rect x="726" y="156" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="778.0" y="183" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Titanium</text>
+  <rect x="830" y="156" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <path d="M876,177.0 L910,177.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <text x="920" y="183.0" font-size="15" fill="#92750A" text-anchor="start" font-weight="800">Null</text>
+  <path d="M60,280 L1120,280" fill="none" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="60" y="314" font-size="13" fill="#92750A" text-anchor="start" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">AFTER</text>
+  <text x="58" y="354.0" font-size="16" fill="#00442A" text-anchor="middle" font-weight="800">Head</text>
+  <path d="M92,348.0 L146,348.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="150" y="330" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="225.0" y="355" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">412</text>
+  <rect x="150" y="366" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="202.0" y="393" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Anthem</text>
+  <rect x="254" y="366" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="277.0" y="393" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">268</text>
+  <path d="M300,387.0 L318,387.0 L318,348.0 L338,348.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="342" y="330" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="417.0" y="355" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">268</text>
+  <rect x="342" y="366" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="394.0" y="393" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Skyfall</text>
+  <rect x="446" y="366" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="469.0" y="393" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">531</text>
+  <path d="M492,387.0 L510,387.0 L510,348.0 L530,348.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="534" y="330" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="609.0" y="355" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">531</text>
+  <rect x="534" y="366" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="586.0" y="393" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Yellow</text>
+  <rect x="638" y="366" width="46" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="661.0" y="393" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">187</text>
+  <path d="M684,387.0 L702,387.0 L702,348.0 L722,348.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="726" y="330" width="150" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="801.0" y="355" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">187</text>
+  <rect x="726" y="366" width="104" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="778.0" y="393" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Titanium</text>
+  <rect x="830" y="366" width="46" height="42" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="853.0" y="393" font-size="13.5" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">356</text>
+  <path d="M876,387.0 L894,387.0 L894,348.0 L914,348.0" fill="none" stroke="#C9A227" stroke-width="2.6" marker-end="url(#arrowg)"/>
+  <rect x="918" y="330" width="150" height="36" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="993.0" y="355" font-size="16" fill="#92750A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">356</text>
+  <rect x="918" y="366" width="104" height="42" fill="#FFFFFF" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="970.0" y="393" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Vertigo</text>
+  <rect x="1022" y="366" width="46" height="42" fill="#FFFFFF" stroke="#C9A227" stroke-width="2.4"/>
+  <path d="M1068,387.0 L1102,387.0" fill="none" stroke="#C9A227" stroke-width="2.6" marker-end="url(#arrowg)"/>
+  <text x="1112" y="393.0" font-size="15" fill="#92750A" text-anchor="start" font-weight="800">Null</text>
+  <rect x="150" y="480" width="918" height="86" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="176" y="510" font-size="14.5" fill="#92750A" text-anchor="start" font-weight="800">What actually changed</text>
+  <text x="176" y="535" font-size="14" fill="#1A1A1A" text-anchor="start">1. A new node is created at address <tspan font-weight="700">356</tspan> holding &#8220;Vertigo&#8221;, and its pointer is set to <tspan font-weight="700">Null</tspan>.</text>
+  <text x="176" y="556" font-size="14" fill="#1A1A1A" text-anchor="start">2. The pointer of node <tspan font-weight="700">187</tspan> changes from <tspan font-weight="700">Null</tspan> to <tspan font-weight="700">356</tspan>. Nothing else moves &#8212; that is the whole operation.</text>
+</svg>

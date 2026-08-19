@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 270" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Four detached linked-list nodes with empty pointers</title>
+  <desc id="d">Four nodes are shown side by side, each with a memory address across the top and a data item and an empty pointer cell beneath. Node 640 holds Perth, node 318 holds Ayr, node 905 holds Nairn and node 172 holds Dundee. All four pointer cells are blank. A caption states that the list is to be sorted into alphabetical order of town name.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00442A"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="270" fill="#FFFFFF"/>
+  <text x="590" y="42" font-size="19" fill="#00442A" text-anchor="middle" font-weight="800">Four towns stored in a single linked list</text>
+  <text x="590" y="72" font-size="14" fill="#4A5568" text-anchor="middle">The nodes are shown below with their pointers left blank.</text>
+  <rect x="150" y="110" width="170" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="235.0" y="135" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">640</text>
+  <rect x="150" y="146" width="118" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="209.0" y="173" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Perth</text>
+  <rect x="268" y="146" width="52" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <rect x="400" y="110" width="170" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="485.0" y="135" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">318</text>
+  <rect x="400" y="146" width="118" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="459.0" y="173" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Ayr</text>
+  <rect x="518" y="146" width="52" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <rect x="650" y="110" width="170" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="735.0" y="135" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">905</text>
+  <rect x="650" y="146" width="118" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="709.0" y="173" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Nairn</text>
+  <rect x="768" y="146" width="52" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <rect x="900" y="110" width="170" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="985.0" y="135" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">172</text>
+  <rect x="900" y="146" width="118" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="959.0" y="173" font-size="14.5" fill="#1A1A1A" text-anchor="middle">Dundee</text>
+  <rect x="1018" y="146" width="52" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="590" y="240" font-size="14.5" fill="#4A5568" text-anchor="middle">The list is to be sorted into alphabetical order of town name.</text>
+</svg>

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 672" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Deleting a node from the middle of a double linked list</title>
+  <desc id="d">The same double linked list shown before and after the node at address 318, holding harbour.jpg, is deleted. In the before version the four nodes are linked in both directions: 601 beach.jpg, 745 sunset.jpg, 318 harbour.jpg and 522 castle.jpg. In the after version node 318 is greyed out and crossed through, labelled removed, memory freed. The next pointer of node 745 is highlighted in gold and now holds 522 instead of 318, with a gold arrow arcing over the removed node to node 522. The previous pointer of node 522 is highlighted in gold and now holds 745 instead of 318, with a gold arrow running back beneath the removed node to node 745. A note explains that the next pointer of node 745 changed from 318 to 522 so the list skips the deleted node going forwards, that the previous pointer of node 522 changed from 318 to 745 so it also skips it going backwards, and that node 318 is then freed.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00442A"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#C9A227"/>
+    </marker>
+    <marker id="lead" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4A5568"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="672" fill="#FFFFFF"/>
+  <text x="590" y="40" font-size="25" fill="#00442A" text-anchor="middle" font-weight="800">Deleting a photograph from the middle of the list</text>
+  <text x="590" y="68" font-size="15" fill="#4A5568" text-anchor="middle">The user deletes <tspan font-style="italic">harbour.jpg</tspan>, which is stored at memory address 318.</text>
+  <text x="46" y="116" font-size="13" fill="#4A5568" text-anchor="start" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">BEFORE</text>
+  <text x="38" y="154" font-size="16" fill="#00442A" text-anchor="middle" font-weight="800">Head</text>
+  <path d="M72,148.0 L126,148.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="130" y="130" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="230.0" y="155" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">601</text>
+  <rect x="130" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="155.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">Null</text>
+  <rect x="180" y="166" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="230.0" y="193" font-size="14.5" fill="#1A1A1A" text-anchor="middle">beach.jpg</text>
+  <rect x="280" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="305.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="378" y="130" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="478.0" y="155" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="378" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="403.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">601</text>
+  <rect x="428" y="166" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="478.0" y="193" font-size="14.5" fill="#1A1A1A" text-anchor="middle">sunset.jpg</text>
+  <rect x="528" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="553.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">318</text>
+  <rect x="626" y="130" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="726.0" y="155" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">318</text>
+  <rect x="626" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="651.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="676" y="166" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="726.0" y="193" font-size="14.5" fill="#1A1A1A" text-anchor="middle">harbour.jpg</text>
+  <rect x="776" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="801.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">522</text>
+  <rect x="874" y="130" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="974.0" y="155" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">522</text>
+  <rect x="874" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="899.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">318</text>
+  <rect x="924" y="166" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="974.0" y="193" font-size="14.5" fill="#1A1A1A" text-anchor="middle">castle.jpg</text>
+  <rect x="1024" y="166" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="1049.0" y="193" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">Null</text>
+  <path d="M330,187.0 L350,187.0 L350,148.0 L374,148.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M578,187.0 L598,187.0 L598,148.0 L622,148.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M826,187.0 L846,187.0 L846,148.0 L870,148.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M403.0,208 L403.0,244 L230.0,244 L230.0,212" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M651.0,208 L651.0,244 L478.0,244 L478.0,212" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M899.0,208 L899.0,244 L726.0,244 L726.0,212" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M46,320 L1134,320" fill="none" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="46" y="364" font-size="13" fill="#92750A" text-anchor="start" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">AFTER</text>
+  <text x="38" y="402" font-size="16" fill="#00442A" text-anchor="middle" font-weight="800">Head</text>
+  <path d="M72,396.0 L126,396.0" fill="none" stroke="#00442A" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <rect x="130" y="378" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="230.0" y="403" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">601</text>
+  <rect x="130" y="414" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="155.0" y="441" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">Null</text>
+  <rect x="180" y="414" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="230.0" y="441" font-size="14.5" fill="#1A1A1A" text-anchor="middle">beach.jpg</text>
+  <rect x="280" y="414" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="305.0" y="441" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="378" y="378" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="478.0" y="403" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="378" y="414" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="403.0" y="441" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">601</text>
+  <rect x="428" y="414" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="478.0" y="441" font-size="14.5" fill="#1A1A1A" text-anchor="middle">sunset.jpg</text>
+  <rect x="528" y="414" width="50" height="42" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="553.0" y="441" font-size="13.5" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">522</text>
+  <rect x="626" y="378" width="200" height="36" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="726.0" y="403" font-size="16" fill="#4A5568" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">318</text>
+  <rect x="626" y="414" width="50" height="42" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="651.0" y="441" font-size="13.5" fill="#4A5568" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="676" y="414" width="100" height="42" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="726.0" y="441" font-size="14.5" fill="#4A5568" text-anchor="middle">harbour.jpg</text>
+  <rect x="776" y="414" width="50" height="42" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="801.0" y="441" font-size="13.5" fill="#4A5568" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">522</text>
+  <rect x="874" y="378" width="200" height="36" fill="#E8F5EE" stroke="#00442A" stroke-width="1.6"/>
+  <text x="974.0" y="403" font-size="16" fill="#00442A" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,monospace">522</text>
+  <rect x="874" y="414" width="50" height="42" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="899.0" y="441" font-size="13.5" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,monospace">745</text>
+  <rect x="924" y="414" width="100" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="974.0" y="441" font-size="14.5" fill="#1A1A1A" text-anchor="middle">castle.jpg</text>
+  <rect x="1024" y="414" width="50" height="42" fill="#FFFFFF" stroke="#00442A" stroke-width="1.6"/>
+  <text x="1049.0" y="441" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace">Null</text>
+  <path d="M632,384 L820,450" fill="none" stroke="#D1D5DB" stroke-width="2.5"/>
+  <path d="M820,384 L632,450" fill="none" stroke="#D1D5DB" stroke-width="2.5"/>
+  <text x="726.0" y="478" font-size="12.5" fill="#4A5568" text-anchor="middle" font-weight="700">removed &#8212; memory freed</text>
+  <path d="M578,435.0 L594,435.0 L594,352 L974.0,352 L974.0,374" fill="none" stroke="#C9A227" stroke-width="2.8" marker-end="url(#arrowg)"/>
+  <path d="M899.0,456 L899.0,518 L553.0,518 L553.0,460" fill="none" stroke="#C9A227" stroke-width="2.8" marker-end="url(#arrowg)"/>
+  <rect x="130" y="552" width="1004" height="86" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="156" y="582" font-size="14.5" fill="#92750A" text-anchor="start" font-weight="800">Two pointers change &#8212; and no data is moved</text>
+  <text x="156" y="607" font-size="14" fill="#1A1A1A" text-anchor="start">1. The <tspan font-weight="700">next</tspan> pointer of node <tspan font-weight="700">745</tspan> changes from 318 to <tspan font-weight="700">522</tspan>, so the list skips over the deleted node going forwards.</text>
+  <text x="156" y="628" font-size="14" fill="#1A1A1A" text-anchor="start">2. The <tspan font-weight="700">previous</tspan> pointer of node <tspan font-weight="700">522</tspan> changes from 318 to <tspan font-weight="700">745</tspan>, so it also skips over it going backwards. Node 318 is then freed.</text>
+</svg>
