@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymorphism Dispatcher — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:880px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85} .chip.ref b{color:var(--match)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  #methods button{text-transform:none;letter-spacing:.02em;font-size:12.5px}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  /* the array */
+  .arr{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
+  .cellobj{border:2px solid var(--line);background:#fff;cursor:pointer;transition:border-color .15s,background .15s;padding:0;text-align:left}
+  .cellobj:hover{border-color:var(--active)}
+  .cellobj .ix{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);padding:5px 9px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+  .cellobj .ix b{font-weight:700}
+  .cellobj.bk .ix b{color:var(--active-strong)}
+  .cellobj.dv .ix b{color:#1E40AF}
+  .cellobj .ti{padding:9px;font-size:13px;line-height:1.35}
+  .cellobj.sel{border-color:var(--match-accent);background:var(--match-bg)}
+  .cellobj.done{opacity:.55}
+
+  /* hierarchy */
+  .hier{display:grid;grid-template-columns:1fr;gap:0;justify-items:center}
+  .cls{border:2px solid var(--active-strong);background:#fff;width:100%;max-width:330px}
+  .cls .ch{background:var(--active-strong);color:#fff;text-align:center;font-weight:700;font-size:14px;padding:7px}
+  .cls.sub .ch{background:var(--active)}
+  .cls .cm{padding:8px 0}
+  .cls .m{font-family:var(--mono);font-size:12px;padding:5px 12px;color:var(--ink);display:flex;justify-content:space-between;gap:8px}
+  .cls .m .tag{font-size:9.5px;letter-spacing:.12em;color:var(--match);font-weight:700}
+  .cls .m.hit{background:var(--match-bg);color:var(--match);font-weight:700;box-shadow:inset 3px 0 0 var(--match-accent)}
+  .cls .m.miss{opacity:.35;text-decoration:line-through}
+  .cls.looked{border-color:var(--match-accent)}
+  .cls.notfound{border-style:dashed;opacity:.7}
+  .subs{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:100%;margin-top:0}
+  @media(max-width:700px){.subs{grid-template-columns:1fr}}
+  .updown{font-size:20px;color:var(--ink-soft);line-height:1;margin:6px 0}
+  .updown.hot{color:var(--match-accent);font-weight:700}
+  .hierwrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .lbl-inh{font-size:11.5px;color:var(--ink-soft);font-style:italic}
+
+  table.res{width:100%;border-collapse:collapse;margin-top:4px;font-size:13px}
+  table.res th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line);padding:7px 8px}
+  table.res td{padding:7px 8px;border-bottom:1px dotted var(--line);font-family:var(--mono);font-size:12.5px}
+  table.res tr.ovr td{background:var(--match-bg)}
+  table.res tr.err td{background:var(--warn-bg);color:var(--warn)}
+  table.res .empty{color:var(--ink-soft);font-family:var(--sans);font-style:italic}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate.warn{border-left-color:var(--warn);background:var(--warn-bg);color:var(--warn)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .narrate .say{display:block;margin-top:7px;padding-left:12px;border-left:2px solid var(--match-accent);font-style:italic;color:var(--match)}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+  .callline{font-family:var(--mono);font-size:13px;background:var(--bar);color:#E8F5EE;padding:10px 14px;margin:0 0 14px;overflow-x:auto}
+  .callline b{color:var(--match-accent)}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Object-Oriented Programming</p>
+    <h1>Polymorphism Dispatcher</h1>
+    <p class="sub">One array holds a mixture of <b>Book</b> and <b>Dvd</b> objects. Send the same method call to each one and watch which class&#8217;s version actually runs &#8212; and why an <b>overridden</b> method behaves differently from an <b>inherited</b> one.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">method</span><b id="c-method">getLoanPeriod()</b></div>
+      <div class="chip ref"><span class="k">element</span><b id="c-el">&#8212;</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="play" class="primary">&#9654; Run on all</button>
+      <button id="step">&#9197; Step</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span>CHOOSE THE METHOD TO CALL</span><span class="dim">THEN CLICK AN ELEMENT, OR RUN ON ALL</span></div>
+    <div class="panelbody">
+      <div class="btnrow" id="methods"></div>
+      <p class="tipnote" id="mnote" style="margin-top:12px"></p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>catalogue &#8212; AN ARRAY OF LibraryItem OBJECTS</span><span class="dim">CLICK ANY ELEMENT</span></div>
+    <div class="panelbody">
+      <p class="callline" id="callline"></p>
+      <div class="arr" id="arr"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>WHICH VERSION RUNS?</span><span class="dim">THE SEARCH STARTS AT THE OBJECT&#8217;S OWN CLASS</span></div>
+    <div class="panelbody">
+      <div class="hierwrap">
+        <div class="subs">
+          <div class="cls sub" id="cls-Book"></div>
+          <div class="cls sub" id="cls-Dvd"></div>
+        </div>
+        <div class="updown" id="uparrow">&#9650;</div>
+        <span class="lbl-inh" id="inhlbl">if the object&#8217;s own class does not define it, look in the super-class</span>
+        <div class="cls" id="cls-LibraryItem"></div>
+      </div>
+      <div class="narrate idle" id="narrate" aria-live="polite">Pick a method above, then click an element of the array &#8212; or press <b>Run on all</b>.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>RESULTS</span><span class="dim">SAME CALL, DIFFERENT OUTCOMES</span></div>
+    <div class="panelbody">
+      <table class="res" id="res">
+        <thead><tr><th>element</th><th>object&#8217;s class</th><th>version that ran</th><th>result</th></tr></thead>
+        <tbody><tr><td colspan="4" class="empty">Nothing called yet.</td></tr></tbody>
+      </table>
+      <p class="tipnote"><b>The point:</b> the calling code writes <i>one</i> line and never asks what class each element is. The version that runs is decided by the <b>class of the object</b> &#8212; that is polymorphism, and it is why a mixed array can be processed by a single loop.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CATALOGUE = [
+    { cls: 'Book', title: 'Sunset Song',        by: 'Lewis Grassic Gibbon' },
+    { cls: 'Dvd',  title: 'Local Hero',         by: 'Bill Forsyth' },
+    { cls: 'Book', title: 'The Cone-Gatherers', by: 'Robin Jenkins' },
+    { cls: 'Dvd',  title: "Gregory's Girl",     by: 'Bill Forsyth' },
+    { cls: 'Book', title: 'Lanark',             by: 'Alasdair Gray' },
+    { cls: 'Dvd',  title: 'Whisky Galore',      by: 'Alexander Mackendrick' }
+  ];
+
+  /* which class defines which method */
+  var DEFS = {
+    LibraryItem: ['getTitle()', 'getLoanPeriod()'],
+    Book:        ['getAuthor()'],
+    Dvd:         ['getLoanPeriod()', 'getDirector()']       /* getLoanPeriod is the OVERRIDE */
+  };
+  var SUPER = { Book: 'LibraryItem', Dvd: 'LibraryItem', LibraryItem: null };
+
+  var METHODS = [
+    { m: 'getLoanPeriod()', note: '<b>Overridden.</b> <code>LibraryItem</code> defines it and <code>Dvd</code> replaces it with its own version. Expect two different answers.' },
+    { m: 'getTitle()',      note: '<b>Inherited, not overridden.</b> Only <code>LibraryItem</code> defines it, so every object runs the same version. Same call, same behaviour &#8212; the contrast that makes the first one meaningful.' },
+    { m: 'getAuthor()',     note: '<b>Defined only in a sub-class.</b> <code>Book</code> has it; <code>Dvd</code> and <code>LibraryItem</code> do not. Watch what happens when it is sent to a DVD.' }
+  ];
+
+  var state = { method: 'getLoanPeriod()', idx: -1, results: [], timer: null };
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* resolve which class supplies the method for an object of class cls */
+  function resolve(cls, m) {
+    var trail = [];
+    var c = cls;
+    while (c) {
+      trail.push(c);
+      if (DEFS[c].indexOf(m) !== -1) return { found: c, trail: trail };
+      c = SUPER[c];
+    }
+    return { found: null, trail: trail };
+  }
+
+  function valueFor(item, m, owner) {
+    if (m === 'getTitle()') return '"' + item.title + '"';
+    if (m === 'getAuthor()') return '"' + item.by + '"';
+    if (m === 'getLoanPeriod()') return owner === 'Dvd' ? '7' : '21';
+    return '';
+  }
+
+  function renderMethods() {
+    $('methods').innerHTML = METHODS.map(function (x) {
+      return '<button data-m="' + x.m + '"' + (state.method === x.m ? ' class="on"' : '') + '>' + x.m + '</button>';
+    }).join('');
+    var cur = METHODS.filter(function (x) { return x.m === state.method; })[0];
+    $('mnote').innerHTML = cur.note;
+    $('c-method').textContent = state.method;
+    $('callline').innerHTML = 'FOR index FROM 0 TO 5 DO<br>&nbsp;&nbsp;&nbsp;&nbsp;SEND catalogue[index].<b>' +
+      esc(state.method) + '</b> TO DISPLAY<br>END FOR';
+  }
+
+  function renderArr() {
+    $('arr').innerHTML = CATALOGUE.map(function (it, i) {
+      var cls = 'cellobj ' + (it.cls === 'Book' ? 'bk' : 'dv') +
+        (i === state.idx ? ' sel' : '') +
+        (state.results.some(function (r) { return r.i === i; }) && i !== state.idx ? ' done' : '');
+      return '<button class="' + cls + '" data-i="' + i + '">' +
+        '<span class="ix">catalogue[' + i + ']<b>' + it.cls + '</b></span>' +
+        '<span class="ti">' + esc(it.title) + '</span></button>';
+    }).join('');
+    $('c-el').textContent = state.idx < 0 ? '—' : 'catalogue[' + state.idx + ']';
+  }
+
+  function renderHier(res) {
+    ['LibraryItem', 'Book', 'Dvd'].forEach(function (c) {
+      var box = $('cls-' + c);
+      var looked = res && res.trail.indexOf(c) !== -1;
+      var isHit = res && res.found === c;
+      box.className = 'cls' + (c === 'LibraryItem' ? '' : ' sub') +
+        (looked ? ' looked' : '') + (looked && !isHit ? ' notfound' : '');
+      var rows = DEFS[c].map(function (m) {
+        var hit = isHit && m === state.method;
+        var tag = (c === 'Dvd' && m === 'getLoanPeriod()') ? '<span class="tag">OVERRIDE</span>' : '';
+        return '<div class="m' + (hit ? ' hit' : '') + '">' + m + tag + '</div>';
+      }).join('');
+      if (looked && !isHit) {
+        rows += '<div class="m miss">' + state.method + '</div>';
+      }
+      box.innerHTML = '<div class="ch">' + c + (c === 'LibraryItem' ? '' : '') + '</div><div class="cm">' + rows + '</div>';
+    });
+    var up = res && res.found === 'LibraryItem' && res.trail.length > 1;
+    $('uparrow').className = 'updown' + (up ? ' hot' : '');
+  }
+
+  function renderRes() {
+    var tb = $('res').querySelector('tbody');
+    if (!state.results.length) {
+      tb.innerHTML = '<tr><td colspan="4" class="empty">Nothing called yet.</td></tr>';
+      return;
+    }
+    tb.innerHTML = state.results.map(function (r) {
+      var cls = r.owner === null ? 'err' : (r.owner === r.cls && r.cls !== 'LibraryItem' ? 'ovr' : '');
+      return '<tr class="' + cls + '"><td>catalogue[' + r.i + ']</td><td>' + r.cls + '</td><td>' +
+        (r.owner ? r.owner + '.' + esc(state.method) : 'none &#8212; not defined') + '</td><td>' +
+        (r.owner ? esc(r.val) : 'cannot be called') + '</td></tr>';
+    }).join('');
+  }
+
+  function say(msg, kind, model) {
+    $('narrate').className = 'narrate ' + (kind || '');
+    $('narrate').innerHTML = msg + (model ? '<span class="say">&#8220;' + model + '&#8221;</span>' : '');
+  }
+
+  function call(i) {
+    state.idx = i;
+    var it = CATALOGUE[i];
+    var res = resolve(it.cls, state.method);
+    var val = res.found ? valueFor(it, state.method, res.found) : null;
+
+    state.results = state.results.filter(function (r) { return r.i !== i; });
+    state.results.push({ i: i, cls: it.cls, owner: res.found, val: val });
+    state.results.sort(function (a, b) { return a.i - b.i; });
+
+    renderArr(); renderHier(res); renderRes();
+
+    var ref = '<code>catalogue[' + i + '].' + esc(state.method) + '</code>';
+    if (!res.found) {
+      say(ref + ' &#8212; the object is a <b>' + it.cls + '</b>. <code>' + it.cls + '</code> does not define <code>' +
+          esc(state.method) + '</code>, and neither does its <b>super-class</b> <code>LibraryItem</code>, so there is ' +
+          '<b>no version to run</b>. A method defined only in one sub-class is not available on the others.', 'warn');
+    } else if (res.found === it.cls && it.cls !== 'LibraryItem') {
+      say(ref + ' &#8212; the object is a <b>' + it.cls + '</b>. <code>' + it.cls + '</code> <b>overrides</b> <code>' +
+          esc(state.method) + '</code>, so <b>its own version runs</b> and returns <b>' + esc(val) + '</b>, not the inherited one.',
+          'match',
+          'The ' + it.cls + ' sub-class overrides the inherited method, so the version belonging to the class of the object is the one that executes.');
+    } else {
+      say(ref + ' &#8212; the object is a <b>' + it.cls + '</b>. <code>' + it.cls + '</code> does <b>not</b> define <code>' +
+          esc(state.method) + '</code>, so the search moves up to the <b>super-class</b> <code>LibraryItem</code>, whose ' +
+          '<b>inherited</b> version runs and returns <b>' + esc(val) + '</b>.', 'match');
+    }
+  }
+
+  $('methods').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-m]');
+    if (!b) return;
+    stop();
+    state.method = b.dataset.m;
+    state.results = []; state.idx = -1;
+    renderMethods(); renderArr(); renderHier(null); renderRes();
+    say('Now calling <code>' + esc(state.method) + '</code>. Click an element, or press <b>Run on all</b> to send it to every object in turn.', 'idle');
+  });
+
+  $('arr').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-i]');
+    if (!b) return;
+    stop();
+    call(+b.dataset.i);
+  });
+
+  function nextIndex() {
+    for (var i = 0; i < CATALOGUE.length; i++) {
+      if (!state.results.some(function (r) { return r.i === i; })) return i;
+    }
+    return -1;
+  }
+
+  function stepOnce() {
+    var i = nextIndex();
+    if (i === -1) { finish(); return false; }
+    call(i);
+    return true;
+  }
+
+  function finish() {
+    stop();
+    var owners = {};
+    state.results.forEach(function (r) { owners[r.owner || 'none'] = true; });
+    var n = Object.keys(owners).length;
+    if (n > 1) {
+      say('<b>Finished.</b> The same line of code ran <b>' + n + ' different versions</b> of <code>' + esc(state.method) +
+          '</code>, chosen by the <b>class of each object</b>. That is <b>polymorphism</b>.', 'match',
+          'The same method call behaves differently depending on the class of the object it is called on.');
+    } else {
+      say('<b>Finished.</b> Every object ran the <b>same</b> version of <code>' + esc(state.method) +
+          '</code> &#8212; it is <b>inherited</b> from <code>LibraryItem</code> and no sub-class overrides it. ' +
+          'Inheritance without overriding is not polymorphism.', 'match');
+    }
+  }
+
+  function stop() {
+    if (state.timer) { clearInterval(state.timer); state.timer = null; }
+    $('play').innerHTML = '&#9654; Run on all';
+  }
+
+  $('step').addEventListener('click', function () { stop(); stepOnce(); });
+
+  $('play').addEventListener('click', function () {
+    if (state.timer) { stop(); return; }
+    if (nextIndex() === -1) { state.results = []; state.idx = -1; renderArr(); renderRes(); }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    stepOnce();
+    state.timer = setInterval(function () { if (!stepOnce()) stop(); }, 1600);
+  });
+
+  $('reset').addEventListener('click', function () {
+    stop();
+    state.results = []; state.idx = -1;
+    renderArr(); renderHier(null); renderRes();
+    say('Pick a method above, then click an element of the array &#8212; or press <b>Run on all</b>.', 'idle');
+  });
+
+  renderMethods(); renderArr(); renderHier(null); renderRes();
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2D Array Index Explorer — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --scan:#1E40AF; --scan-bg:#EFF6FF;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:860px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip[hidden]{display:none}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85}
+  .chip.ref b{color:var(--match)}
+  .chip.count{border-color:var(--scan);background:var(--scan-bg)}
+  .chip.count .k{color:var(--scan);opacity:.85}
+  .chip.count b{color:var(--scan)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  /* ── the grid ───────────────────────────────────────────── */
+  .gridwrap{overflow-x:auto}
+  table.grid{border-collapse:collapse;margin:0 auto}
+  table.grid th{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink-soft);padding:6px 8px;text-align:center;transition:color .15s,background .15s}
+  table.grid th.hi{color:var(--match);background:var(--match-bg)}
+  table.grid td{border:1px solid var(--line);width:82px;height:44px;text-align:center;font-size:12.5px;background:#fff;cursor:pointer;transition:background .12s,box-shadow .12s;padding:0}
+  table.grid td.booked{background:var(--active-bg);color:var(--active-strong)}
+  table.grid td:hover{box-shadow:inset 0 0 0 2px var(--tint)}
+  table.grid td.lane{background:var(--scan-bg)}
+  table.grid td.lane.booked{background:#DBE7FB}
+  table.grid td.scan{box-shadow:inset 0 0 0 3px var(--scan);font-weight:700}
+  table.grid td.sel{box-shadow:inset 0 0 0 3px var(--match-accent);background:var(--match-bg);font-weight:700;color:var(--match)}
+  table.grid td.sel.booked{background:var(--match-bg)}
+  table.grid td .empty{color:var(--line);font-family:var(--mono);font-size:12px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-size:12.5px;color:var(--ink-soft);justify-content:center}
+  .legend i{display:inline-block;width:14px;height:14px;border:1px solid var(--line);vertical-align:-2px;margin-right:6px}
+  .legend .l-book{background:var(--active-bg)}
+  .legend .l-sel{background:var(--match-bg);border-color:var(--match-accent)}
+  .legend .l-lane{background:var(--scan-bg);border-color:var(--scan)}
+
+  .refsplit{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .refhead{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 12px}
+
+  /* ── reference builder ──────────────────────────────────── */
+  .refrow{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+  .stepper{display:flex;flex-direction:column;gap:6px}
+  .stepper .lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .stepper .row{display:flex;align-items:stretch;border:1px solid var(--line);background:#fff}
+  .stepper button{border:0;padding:8px 13px;font-size:14px;letter-spacing:0}
+  .stepper output{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--match);min-width:52px;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--match-bg)}
+  .refout{flex:1 1 300px;min-width:280px}
+  .refexpr{font-family:var(--mono);font-size:23px;font-weight:700;color:var(--match);margin:0 0 6px;word-break:break-all}
+  .refval{font-size:14.5px;color:var(--ink-soft);margin:0}
+  .refval b{color:var(--ink)}
+
+  /* ── code panel ─────────────────────────────────────────── */
+  pre.code{margin:0;background:var(--bar);color:#E8F5EE;padding:15px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.75}
+  pre.code .kw{color:#7FD1A8}
+  pre.code .fix{color:var(--match-accent);font-weight:700;background:rgba(201,162,39,.18);padding:0 3px}
+  pre.code .var{color:#93B4FF;font-weight:700}
+  pre.code .str{color:#F3C969}
+  pre.code .cur{background:rgba(147,180,255,.22);display:inline-block;padding:0 3px}
+  pre.code .cmt{color:rgba(232,245,238,.45)}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate.scan{border-left-color:var(--scan);background:var(--scan-bg)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:760px){
+    .controls{flex-direction:column;align-items:stretch}
+    table.grid td{width:58px;height:40px;font-size:11px}
+    .panelbody{padding:14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Data Structures</p>
+    <h1>2D Array Index Explorer</h1>
+    <p class="sub">The array <b>seatPlan</b> holds a cinema seating plan &#8212; <b>5 rows</b> of <b>8 seats</b>, each element a string. Build a reference with the steppers to see which seat it reaches, or click any seat to see the reference that reaches it. Then fix one index and watch the other one vary.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">row</span><b id="c-row">2</b></div>
+      <div class="chip"><span class="k">column</span><b id="c-col">5</b></div>
+      <div class="chip ref"><span class="k">value</span><b id="c-val">"Booked"</b></div>
+      <div class="chip count" id="chip-count" hidden><span class="k">booked found</span><b id="c-count">0</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE ARRAY</span><span class="dim">CLICK A SEAT, OR BUILD A REFERENCE BELOW</span></div>
+    <div class="panelbody">
+      <div class="gridwrap">
+        <table class="grid" id="grid"></table>
+      </div>
+      <div class="legend">
+        <span><i class="l-book"></i>"Booked"</span>
+        <span><i></i>"" &#8212; an empty seat</span>
+        <span><i class="l-sel"></i>the selected element</span>
+        <span><i class="l-lane"></i>the row or column being traversed</span>
+      </div>
+      <div class="refsplit">
+        <p class="refhead">Build the reference &#8212; row first, then column</p>
+        <div class="refrow">
+        <div class="stepper">
+          <span class="lbl">row (0&#8211;4)</span>
+          <div class="row">
+            <button id="row-down" aria-label="Decrease row index">&#8722;</button>
+            <output id="out-row">2</output>
+            <button id="row-up" aria-label="Increase row index">+</button>
+          </div>
+        </div>
+        <div class="stepper">
+          <span class="lbl">column (0&#8211;7)</span>
+          <div class="row">
+            <button id="col-down" aria-label="Decrease column index">&#8722;</button>
+            <output id="out-col">5</output>
+            <button id="col-up" aria-label="Increase column index">+</button>
+          </div>
+        </div>
+        <div class="refout">
+          <p class="refexpr" id="refexpr">seatPlan[2][5]</p>
+          <p class="refval" id="refval">row <b>2</b> &#8212; the third row &#183; column <b>5</b> &#8212; the sixth seat</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="panel">
+    <div class="panelbar"><span>TRAVERSE</span><span class="dim">FIX ONE INDEX, VARY THE OTHER</span></div>
+    <div class="panelbody">
+      <div class="btnrow" style="margin-bottom:14px">
+        <button id="mode-row" class="on">Traverse row 2</button>
+        <button id="mode-col">Traverse column 5</button>
+        <button id="play" class="primary">&#9654; Play</button>
+        <button id="step">&#9197; Step</button>
+        <button id="stop" disabled>&#9632; Stop</button>
+      </div>
+      <pre class="code" id="code"></pre>
+      <div class="narrate idle" id="narrate" aria-live="polite">Pick a seat, or press Play to walk along a row.</div>
+      <p class="tipnote"><b>Why this matters:</b> a question that asks about <i>one row</i> fixes the row index and loops the column; a question about <i>one column</i> fixes the column and loops the row. Only a question about <i>every</i> element needs two loops, one inside the other.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ROWS = 5, COLS = 8;
+  var BOOKED = [[0,0],[0,1],[1,3],[2,2],[2,5],[3,6],[4,0],[4,7]];
+
+  var plan = [];
+  for (var r = 0; r < ROWS; r++) {
+    plan[r] = [];
+    for (var c = 0; c < COLS; c++) plan[r][c] = '';
+  }
+  BOOKED.forEach(function (p) { plan[p[0]][p[1]] = 'Booked'; });
+
+  var state = { row: 2, col: 5, mode: 'row', scanning: false, idx: -1, count: 0, timer: null };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $('grid'), narrate = $('narrate'), code = $('code');
+
+  /* ── build the grid once ─────────────────────────────── */
+  var head = document.createElement('thead');
+  var hrow = document.createElement('tr');
+  hrow.appendChild(document.createElement('th'));
+  for (var c = 0; c < COLS; c++) {
+    var th = document.createElement('th');
+    th.textContent = '[' + c + ']';
+    th.dataset.col = c;
+    hrow.appendChild(th);
+  }
+  head.appendChild(hrow);
+  grid.appendChild(head);
+
+  var body = document.createElement('tbody');
+  for (var r = 0; r < ROWS; r++) {
+    var tr = document.createElement('tr');
+    var rh = document.createElement('th');
+    rh.textContent = '[' + r + ']';
+    rh.dataset.row = r;
+    tr.appendChild(rh);
+    for (var c2 = 0; c2 < COLS; c2++) {
+      var td = document.createElement('td');
+      td.dataset.row = r;
+      td.dataset.col = c2;
+      td.tabIndex = 0;
+      td.setAttribute('role', 'button');
+      if (plan[r][c2] === 'Booked') {
+        td.className = 'booked';
+        td.textContent = 'Booked';
+      } else {
+        td.innerHTML = '<span class="empty">""</span>';
+      }
+      td.setAttribute('aria-label', 'seatPlan row ' + r + ' column ' + c2 +
+        ', value ' + (plan[r][c2] === 'Booked' ? 'Booked' : 'empty'));
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+  grid.appendChild(body);
+
+  var cells = [].slice.call(grid.querySelectorAll('td'));
+  var colHeads = [].slice.call(grid.querySelectorAll('thead th[data-col]'));
+  var rowHeads = [].slice.call(grid.querySelectorAll('tbody th[data-row]'));
+
+  function cellAt(r, c) {
+    return cells[r * COLS + c];
+  }
+
+  var ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
+
+  /* ── painting ────────────────────────────────────────── */
+  function paint() {
+    cells.forEach(function (td) { td.classList.remove('sel', 'lane', 'scan'); });
+    colHeads.forEach(function (th) { th.classList.remove('hi'); });
+    rowHeads.forEach(function (th) { th.classList.remove('hi'); });
+
+    if (state.scanning) {
+      // the lane being traversed
+      for (var i = 0; i < (state.mode === 'row' ? COLS : ROWS); i++) {
+        var t = state.mode === 'row' ? cellAt(state.row, i) : cellAt(i, state.col);
+        t.classList.add('lane');
+      }
+      if (state.idx >= 0) {
+        var cur = state.mode === 'row' ? cellAt(state.row, state.idx) : cellAt(state.idx, state.col);
+        cur.classList.add('scan');
+      }
+      if (state.mode === 'row') rowHeads[state.row].classList.add('hi');
+      else colHeads[state.col].classList.add('hi');
+    } else {
+      cellAt(state.row, state.col).classList.add('sel');
+      rowHeads[state.row].classList.add('hi');
+      colHeads[state.col].classList.add('hi');
+    }
+
+    $('c-row').textContent = state.scanning && state.mode === 'col' && state.idx >= 0 ? state.idx : state.row;
+    $('c-col').textContent = state.scanning && state.mode === 'row' && state.idx >= 0 ? state.idx : state.col;
+    $('out-row').textContent = state.row;
+    $('out-col').textContent = state.col;
+
+    var vr = state.row, vc = state.col;
+    if (state.scanning && state.idx >= 0) {
+      if (state.mode === 'row') vc = state.idx; else vr = state.idx;
+    }
+    var val = plan[vr][vc];
+    $('c-val').textContent = val === 'Booked' ? '"Booked"' : '""';
+
+    $('refexpr').textContent = 'seatPlan[' + state.row + '][' + state.col + ']';
+    $('refval').innerHTML = 'row <b>' + state.row + '</b> &#8212; the ' + ORD[state.row] +
+      ' row &#183; column <b>' + state.col + '</b> &#8212; the ' + ORD[state.col] + ' seat';
+
+    $('mode-row').textContent = 'Traverse row ' + state.row;
+    $('mode-col').textContent = 'Traverse column ' + state.col;
+    $('mode-row').classList.toggle('on', state.mode === 'row');
+    $('mode-col').classList.toggle('on', state.mode === 'col');
+
+    $('chip-count').hidden = !state.scanning;
+    $('c-count').textContent = state.count;
+
+    renderCode();
+  }
+
+  /* ── the live code panel ─────────────────────────────── */
+  function renderCode() {
+    var fixedName, fixedVal, varName, varMax, ref, cur;
+    if (state.mode === 'row') {
+      fixedName = 'row'; fixedVal = state.row; varName = 'seat'; varMax = COLS - 1;
+      ref = 'seatPlan[<span class="fix">' + fixedVal + '</span>][<span class="var">seat</span>]';
+    } else {
+      fixedName = 'column'; fixedVal = state.col; varName = 'row'; varMax = ROWS - 1;
+      ref = 'seatPlan[<span class="var">row</span>][<span class="fix">' + fixedVal + '</span>]';
+    }
+    cur = state.scanning && state.idx >= 0 ? state.idx : null;
+    var curLine = cur === null
+      ? '<span class="cmt"># press Play or Step to run it</span>'
+      : '<span class="cmt"># now: <span class="var">' + varName + '</span> = ' + cur +
+        ' &#8594; ' + (state.mode === 'row'
+          ? 'seatPlan[' + state.row + '][' + cur + ']'
+          : 'seatPlan[' + cur + '][' + state.col + ']') +
+        ' = ' + (plan[state.mode === 'row' ? state.row : cur][state.mode === 'row' ? cur : state.col] === 'Booked' ? '"Booked"' : '""') +
+        ' &#183; count = ' + state.count + '</span>';
+
+    code.innerHTML =
+      '<span class="kw">DECLARE</span> count <span class="kw">INITIALLY</span> 0\n' +
+      '<span class="kw">FOR</span> <span class="var">' + varName + '</span> <span class="kw">FROM</span> 0 <span class="kw">TO</span> ' + varMax + ' <span class="kw">DO</span>\n' +
+      '    <span class="kw">IF</span> ' + ref + ' = <span class="str">"Booked"</span> <span class="kw">THEN</span>\n' +
+      '        <span class="kw">SET</span> count <span class="kw">TO</span> count + 1\n' +
+      '    <span class="kw">END IF</span>\n' +
+      '<span class="kw">END FOR</span>\n\n' +
+      '<span class="cmt"># ' + fixedName + ' is fixed at </span><span class="fix">' + fixedVal +
+      '</span><span class="cmt">, </span><span class="var">' + varName + '</span><span class="cmt"> varies 0 to ' + varMax + '</span>\n' +
+      curLine;
+  }
+
+  function say(msg, kind) {
+    narrate.className = 'narrate ' + (kind || '');
+    narrate.innerHTML = msg;
+  }
+
+  /* ── selection ───────────────────────────────────────── */
+  function select(r, c, viaClick) {
+    stop(true);
+    state.row = Math.max(0, Math.min(ROWS - 1, r));
+    state.col = Math.max(0, Math.min(COLS - 1, c));
+    paint();
+    var val = plan[state.row][state.col];
+    var ref = '<code>seatPlan[' + state.row + '][' + state.col + ']</code>';
+    if (viaClick) {
+      say('That seat is the <b>' + ORD[state.col] + '</b> seat of the <b>' + ORD[state.row] +
+          '</b> row, so it is reached by ' + ref + ' &#8212; <b>row first, then column</b>. It holds ' +
+          (val === 'Booked' ? '<b>"Booked"</b>.' : '<b>""</b>, so it is free.'), 'match');
+    } else {
+      say(ref + ' is row <b>' + state.row + '</b>, column <b>' + state.col + '</b> &#8212; the ' +
+          ORD[state.col] + ' seat of the ' + ORD[state.row] + ' row. It holds ' +
+          (val === 'Booked' ? '<b>"Booked"</b>.' : '<b>""</b>, so it is free.'), 'match');
+    }
+  }
+
+  cells.forEach(function (td) {
+    td.addEventListener('click', function () {
+      select(+td.dataset.row, +td.dataset.col, true);
+    });
+    td.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); td.click(); }
+    });
+  });
+
+  $('row-up').addEventListener('click', function () { select(state.row + 1, state.col); });
+  $('row-down').addEventListener('click', function () { select(state.row - 1, state.col); });
+  $('col-up').addEventListener('click', function () { select(state.row, state.col + 1); });
+  $('col-down').addEventListener('click', function () { select(state.row, state.col - 1); });
+
+  /* ── traversal ───────────────────────────────────────── */
+  function setMode(m) {
+    stop(true);
+    state.mode = m;
+    paint();
+    if (m === 'row') {
+      say('Ready to traverse <b>row ' + state.row + '</b>. The <b>row</b> index stays at <span class="fix">' +
+          state.row + '</span> and the <b>column</b> index counts 0 to 7 &#8212; one loop, not two.', 'scan');
+    } else {
+      say('Ready to traverse <b>column ' + state.col + '</b>. The <b>column</b> index stays at <span class="fix">' +
+          state.col + '</span> and the <b>row</b> index counts 0 to 4 &#8212; one loop, not two.', 'scan');
+    }
+  }
+  $('mode-row').addEventListener('click', function () { setMode('row'); });
+  $('mode-col').addEventListener('click', function () { setMode('col'); });
+
+  function limit() { return state.mode === 'row' ? COLS : ROWS; }
+
+  function beginScan() {
+    if (!state.scanning) {
+      state.scanning = true;
+      state.idx = -1;
+      state.count = 0;
+    }
+  }
+
+  function advance() {
+    beginScan();
+    if (state.idx + 1 >= limit()) return finish();
+    state.idx++;
+    var r = state.mode === 'row' ? state.row : state.idx;
+    var c = state.mode === 'row' ? state.idx : state.col;
+    var booked = plan[r][c] === 'Booked';
+    if (booked) state.count++;
+    paint();
+    var varName = state.mode === 'row' ? 'seat' : 'row';
+    say('<code>' + varName + ' = ' + state.idx + '</code> &#8594; <code>seatPlan[' + r + '][' + c + ']</code> holds ' +
+        (booked ? '<b>"Booked"</b>, so <code>count</code> becomes <b>' + state.count + '</b>.'
+                : '<b>""</b>, so <code>count</code> is unchanged at <b>' + state.count + '</b>.'), 'scan');
+    return true;
+  }
+
+  function finish() {
+    stopTimer();
+    $('play').disabled = false;
+    $('play').innerHTML = '&#9654; Play';
+    $('stop').disabled = false;
+    var what = state.mode === 'row'
+      ? 'Row <b>' + state.row + '</b> has <b>' + state.count + '</b> of its 8 seats booked.'
+      : 'Column <b>' + state.col + '</b> has <b>' + state.count + '</b> of its 5 seats booked.';
+    var idx = state.mode === 'row'
+      ? 'The row index never changed &#8212; only the column index moved.'
+      : 'The column index never changed &#8212; only the row index moved.';
+    say('<b>Traversal complete.</b> ' + what + ' ' + idx, 'match');
+    return false;
+  }
+
+  function stopTimer() {
+    if (state.timer) { clearInterval(state.timer); state.timer = null; }
+  }
+
+  function stop(silent) {
+    stopTimer();
+    state.scanning = false;
+    state.idx = -1;
+    state.count = 0;
+    $('play').disabled = false;
+    $('play').innerHTML = '&#9654; Play';
+    $('stop').disabled = true;
+    if (!silent) {
+      paint();
+      say('Stopped. Press <b>Play</b> to run the traversal again, or <b>Step</b> to move one element at a time.', 'idle');
+    }
+  }
+
+  $('step').addEventListener('click', function () {
+    stopTimer();
+    $('play').innerHTML = '&#9654; Play';
+    $('stop').disabled = false;
+    advance();
+  });
+
+  $('play').addEventListener('click', function () {
+    if (state.timer) {                       // pause
+      stopTimer();
+      $('play').innerHTML = '&#9654; Play';
+      return;
+    }
+    if (state.scanning && state.idx + 1 >= limit()) { state.scanning = false; }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    $('stop').disabled = false;
+    advance();
+    state.timer = setInterval(function () { advance(); }, 850);
+  });
+
+  $('stop').addEventListener('click', function () { stop(false); });
+
+  $('reset').addEventListener('click', function () {
+    stop(true);
+    state.mode = 'row';
+    select(2, 5);
+  });
+
+  /* ── go ──────────────────────────────────────────────── */
+  paint();
+  say('The gold seat is <code>seatPlan[2][5]</code>. Click any seat, use the steppers, or press <b>Play</b> to traverse a row.', 'idle');
+})();
+
+  /* Report our height to the host page so the iframe grows to fit instead of
+     scrolling internally. Same protocol as the Integration visualisers, which
+     js/nav.js already listens for. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+</script>
+</body>
+</html>

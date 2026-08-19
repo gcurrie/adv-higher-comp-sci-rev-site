@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OO Terminology Trainer — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:860px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.good{border-color:var(--active);background:var(--active-bg)}
+  .chip.good .k{color:var(--active);opacity:.85} .chip.good b{color:var(--active-strong)}
+  .chip.bad{border-color:var(--warn);background:var(--warn-bg)}
+  .chip.bad .k{color:var(--warn);opacity:.85} .chip.bad b{color:var(--warn)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .progress{height:6px;background:var(--tint);border:1px solid var(--line);border-top:0;margin:-14px 0 18px;overflow:hidden}
+  .progress i{display:block;height:100%;width:0;background:var(--active);transition:width .25s}
+
+  .panel{border:1px solid var(--line);background:var(--panel)}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  .stem{font-size:16px;margin:0 0 12px;line-height:1.6}
+  pre.stimulus{margin:0 0 16px;background:var(--bar);color:#E8F5EE;padding:13px 16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7}
+  pre.stimulus .kw{color:#7FD1A8} pre.stimulus .str{color:#F3C969}
+  pre.stimulus .this{color:#93B4FF} pre.stimulus .ovr{color:#C9A227;font-weight:700}
+
+  .answers{display:grid;grid-template-columns:1fr;gap:9px}
+  .ans{font-family:var(--sans);font-size:14.5px;font-weight:400;letter-spacing:0;text-transform:none;text-align:left;padding:13px 15px;border-width:2px;line-height:1.5;color:var(--ink)}
+  .ans:hover:not(:disabled){background:var(--active-bg);border-color:var(--active)}
+  .ans.right{border-color:var(--active)!important;background:var(--active-bg)!important}
+  .ans.wrong{border-color:var(--warn)!important;background:var(--warn-bg)!important;color:var(--warn)!important}
+  .ans .mark{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;display:block;margin-top:6px}
+  .ans.right .mark{color:var(--active-strong)} .ans.wrong .mark{color:var(--warn)}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.warn{border-left-color:var(--warn);background:var(--warn-bg);color:var(--warn)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .nextrow{margin-top:14px;display:flex;justify-content:flex-end}
+
+  .done-box{display:none;margin-top:16px}
+  .done-box.show{display:block}
+  .scoreline{font-size:15px;margin:0 0 14px} .scoreline b{color:var(--active-strong)}
+  .model{border:1px solid var(--match-accent);border-left:3px solid var(--match-accent);background:var(--match-bg);padding:13px 16px;font-size:14px;line-height:1.6}
+  .model .lbl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--match);display:block;margin-bottom:6px}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:12px 0 0;line-height:1.6}
+  .missed{margin:14px 0 0;padding-left:20px;font-size:13.5px;color:var(--ink-soft)}
+  .missed li{margin-bottom:5px}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Object-Oriented Programming</p>
+    <h1>Terminology Trainer</h1>
+    <p class="sub">Advanced Higher questions say &#8220;<i>using appropriate object-oriented terminology</i>&#8221; because the <b>words</b> are the marks. Ten questions &#8212; pick the wording that would score. Only your <b>first</b> answer counts, and the feedback explains every option.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">question</span><b id="c-q">1 / 10</b></div>
+      <div class="chip good"><span class="k">right first try</span><b id="c-right">0</b></div>
+      <div class="chip bad"><span class="k">missed</span><b id="c-wrong">0</b></div>
+    </div>
+    <div class="btnrow"><button id="restart" class="primary">Restart</button></div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <section class="panel">
+    <div class="panelbar"><span id="ptitle">THE CODE</span><span class="dim">CHOOSE THE BEST WORDING</span></div>
+    <div class="panelbody">
+      <p class="stem" id="stem"></p>
+      <pre class="stimulus" id="stimulus"></pre>
+      <div class="answers" id="answers"></div>
+      <div class="narrate idle" id="narrate" aria-live="polite">Read the code, then choose the description that uses correct object-oriented terminology.</div>
+      <div class="nextrow"><button id="next" disabled>Next question &#9654;</button></div>
+    </div>
+  </section>
+
+  <section class="panel done-box" id="done-box">
+    <div class="panelbar"><span>ALL TEN ANSWERED</span><span class="dim">HOW TO USE THIS IN THE EXAM</span></div>
+    <div class="panelbody">
+      <p class="scoreline" id="scoreline"></p>
+      <div class="model">
+        <span class="lbl">Exam tip</span>
+        When a question says <i>&#8220;using appropriate object-oriented terminology&#8221;</i>, mark your own answer by counting the technical words in it. A three-mark description of one line of code should contain something close to: <b>instantiates</b>, <b>object</b>, <b>class</b>, <b>constructor</b>, <b>parameters</b>, <b>instance variables</b>. If your sentence would still make sense to someone who had never studied OO, it is almost certainly too vague to score.
+      </div>
+      <ul class="missed" id="missed"></ul>
+      <p class="tipnote"><b>The commonest slips:</b> saying <i>class</i> when you mean <i>object</i>; saying <i>variable</i> when you mean <i>instance variable</i>; and answering <i>inheritance</i> when the question is really about <i>polymorphism</i>.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var Q = [
+    {
+      stem: 'Which statement describes this line using appropriate object-oriented terminology?',
+      code: 'DECLARE copy1 INITIALLY Book("Sunset Song", "Lewis Grassic Gibbon", "9781847674463")',
+      topic: 'instantiation',
+      opts: [
+        { t: 'It instantiates an object of the Book class, and the constructor assigns the three parameters to its instance variables.', ok: true,
+          why: 'Names the action (<b>instantiates</b>), the thing created (<b>object</b>), its <b>class</b>, the <b>constructor</b> and the <b>instance variables</b>. This is what a three-mark answer looks like.' },
+        { t: 'It makes a new book and fills in the title, author and ISBN.', ok: false,
+          why: 'Correct in substance, but there is no object-oriented terminology in it at all. Marking instructions cap this kind of answer at one mark.' },
+        { t: 'It declares a new Book class containing three properties.', ok: false,
+          why: 'Confuses <b>class</b> with <b>object</b>. The class was written by the programmer earlier; this line creates an <b>object</b> from it.' },
+        { t: 'It creates a record with three fields and stores it in copy1.', ok: false,
+          why: 'A record holds data only. An <b>object</b> holds instance variables <i>and</i> the methods that act on them.' }
+      ]
+    },
+    {
+      stem: 'Inside a method of the Book class, what does <code>THIS.title</code> refer to?',
+      code: 'PROCEDURE showTitle()\n    SEND THIS.title TO DISPLAY\nEND PROCEDURE',
+      topic: 'THIS and instance variables',
+      opts: [
+        { t: 'The title instance variable belonging to the object the method was called on.', ok: true,
+          why: '<b>THIS</b> means "the current object". Each object has its own copy of the instance variables, and <code>THIS</code> is what identifies which one.' },
+        { t: 'A global variable called title that every Book object shares.', ok: false,
+          why: 'The opposite of the truth. Instance variables are <b>not</b> shared &#8212; each object has its own, which is why one book can be on loan while another is not.' },
+        { t: 'A parameter passed into the class when it was written.', ok: false,
+          why: 'Parameters are passed to <b>methods</b> at run time, not to a class when it is written.' },
+        { t: 'The title of the class itself.', ok: false,
+          why: 'The class is <code>Book</code>. <code>title</code> is an <b>instance variable</b> holding data belonging to one object.' }
+      ]
+    },
+    {
+      stem: 'The Ball class defines rebound(). The Fireball sub-class defines it again as shown. Name the feature of object-oriented programming illustrated.',
+      code: 'OVERRIDE PROCEDURE rebound()\n    SET THIS.bounce TO FALSE\nEND PROCEDURE',
+      topic: 'polymorphism',
+      opts: [
+        { t: 'Polymorphism', ok: true,
+          why: 'The same method name behaves differently depending on the <b>class of the object</b> it is called on. Marking instructions also accept <b>overriding</b>.' },
+        { t: 'Inheritance', ok: false,
+          why: 'Inheritance is what gives <code>Fireball</code> the method in the first place. This question is about the sub-class <b>replacing</b> it &#8212; a different idea, and a very common wrong answer.' },
+        { t: 'Encapsulation', ok: false,
+          why: 'Encapsulation is about <b>private</b> data being reachable only through public methods. Nothing here is about access.' },
+        { t: 'Instantiation', ok: false,
+          why: 'Instantiation is creating an object from a class. No object is being created here.' }
+      ]
+    },
+    {
+      stem: 'This line appears in the main program, outside the Book class, and will not run. Which explanation would score?',
+      code: 'SET myBook.onLoan TO TRUE',
+      topic: 'encapsulation',
+      opts: [
+        { t: 'onLoan is a private instance variable, encapsulated within the class, so it cannot be accessed from outside it — a public method must be used instead.', ok: true,
+          why: 'Names the visibility (<b>private</b>), the principle (<b>encapsulation</b>), the reason (<b>outside the class</b>) and the fix (<b>public method</b>).' },
+        { t: 'onLoan is private, so you cannot use it.', ok: false,
+          why: 'Half an answer. It identifies private but never says <i>why that stops this line</i> &#8212; that access from outside the class is not permitted &#8212; and offers no alternative.' },
+        { t: 'The myBook object has not been instantiated yet.', ok: false,
+          why: 'Nothing in the question suggests that. The problem is the <b>visibility</b> of the instance variable, not the existence of the object.' },
+        { t: 'onLoan is inherited, and inherited variables cannot be changed.', ok: false,
+          why: 'Inherited instance variables can be changed perfectly well &#8212; by methods inside the class. Inheritance is not the issue here.' }
+      ]
+    },
+    {
+      stem: 'Which statement describes this line using appropriate object-oriented terminology?',
+      code: 'DECLARE catalogue AS ARRAY OF LibraryItem INITIALLY [Null] * 500',
+      topic: 'arrays of objects',
+      opts: [
+        { t: 'It creates an array of objects with 500 elements, each able to hold a LibraryItem object; no objects are stored in it yet.', ok: true,
+          why: 'The <code>[Null]</code> is the detail that matters &#8212; the <b>array</b> exists, but no <b>objects</b> have been instantiated into it.' },
+        { t: 'It instantiates 500 LibraryItem objects.', ok: false,
+          why: 'The commonest misconception here. Declaring the array creates <b>empty slots</b>; each object still has to be instantiated and assigned separately.' },
+        { t: 'It declares a class called catalogue that holds LibraryItems.', ok: false,
+          why: '<code>catalogue</code> is a <b>variable</b> holding an array, not a class.' },
+        { t: 'It creates an array of records with 500 elements.', ok: false,
+          why: 'Elements are <b>objects</b>, not records &#8212; so each element carries its methods too, which is why you can write <code>catalogue[0].getTitle()</code>.' }
+      ]
+    },
+    {
+      stem: 'Which statement correctly describes the relationship declared here?',
+      code: 'CLASS Dvd INHERITS LibraryItem WITH { STRING director, INTEGER ageRating }',
+      topic: 'inheritance',
+      opts: [
+        { t: 'Dvd is a sub-class which inherits all the instance variables and methods of the LibraryItem super-class, and adds two of its own.', ok: true,
+          why: 'Names both roles the right way round and states what inheritance actually gives the sub-class.' },
+        { t: 'Dvd is the super-class of LibraryItem.', ok: false,
+          why: 'The wrong way round. <code>Dvd</code> is the more specialised class, so it is the <b>sub-class</b>; <code>LibraryItem</code> is the <b>super-class</b>.' },
+        { t: 'The code of LibraryItem is copied into Dvd so that it can be edited.', ok: false,
+          why: 'Nothing is copied. That is the point &#8212; shared code is written <b>once</b> in the super-class, so fixing it fixes every sub-class.' },
+        { t: 'Dvd overrides LibraryItem.', ok: false,
+          why: 'Classes are not overridden; individual <b>methods</b> are. This line declares <b>inheritance</b>.' }
+      ]
+    },
+    {
+      stem: 'What kind of method is this, and why does the class provide it?',
+      code: 'FUNCTION getTitle() RETURNS STRING\n    RETURN THIS.title\nEND FUNCTION',
+      topic: 'getters',
+      opts: [
+        { t: 'A getter — a public method giving the only legitimate route to read a private instance variable.', ok: true,
+          why: 'Exactly. Because <code>title</code> is <b>private</b>, code outside the class needs a <b>public method</b> to read it.' },
+        { t: 'A setter — it changes the value of an instance variable.', ok: false,
+          why: 'A <b>setter</b> changes a value. This one only <b>returns</b> one, so it is a <b>getter</b>.' },
+        { t: 'A constructor — it supplies a value when the object is created.', ok: false,
+          why: 'A <b>constructor</b> runs once, during instantiation, and initialises instance variables. This can be called any number of times.' },
+        { t: 'An overriding method, because it appears in more than one class.', ok: false,
+          why: 'Nothing here suggests a super-class version being replaced &#8212; and there is no <code>OVERRIDE</code> keyword.' }
+      ]
+    },
+    {
+      stem: 'LibraryItem declares title, isbn and onLoan. Book INHERITS LibraryItem and declares author and pages. How many instance variables does one Book object hold?',
+      code: 'CLASS LibraryItem IS { STRING title, STRING isbn, BOOLEAN onLoan }\n\nCLASS Book INHERITS LibraryItem WITH { STRING author, INTEGER pages }',
+      topic: 'inherited instance variables',
+      opts: [
+        { t: 'Five', ok: true,
+          why: 'Its own two, plus the three <b>inherited</b> from the super-class. A class diagram never redraws inherited members, which is exactly why this is asked.' },
+        { t: 'Two', ok: false,
+          why: 'Only counts what <code>Book</code> adds. The inherited instance variables are still part of every <code>Book</code> object.' },
+        { t: 'Three', ok: false,
+          why: 'That is the super-class&#8217;s own count. A <code>Book</code> object has those <b>and</b> its own.' },
+        { t: 'Seven', ok: false,
+          why: 'Double-counting. Inherited variables are not duplicated &#8212; the sub-class receives one set of them.' }
+      ]
+    },
+    {
+      stem: 'Inside a sort, why is the method call used here rather than simply comparing <code>league[loop].power</code>?',
+      code: 'IF league[loop].getPower() < league[loop + 1].getPower() THEN',
+      topic: 'encapsulation in practice',
+      opts: [
+        { t: 'power is a private instance variable, so it can only be read from outside the class through a public method — a getter.', ok: true,
+          why: 'The marking instructions for this exact question award a separate mark for <b>correct use of the getter</b>, on top of the mark for the comparison.' },
+        { t: 'Because league is an array, its elements can only be accessed by methods.', ok: false,
+          why: 'Nothing to do with it being an array. Array elements are reached by index perfectly normally; the restriction is on the <b>private</b> instance variable inside each object.' },
+        { t: 'Calling a method is faster than reading a variable.', ok: false,
+          why: 'It is not, and efficiency is not the reason. This is about <b>encapsulation</b>.' },
+        { t: 'The objects do not have a power instance variable at all.', ok: false,
+          why: 'They do &#8212; that is what <code>getPower()</code> returns. It is <b>private</b>, not absent.' }
+      ]
+    },
+    {
+      stem: 'StandardBooking inherits from Booking and adds no instance variables of its own. Why does it need no constructor method?',
+      code: 'CLASS StandardBooking INHERITS Booking\n  METHODS\n\n  FUNCTION getBookingType() RETURNS STRING\n      RETURN "Standard"\n  END FUNCTION\nEND CLASS',
+      topic: 'constructors and inheritance',
+      opts: [
+        { t: 'It adds no instance variables of its own, so the constructor it inherits from Booking already initialises everything an object of it has.', ok: true,
+          why: 'A constructor exists to initialise <b>instance variables</b>. With nothing new to initialise, the <b>inherited</b> constructor is sufficient.' },
+        { t: 'Sub-classes never have constructors — only super-classes do.', ok: false,
+          why: 'Untrue. A sub-class that <b>does</b> add instance variables needs its own constructor to initialise them.' },
+        { t: 'Constructors are optional in object-oriented programming.', ok: false,
+          why: 'Too vague to score. The question asks why <b>this</b> class does not need one, so the answer must be about it adding no instance variables.' },
+        { t: 'Because it only contains one method.', ok: false,
+          why: 'The number of methods is irrelevant. Constructors initialise <b>data</b>, not methods.' }
+      ]
+    }
+  ];
+
+  var order = [], qi = 0, right = 0, wrong = 0, answered = false, missed = [];
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* Pull string literals out first, so the quotes inside the class="..."
+     attributes added below can never be mistaken for code strings. */
+  function colour(t) {
+    var strs = [];
+    t = t.replace(/"[^"]*"/g, function (m) { strs.push(m); return '\u0000' + (strs.length - 1) + '\u0000'; });
+    t = t
+      .replace(/\b(CLASS|IS|METHODS|CONSTRUCTOR|PROCEDURE|FUNCTION|RETURNS|RETURN|DECLARE|INITIALLY|SET|TO|END|INHERITS|WITH|ARRAY|OF|SEND|DISPLAY|IF|THEN|STRING|INTEGER|BOOLEAN|REAL|TRUE|FALSE|Null)\b/g,
+               '<span class="kw">$1</span>')
+      .replace(/\bOVERRIDE\b/g, '<span class="ovr">OVERRIDE</span>')
+      .replace(/\bTHIS\b/g, '<span class="this">THIS</span>');
+    return t.replace(/\u0000(\d+)\u0000/g, function (m, i) {
+      return '<span class="str">' + strs[+i] + '</span>';
+    });
+  }
+
+  function shuffled(n) {
+    var a = [];
+    for (var i = 0; i < n; i++) a.push(i);
+    for (var j = a.length - 1; j > 0; j--) {
+      var k = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[k]; a[k] = t;
+    }
+    return a;
+  }
+
+  function render() {
+    var q = Q[qi];
+    answered = false;
+    $('c-q').textContent = (qi + 1) + ' / ' + Q.length;
+    $('bar').style.width = (qi / Q.length * 100) + '%';
+    $('ptitle').textContent = q.topic.toUpperCase();
+    $('stem').innerHTML = q.stem;
+    $('stimulus').innerHTML = colour(esc(q.code));
+    order = shuffled(q.opts.length);
+    $('answers').innerHTML = order.map(function (oi, pos) {
+      return '<button class="ans" data-o="' + oi + '">' + esc(q.opts[oi].t) + '</button>';
+    }).join('');
+    $('narrate').className = 'narrate idle';
+    $('narrate').innerHTML = 'Read the code, then choose the description that uses correct object-oriented terminology.';
+    $('next').disabled = true;
+    $('next').textContent = qi === Q.length - 1 ? 'See results ▶' : 'Next question ▶';
+  }
+
+  $('answers').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-o]');
+    if (!b || answered) return;
+    answered = true;
+    var q = Q[qi], picked = +b.dataset.o;
+    var correct = q.opts.map(function (o, i) { return o.ok ? i : -1; }).filter(function (i) { return i > -1; })[0];
+
+    [].forEach.call($('answers').children, function (el) {
+      var oi = +el.dataset.o;
+      el.disabled = true;
+      if (oi === correct) el.classList.add('right');
+      if (oi === picked && oi !== correct) el.classList.add('wrong');
+      if (oi === correct || oi === picked) {
+        el.innerHTML += '<span class="mark">' + (oi === correct ? '✓ THE WORDING THAT SCORES' : '✗ YOUR ANSWER') + '</span>';
+      }
+    });
+
+    if (picked === correct) {
+      right++;
+      $('narrate').className = 'narrate match';
+      $('narrate').innerHTML = '<b>Correct.</b> ' + q.opts[correct].why;
+    } else {
+      wrong++;
+      missed.push(q.topic);
+      $('narrate').className = 'narrate warn';
+      $('narrate').innerHTML = '<b>Not quite.</b> ' + q.opts[picked].why +
+        '<br><br><b>The answer that scores:</b> ' + q.opts[correct].why;
+    }
+    $('c-right').textContent = right;
+    $('c-wrong').textContent = wrong;
+    $('next').disabled = false;
+  });
+
+  $('next').addEventListener('click', function () {
+    if (qi === Q.length - 1) { finish(); return; }
+    qi++; render();
+  });
+
+  function finish() {
+    $('bar').style.width = '100%';
+    $('done-box').classList.add('show');
+    document.querySelector('.panel').style.display = 'none';
+    var pct = Math.round(right / Q.length * 100);
+    var verdict = pct >= 80 ? 'That is exam-ready terminology.'
+      : (pct >= 50 ? 'The ideas are there — it is the precise vocabulary that needs work.'
+                   : 'Work back through the page before trying again; the terminology is where these marks live.');
+    $('scoreline').innerHTML = 'You scored <b>' + right + ' out of ' + Q.length + '</b> first time. ' + verdict;
+    if (missed.length) {
+      $('missed').innerHTML = '<li><b>Worth revisiting:</b> ' +
+        missed.filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ') + '.</li>';
+    } else {
+      $('missed').innerHTML = '<li>Every question right first time — nothing to revisit.</li>';
+    }
+    $('done-box').scrollIntoView({ block: 'nearest' });
+  }
+
+  $('restart').addEventListener('click', function () {
+    qi = 0; right = 0; wrong = 0; missed = [];
+    $('c-right').textContent = 0; $('c-wrong').textContent = 0;
+    $('done-box').classList.remove('show');
+    document.querySelector('.panel').style.display = '';
+    render();
+  });
+
+  render();
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

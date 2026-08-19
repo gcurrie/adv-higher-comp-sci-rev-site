@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Diagram ↔ Code — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:880px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85} .chip.ref b{color:var(--match)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.on{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  .split{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:20px;align-items:start}
+  @media(max-width:860px){.split{grid-template-columns:minmax(0,1fr)}}
+
+  /* UML boxes */
+  .diagram{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .cls{border:2px solid var(--active-strong);background:#fff;width:100%;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+  .cls:hover{box-shadow:0 0 0 3px var(--active-bg)}
+  .cls .ch{background:var(--active-strong);color:#fff;text-align:center;font-weight:700;font-size:14px;padding:7px}
+  .cls.sub .ch{background:var(--active)}
+  .cls.sel{border-color:var(--match-accent)}
+  .cls.sel .ch{background:var(--match-accent);color:#002D1C}
+  .cls .sect{border-top:1px solid var(--line);padding:5px 0}
+  .cls .mem{font-family:var(--mono);font-size:11.5px;padding:4px 11px;cursor:pointer;display:flex;justify-content:space-between;gap:6px;transition:background .12s}
+  .cls .mem:hover{background:var(--active-bg)}
+  .cls .mem.sel{background:var(--match-bg);color:var(--match);font-weight:700;box-shadow:inset 3px 0 0 var(--match-accent)}
+  .cls .mem .tag{font-size:9px;letter-spacing:.1em;color:var(--match);font-weight:700}
+  .cls .mem.inh{opacity:.62;font-style:italic;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(0,0,0,.028) 6px,rgba(0,0,0,.028) 12px)}
+  .arrowup{font-size:17px;color:var(--ink-soft);line-height:1}
+  .subrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+  @media(max-width:520px){.subrow{grid-template-columns:1fr}}
+  .hint{font-size:11.5px;color:var(--ink-soft);font-style:italic;text-align:center}
+
+  pre.code{margin:0;background:var(--bar);color:#E8F5EE;padding:14px 0;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.75;min-height:320px}
+  pre.code i{display:block;font-style:normal;padding:0 16px;border-left:3px solid transparent;cursor:pointer}
+  pre.code i:hover{background:rgba(255,255,255,.05)}
+  pre.code i.on{background:rgba(201,162,39,.22);border-left-color:var(--match-accent)}
+  pre.code .kw{color:#7FD1A8}
+  pre.code .str{color:#F3C969}
+  pre.code .this{color:#93B4FF}
+  pre.code .ovr{color:#C9A227;font-weight:700}
+  pre.code .cmt{color:rgba(232,245,238,.42)}
+
+  .count{border:1px solid var(--match-accent);background:var(--match-bg);padding:12px 16px;margin-top:14px;font-size:14px}
+  .count b{color:var(--match)}
+  .count .big{font-family:var(--mono);font-size:20px;font-weight:800;color:var(--match)}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Object-Oriented Programming</p>
+    <h1>Class Diagram &#8596; Code</h1>
+    <p class="sub">Click any class, instance variable or method in the diagram to see the code it stands for &#8212; or click a line of code to find it in the diagram. Then switch on <b>inherited members</b> to see what a sub-class object <i>really</i> holds.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">class</span><b id="c-cls">LibraryItem</b></div>
+      <div class="chip ref"><span class="k">selected</span><b id="c-mem">&#8212;</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="inh">Show inherited members</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE DIAGRAM AND THE CODE ARE THE SAME THING</span><span class="dim">CLICK EITHER SIDE</span></div>
+    <div class="panelbody">
+      <div class="split">
+        <div>
+          <div class="diagram">
+            <div class="cls" id="box-LibraryItem" data-c="LibraryItem"></div>
+            <div class="arrowup">&#9650;</div>
+            <p class="hint">inheritance &#8212; the arrow points at the super-class</p>
+            <div class="subrow">
+              <div class="cls sub" id="box-Book" data-c="Book"></div>
+              <div class="cls sub" id="box-Dvd" data-c="Dvd"></div>
+            </div>
+          </div>
+          <div class="count" id="count"></div>
+        </div>
+        <div>
+          <pre class="code" id="code"></pre>
+          <p class="tipnote"><b>Reading tip:</b> a class diagram never repeats inherited members in a sub-class box. Press <b>Show inherited members</b> to see the ones the diagram leaves out &#8212; they still exist in every object.</p>
+        </div>
+      </div>
+      <div class="narrate idle" id="narrate" aria-live="polite">Click a class name, an instance variable, a method, or a line of code.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CLASSES = {
+    LibraryItem: {
+      sup: null,
+      vars: [['title', 'String'], ['isbn', 'String'], ['onLoan', 'Boolean']],
+      meths: ['LibraryItem()', 'borrow()', 'returnItem()', 'isOnLoan()', 'getLoanPeriod()']
+    },
+    Book: {
+      sup: 'LibraryItem',
+      vars: [['author', 'String'], ['pages', 'Integer']],
+      meths: ['Book()', 'getAuthor()']
+    },
+    Dvd: {
+      sup: 'LibraryItem',
+      vars: [['director', 'String'], ['ageRating', 'Integer']],
+      meths: ['Dvd()', 'getDirector()', 'getLoanPeriod()']
+    }
+  };
+
+  /* code, line by line; m = which members the line belongs to */
+  var CODE = {
+    LibraryItem: [
+      ['CLASS LibraryItem IS { STRING title, STRING isbn, BOOLEAN onLoan }', ['title', 'isbn', 'onLoan']],
+      ['  METHODS', []],
+      ['', []],
+      ['  CONSTRUCTOR (STRING title, STRING isbn)', ['LibraryItem()']],
+      ['      DECLARE THIS.title INITIALLY title', ['LibraryItem()', 'title']],
+      ['      DECLARE THIS.isbn INITIALLY isbn', ['LibraryItem()', 'isbn']],
+      ['      DECLARE THIS.onLoan INITIALLY FALSE', ['LibraryItem()', 'onLoan']],
+      ['  END CONSTRUCTOR', ['LibraryItem()']],
+      ['', []],
+      ['  PROCEDURE borrow()', ['borrow()']],
+      ['      SET THIS.onLoan TO TRUE', ['borrow()', 'onLoan']],
+      ['  END PROCEDURE', ['borrow()']],
+      ['', []],
+      ['  PROCEDURE returnItem()', ['returnItem()']],
+      ['      SET THIS.onLoan TO FALSE', ['returnItem()', 'onLoan']],
+      ['  END PROCEDURE', ['returnItem()']],
+      ['', []],
+      ['  FUNCTION isOnLoan() RETURNS BOOLEAN', ['isOnLoan()']],
+      ['      RETURN THIS.onLoan', ['isOnLoan()', 'onLoan']],
+      ['  END FUNCTION', ['isOnLoan()']],
+      ['', []],
+      ['  FUNCTION getLoanPeriod() RETURNS INTEGER', ['getLoanPeriod()']],
+      ['      RETURN 21', ['getLoanPeriod()']],
+      ['  END FUNCTION', ['getLoanPeriod()']],
+      ['END CLASS', []]
+    ],
+    Book: [
+      ['CLASS Book INHERITS LibraryItem WITH { STRING author, INTEGER pages }', ['author', 'pages']],
+      ['  METHODS', []],
+      ['', []],
+      ['  CONSTRUCTOR (STRING title, STRING isbn, STRING author, INTEGER pages)', ['Book()']],
+      ['      DECLARE THIS.title INITIALLY title', ['Book()']],
+      ['      DECLARE THIS.isbn INITIALLY isbn', ['Book()']],
+      ['      DECLARE THIS.onLoan INITIALLY FALSE', ['Book()']],
+      ['      DECLARE THIS.author INITIALLY author', ['Book()', 'author']],
+      ['      DECLARE THIS.pages INITIALLY pages', ['Book()', 'pages']],
+      ['  END CONSTRUCTOR', ['Book()']],
+      ['', []],
+      ['  FUNCTION getAuthor() RETURNS STRING', ['getAuthor()']],
+      ['      RETURN THIS.author', ['getAuthor()', 'author']],
+      ['  END FUNCTION', ['getAuthor()']],
+      ['END CLASS', []],
+      ['', []],
+      ['# borrow(), returnItem(), isOnLoan() and getLoanPeriod() are', []],
+      ['# inherited from LibraryItem and are not written again here.', []]
+    ],
+    Dvd: [
+      ['CLASS Dvd INHERITS LibraryItem WITH { STRING director, INTEGER ageRating }', ['director', 'ageRating']],
+      ['  METHODS', []],
+      ['', []],
+      ['  CONSTRUCTOR (STRING title, STRING isbn, STRING director, INTEGER ageRating)', ['Dvd()']],
+      ['      DECLARE THIS.title INITIALLY title', ['Dvd()']],
+      ['      DECLARE THIS.isbn INITIALLY isbn', ['Dvd()']],
+      ['      DECLARE THIS.onLoan INITIALLY FALSE', ['Dvd()']],
+      ['      DECLARE THIS.director INITIALLY director', ['Dvd()', 'director']],
+      ['      DECLARE THIS.ageRating INITIALLY ageRating', ['Dvd()', 'ageRating']],
+      ['  END CONSTRUCTOR', ['Dvd()']],
+      ['', []],
+      ['  FUNCTION getDirector() RETURNS STRING', ['getDirector()']],
+      ['      RETURN THIS.director', ['getDirector()', 'director']],
+      ['  END FUNCTION', ['getDirector()']],
+      ['', []],
+      ['  OVERRIDE FUNCTION getLoanPeriod() RETURNS INTEGER', ['getLoanPeriod()']],
+      ['      RETURN 7', ['getLoanPeriod()']],
+      ['  END FUNCTION', ['getLoanPeriod()']],
+      ['END CLASS', []]
+    ]
+  };
+
+  var NOTES = {
+    'LibraryItem.getLoanPeriod()': 'Defined here in the <b>super-class</b>, returning 21. Every item inherits it &#8212; unless the sub-class replaces it.',
+    'Dvd.getLoanPeriod()': 'This is the <b>override</b>. <code>Dvd</code> already inherits <code>getLoanPeriod()</code> from <code>LibraryItem</code>, but replaces it with its own version returning 7. That is <b>polymorphism</b>.',
+    'Book.Book()': 'The sub-class <b>does</b> need its own constructor, because it adds instance variables (<code>author</code>, <code>pages</code>) that the inherited constructor knows nothing about.',
+    'Dvd.Dvd()': 'The sub-class <b>does</b> need its own constructor, because it adds <code>director</code> and <code>ageRating</code>.'
+  };
+
+  var state = { cls: 'LibraryItem', mem: null, inherited: false };
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function colour(t) {
+    var out = esc(t);
+    if (out.indexOf('#') === 0 || out.indexOf('# ') > -1) return '<span class="cmt">' + out + '</span>';
+    return out
+      .replace(/\b(CLASS|IS|METHODS|CONSTRUCTOR|PROCEDURE|FUNCTION|RETURNS|RETURN|DECLARE|INITIALLY|SET|TO|END|INHERITS|WITH|STRING|INTEGER|BOOLEAN|TRUE|FALSE)\b/g,
+               '<span class="kw">$1</span>')
+      .replace(/\bOVERRIDE\b/g, '<span class="ovr">OVERRIDE</span>')
+      .replace(/\bTHIS\b/g, '<span class="this">THIS</span>');
+  }
+
+  function inheritedOf(c) {
+    var s = CLASSES[c].sup;
+    if (!s) return { vars: [], meths: [] };
+    var overridden = CLASSES[c].meths;
+    return {
+      vars: CLASSES[s].vars,
+      meths: CLASSES[s].meths.filter(function (m) {
+        return m !== s + '()' && overridden.indexOf(m) === -1;
+      })
+    };
+  }
+
+  function memRow(name, label, isInh, tag) {
+    return '<div class="mem' + (isInh ? ' inh' : '') +
+      (state.mem === name && !isInh ? ' sel' : '') + '" data-m="' + esc(name) + '"' +
+      (isInh ? ' data-inh="1"' : '') + '>' + esc(label) +
+      (tag ? '<span class="tag">' + tag + '</span>' : '') + '</div>';
+  }
+
+  function renderBoxes() {
+    Object.keys(CLASSES).forEach(function (c) {
+      var d = CLASSES[c], box = $('box-' + c);
+      box.className = 'cls' + (d.sup ? ' sub' : '') + (state.cls === c ? ' sel' : '');
+      var vars = d.vars.map(function (v) { return memRow(v[0], '−' + v[0] + ': ' + v[1], false); }).join('');
+      var meths = d.meths.map(function (m) {
+        var tag = (c === 'Dvd' && m === 'getLoanPeriod()') ? 'OVERRIDE' : '';
+        return memRow(m, '+' + m, false, tag);
+      }).join('');
+      if (state.inherited && d.sup) {
+        var inh = inheritedOf(c);
+        vars += inh.vars.map(function (v) { return memRow(v[0], '−' + v[0] + ': ' + v[1], true); }).join('');
+        meths += inh.meths.map(function (m) { return memRow(m, '+' + m, true); }).join('');
+      }
+      box.innerHTML = '<div class="ch" data-c="' + c + '">' + c + '</div>' +
+        '<div class="sect">' + vars + '</div><div class="sect">' + meths + '</div>';
+    });
+    $('c-cls').textContent = state.cls;
+    $('c-mem').textContent = state.mem || '—';
+  }
+
+  function renderCode() {
+    $('code').innerHTML = CODE[state.cls].map(function (l, i) {
+      var on = state.mem && l[1].indexOf(state.mem) !== -1;
+      return '<i' + (on ? ' class="on"' : '') + ' data-l="' + i + '">' + (l[0] === '' ? '&nbsp;' : colour(l[0])) + '</i>';
+    }).join('');
+  }
+
+  function renderCount() {
+    var c = state.cls, d = CLASSES[c];
+    if (!d.sup) {
+      $('count').innerHTML = '<span class="big">' + d.vars.length + '</span> instance variables in a <b>' + c +
+        '</b> object. It is the <b>super-class</b>, so it inherits nothing.';
+      return;
+    }
+    var inh = inheritedOf(c);
+    $('count').innerHTML = 'A <b>' + c + '</b> object has <span class="big">' + (d.vars.length + inh.vars.length) +
+      '</span> instance variables &#8212; <b>' + d.vars.length + ' of its own</b> (' +
+      d.vars.map(function (v) { return '<code>' + v[0] + '</code>'; }).join(', ') +
+      ') plus <b>' + inh.vars.length + ' inherited</b> from <code>' + d.sup + '</code> (' +
+      inh.vars.map(function (v) { return '<code>' + v[0] + '</code>'; }).join(', ') +
+      '). The diagram only draws the first ' + d.vars.length + '.';
+  }
+
+  function say(msg, kind) {
+    $('narrate').className = 'narrate ' + (kind || '');
+    $('narrate').innerHTML = msg;
+  }
+
+  function selectClass(c, quiet) {
+    state.cls = c;
+    state.mem = null;
+    renderBoxes(); renderCode(); renderCount();
+    if (!quiet) {
+      var d = CLASSES[c];
+      say('<code>' + c + '</code> &#8212; ' + (d.sup
+        ? 'a <b>sub-class</b> of <code>' + d.sup + '</code>. Its box lists only what it <b>adds</b>; the code shows how <code>INHERITS ' + d.sup + ' WITH { … }</code> declares it.'
+        : 'the <b>super-class</b>. Everything defined here is inherited by <code>Book</code> and <code>Dvd</code>.'), 'match');
+    }
+  }
+
+  function selectMember(name, fromCode) {
+    state.mem = name;
+    renderBoxes(); renderCode();
+    var d = CLASSES[state.cls];
+    var isVar = d.vars.some(function (v) { return v[0] === name; });
+    var note = NOTES[state.cls + '.' + name];
+    var kind = isVar ? 'instance variable' : 'method';
+    var msg = '<code>' + esc(name) + '</code> is ' + (isVar ? 'a <b>private instance variable</b>' : 'a <b>public method</b>') +
+      ' of <code>' + state.cls + '</code>. ' +
+      (fromCode ? 'It is highlighted in the diagram' : 'The lines of code that declare or use it are highlighted') + '.';
+    if (isVar) {
+      msg += ' On the diagram it is written <code>&#8722;' + esc(name) + '</code> &#8212; the <b>&#8722;</b> means <b>private</b>.';
+    }
+    if (note) msg += '<br><br>' + note;
+    say(msg, 'match');
+  }
+
+  /* diagram clicks */
+  document.querySelector('.diagram').addEventListener('click', function (e) {
+    var head = e.target.closest('.ch');
+    if (head) { selectClass(head.dataset.c); return; }
+    var mem = e.target.closest('.mem');
+    if (!mem) {
+      var box = e.target.closest('.cls');
+      if (box) selectClass(box.dataset.c);
+      return;
+    }
+    var owner = mem.closest('.cls').dataset.c;
+    if (mem.dataset.inh) {
+      var sup = CLASSES[owner].sup;
+      selectClass(sup, true);
+      selectMember(mem.dataset.m, false);
+      say('<code>' + esc(mem.dataset.m) + '</code> is <b>inherited</b> by <code>' + owner + '</code> from <code>' + sup +
+          '</code>. It is not written in the <code>' + owner + '</code> box or its code &#8212; but every <code>' + owner +
+          '</code> object still has it. Jumped to <code>' + sup + '</code>, where it is defined.', 'match');
+      return;
+    }
+    if (owner !== state.cls) selectClass(owner, true);
+    selectMember(mem.dataset.m, false);
+  });
+
+  /* code clicks */
+  $('code').addEventListener('click', function (e) {
+    var li = e.target.closest('i[data-l]');
+    if (!li) return;
+    var mems = CODE[state.cls][+li.dataset.l][1];
+    if (!mems.length) {
+      say('That line is part of the class structure rather than a single member &#8212; try a line inside a method, or one that names an instance variable.', 'idle');
+      return;
+    }
+    selectMember(mems[0], true);
+  });
+
+  $('inh').addEventListener('click', function () {
+    state.inherited = !state.inherited;
+    $('inh').classList.toggle('on', state.inherited);
+    $('inh').textContent = state.inherited ? 'Hide inherited members' : 'Show inherited members';
+    renderBoxes();
+    say(state.inherited
+      ? 'Inherited members are now shown <b>hatched</b> in the sub-class boxes. <b>A real class diagram does not draw these</b> &#8212; which is exactly why "how many instance variables does a Book object have?" catches people out. Click a hatched row to jump to where it is defined.'
+      : 'Back to the diagram as it would actually be drawn: each sub-class box lists <b>only what it adds</b>.', 'match');
+  });
+
+  $('reset').addEventListener('click', function () {
+    state = { cls: 'LibraryItem', mem: null, inherited: false };
+    $('inh').classList.remove('on');
+    $('inh').textContent = 'Show inherited members';
+    renderBoxes(); renderCode(); renderCount();
+    say('Click a class name, an instance variable, a method, or a line of code.', 'idle');
+  });
+
+  renderBoxes(); renderCode(); renderCount();
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

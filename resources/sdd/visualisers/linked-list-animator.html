@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linked List Operation Animator — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810;
+    --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:880px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip[hidden]{display:none}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85}
+  .chip.ref b{color:var(--match)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  input[type=text]{font-family:var(--sans);font-size:14px;padding:9px 11px;border:1px solid var(--line);background:#fff;color:var(--ink);width:150px}
+  input[type=text]:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px;border-color:var(--active)}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:20px 22px}
+
+  /* ── the list ───────────────────────────────────────────── */
+  .listwrap{overflow-x:auto;padding:6px 2px 10px}
+  .list{display:flex;align-items:flex-start;min-width:min-content}
+  .headbox{display:flex;align-items:center;gap:8px;margin-right:2px;flex:0 0 auto;padding-top:18px}
+  .headbox .hlbl{font-size:15px;font-weight:800;color:var(--active-strong)}
+  .headbox .hval{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--match);background:var(--match-bg);border:1px solid var(--match-accent);padding:3px 7px;transition:background .2s,border-color .2s}
+  .headbox .hval.flash{animation:pop .7s}
+  .headbox .arw{font-size:19px;color:var(--active-strong)}
+
+  .node{flex:0 0 auto;cursor:pointer;transition:opacity .25s,transform .25s}
+  .node .addr{border:1.6px solid var(--active-strong);background:var(--active-bg);text-align:center;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--active-strong);padding:6px 10px;transition:background .2s,border-color .2s}
+  .node .cells{display:flex}
+  .node .cell{border:1.6px solid var(--active-strong);border-top:0;background:#fff;padding:9px 6px;text-align:center;font-size:13px;min-height:42px;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,color .2s}
+  .node .cell + .cell{border-left:0}
+  .node .data{min-width:104px;padding-left:9px;padding-right:9px}
+  .node .ptr{min-width:56px;font-family:var(--mono);font-size:12.5px}
+  .node .ptr.unset{color:var(--line)}
+  .node.sel .addr{background:var(--tint)}
+  .node.sel .addr,.node.sel .cell{border-color:var(--active);box-shadow:inset 0 0 0 1px var(--active)}
+  .node.isnew .addr{background:var(--match-bg);border-color:var(--match-accent);color:var(--match)}
+  .node.isnew .cell{border-color:var(--match-accent)}
+  .node.dying{opacity:.3}
+  .node.dying .addr,.node.dying .cell{border-color:var(--line);color:var(--ink-soft);background:#fff}
+  .cell.flash{background:var(--match-bg)!important;border-color:var(--match-accent)!important;color:var(--match)!important;font-weight:800;animation:pop .7s}
+  @keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.08)}100%{transform:scale(1)}}
+
+  .link{flex:0 0 auto;width:46px;align-self:stretch;position:relative;padding-top:18px}
+  .link .fw,.link .bk{font-family:var(--mono);font-size:17px;text-align:center;line-height:1}
+  .link .fw{color:var(--active-strong);height:22px}
+  .link .bk{color:var(--active);height:20px;margin-top:6px;opacity:.75}
+  .link .fw.dead,.link .bk.dead{color:var(--line)}
+  .link .fw.hot,.link .bk.hot{color:var(--match-accent);font-weight:700}
+
+  .hint{font-size:12.5px;color:var(--ink-soft);margin:10px 0 0;text-align:center}
+
+  /* ── steps ──────────────────────────────────────────────── */
+  .stepwrap{display:grid;grid-template-columns:1fr;gap:0}
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+  ol.steps li{counter-increment:s;position:relative;padding:11px 14px 11px 46px;border:1px solid var(--line);border-bottom:0;font-size:14px;color:var(--ink-soft);background:#fff;transition:background .2s,color .2s}
+  ol.steps li:last-child{border-bottom:1px solid var(--line)}
+  ol.steps li::before{content:counter(s);position:absolute;left:13px;top:11px;font-family:var(--mono);font-size:11px;font-weight:700;width:20px;height:20px;line-height:20px;text-align:center;border:1px solid var(--line);color:var(--ink-soft);background:var(--bg)}
+  ol.steps li.done{color:var(--ink)}
+  ol.steps li.done::before{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  ol.steps li.current{background:var(--match-bg);color:var(--ink);font-weight:600}
+  ol.steps li.current::before{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  ol.steps li b{color:var(--match);font-family:var(--mono);font-size:13px}
+  ol.steps.idle li{opacity:.55}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate.warn{border-left-color:var(--warn);background:var(--warn-bg);color:var(--warn)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .narrate .say{display:block;margin-top:7px;padding-left:12px;border-left:2px solid var(--match-accent);font-style:italic;color:var(--match)}
+
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+  .opsrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:6px}
+  .opsrow .lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);width:100%}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}.node .data{min-width:88px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Data Structures</p>
+    <h1>Linked List Operation Animator</h1>
+    <p class="sub">Insert and delete nodes and watch <b>exactly which pointers change</b>. Every operation is broken into the individual pointer changes an exam answer has to name &#8212; step through them one at a time, and the commentary gives you the sentence that would earn the mark.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">list type</span><b id="c-type">single</b></div>
+      <div class="chip"><span class="k">nodes</span><b id="c-len">4</b></div>
+      <div class="chip ref"><span class="k">selected</span><b id="c-sel">none</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="t-single" class="on">Single</button>
+      <button id="t-double">Double</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span id="listname">requestQueue &#8212; A SINGLE LINKED LIST</span><span class="dim">CLICK A NODE TO SELECT IT</span></div>
+    <div class="panelbody">
+      <div class="listwrap"><div class="list" id="list"></div></div>
+      <p class="hint" id="hint">Each node shows its <b>memory address</b> on top, with the <b>data item</b> and <b>pointer</b> beneath.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>OPERATIONS</span><span class="dim">EACH ONE BECOMES A LIST OF POINTER CHANGES</span></div>
+    <div class="panelbody">
+      <div class="opsrow">
+        <span class="lbl">new data item</span>
+        <input type="text" id="newdata" value="Vertigo" aria-label="Data item for the new node" />
+        <button id="ins-front">Insert at front</button>
+        <button id="ins-after">Insert after selected</button>
+        <button id="ins-end">Insert at end</button>
+        <button id="del-sel">Delete selected</button>
+      </div>
+      <div class="opsrow" style="margin-top:12px">
+        <span class="lbl">play the pointer changes</span>
+        <button id="play" class="primary" disabled>&#9654; Play</button>
+        <button id="step" disabled>&#9197; Step</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>WHAT CHANGES</span><span class="dim">THE ANSWER, ONE POINTER AT A TIME</span></div>
+    <div class="panelbody">
+      <div class="stepwrap"><ol class="steps idle" id="steps"><li>Choose an operation above to see the pointer changes it needs.</li></ol></div>
+      <div class="narrate idle" id="narrate" aria-live="polite">Click a node to select it, then choose an operation.</div>
+      <p class="tipnote"><b>Notice what never happens:</b> no data item ever moves. However long the list is, an insertion or deletion rewrites a fixed number of pointers &#8212; which is exactly why a linked list beats an array when items are added and removed often.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SINGLE = [
+    { addr: '412', data: 'Anthem' },
+    { addr: '268', data: 'Skyfall' },
+    { addr: '531', data: 'Yellow' },
+    { addr: '187', data: 'Titanium' }
+  ];
+  var DOUBLE = [
+    { addr: '601', data: 'beach.jpg' },
+    { addr: '745', data: 'sunset.jpg' },
+    { addr: '318', data: 'harbour.jpg' },
+    { addr: '522', data: 'castle.jpg' }
+  ];
+  var POOL_S = ['Vertigo', 'Clocks', 'Firework', 'Halo', 'Roar', 'Believer'];
+  var POOL_D = ['forest.jpg', 'bridge.jpg', 'loch.jpg', 'street.jpg', 'garden.jpg'];
+
+  var UNSET = null;          // pointer cell drawn blank
+  var NUL = 'Null';
+
+  var st = {
+    type: 'single',
+    nodes: [],
+    head: null,
+    sel: null,
+    queue: [],
+    qi: 0,
+    timer: null,
+    poolAt: 0
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var listEl = $('list'), stepsEl = $('steps'), narrate = $('narrate');
+
+  /* ── model ───────────────────────────────────────────── */
+  function build() {
+    var src = st.type === 'single' ? SINGLE : DOUBLE;
+    st.nodes = src.map(function (n) { return { addr: n.addr, data: n.data, next: UNSET, prev: UNSET }; });
+    relink();
+    st.head = st.nodes[0].addr;
+    st.sel = null;
+    st.queue = [];
+    st.qi = 0;
+    st.poolAt = 0;
+  }
+
+  function relink() {
+    st.nodes.forEach(function (n, i) {
+      n.next = i < st.nodes.length - 1 ? st.nodes[i + 1].addr : NUL;
+      n.prev = i > 0 ? st.nodes[i - 1].addr : NUL;
+    });
+  }
+
+  function idxOf(addr) {
+    for (var i = 0; i < st.nodes.length; i++) if (st.nodes[i].addr === addr) return i;
+    return -1;
+  }
+
+  function freshAddr() {
+    var a;
+    do { a = String(Math.floor(Math.random() * 800) + 120); } while (idxOf(a) !== -1);
+    return a;
+  }
+
+  function nextData() {
+    var pool = st.type === 'single' ? POOL_S : POOL_D;
+    var typed = $('newdata').value.trim();
+    if (typed) return typed;
+    return pool[st.poolAt++ % pool.length];
+  }
+
+  /* ── render ──────────────────────────────────────────── */
+  function render(flash) {
+    flash = flash || {};
+    listEl.innerHTML = '';
+
+    var hb = document.createElement('div');
+    hb.className = 'headbox';
+    hb.innerHTML = '<span class="hlbl">Head</span><span class="hval' +
+      (flash.head ? ' flash' : '') + '">' + (st.head === null ? '&#8212;' : st.head) +
+      '</span><span class="arw">&#10142;</span>';
+    listEl.appendChild(hb);
+
+    st.nodes.forEach(function (n, i) {
+      var el = document.createElement('div');
+      el.className = 'node' + (n.addr === st.sel ? ' sel' : '') +
+        (n._new ? ' isnew' : '') + (n._dying ? ' dying' : '');
+      el.tabIndex = 0;
+      el.setAttribute('role', 'button');
+
+      var cells = '';
+      if (st.type === 'double') {
+        cells += ptrCell(n.prev, flash.cells && flash.cells[n.addr] === 'prev');
+      }
+      cells += '<div class="cell data">' + esc(n.data) + '</div>';
+      cells += ptrCell(n.next, flash.cells && flash.cells[n.addr] === 'next');
+
+      el.innerHTML = '<div class="addr">' + n.addr + '</div><div class="cells">' + cells + '</div>';
+      el.setAttribute('aria-label', 'Node at address ' + n.addr + ' holding ' + n.data);
+      el.addEventListener('click', function () { pick(n.addr); });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(n.addr); }
+      });
+      listEl.appendChild(el);
+
+      if (i < st.nodes.length - 1) {
+        var lk = document.createElement('div');
+        lk.className = 'link';
+        var fwLive = n.next === st.nodes[i + 1].addr;
+        var bkLive = st.nodes[i + 1].prev === n.addr;
+        lk.innerHTML = '<div class="fw' + (fwLive ? '' : ' dead') + (flash.link === n.addr ? ' hot' : '') + '">&#10230;</div>' +
+          (st.type === 'double'
+            ? '<div class="bk' + (bkLive ? '' : ' dead') + (flash.linkBack === st.nodes[i + 1].addr ? ' hot' : '') + '">&#10229;</div>'
+            : '');
+        listEl.appendChild(lk);
+      }
+    });
+
+    $('c-type').textContent = st.type;
+    $('c-len').textContent = st.nodes.length;
+    $('c-sel').textContent = st.sel === null ? 'none' : st.sel;
+    $('listname').innerHTML = st.type === 'single'
+      ? 'requestQueue &#8212; A SINGLE LINKED LIST'
+      : 'gallery &#8212; A DOUBLE LINKED LIST';
+    $('hint').innerHTML = st.type === 'single'
+      ? 'Each node shows its <b>memory address</b> on top, with the <b>data item</b> and <b>pointer</b> beneath.'
+      : 'Each node shows its <b>memory address</b> on top, with the <b>previous pointer</b>, <b>data item</b> and <b>next pointer</b> beneath.';
+    $('del-sel').disabled = st.sel === null;
+    $('ins-after').disabled = st.sel === null;
+  }
+
+  function ptrCell(v, hot) {
+    var cls = 'cell ptr' + (v === UNSET ? ' unset' : '') + (hot ? ' flash' : '');
+    return '<div class="' + cls + '">' + (v === UNSET ? '&#8212;' : v) + '</div>';
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function say(msg, kind, model) {
+    narrate.className = 'narrate ' + (kind || '');
+    narrate.innerHTML = msg + (model ? '<span class="say">&#8220;' + model + '&#8221;</span>' : '');
+  }
+
+  function pick(addr) {
+    if (st.queue.length && st.qi < st.queue.length) return;   // mid-operation
+    st.sel = (st.sel === addr) ? null : addr;
+    render();
+    if (st.sel === null) { say('Selection cleared.', 'idle'); return; }
+    var i = idxOf(addr), n = st.nodes[i];
+    var where = i === 0 ? 'the <b>first</b> node, the one the head points at'
+      : (i === st.nodes.length - 1 ? 'the <b>last</b> node &#8212; its pointer is Null' : 'a node in the <b>middle</b> of the list');
+    var prevTxt = i === 0 ? 'Nothing points at it except the head.'
+      : 'The node before it is <code>' + st.nodes[i - 1].addr + '</code>' +
+        (st.type === 'single'
+          ? ' &#8212; found by traversing from the head, because a single list stores no backward pointer.'
+          : ' &#8212; found instantly from its <b>previous</b> pointer.');
+    say('Selected node <code>' + addr + '</code> holding <b>' + esc(n.data) + '</b> &#8212; ' + where + '. ' + prevTxt, 'match');
+  }
+
+  /* ── operation builders ──────────────────────────────── */
+  function queueOp(steps, title) {
+    st.queue = steps;
+    st.qi = 0;
+    drawSteps();
+    $('play').disabled = false;
+    $('step').disabled = false;
+    say(title + ' &#8212; <b>' + steps.length + ' change' + (steps.length === 1 ? '' : 's') +
+        '</b> to make. Press <b>Step</b> to apply them one at a time.', 'match');
+  }
+
+  function drawSteps() {
+    stepsEl.className = 'steps';
+    stepsEl.innerHTML = '';
+    st.queue.forEach(function (s, i) {
+      var li = document.createElement('li');
+      li.className = i < st.qi ? 'done' : (i === st.qi ? 'current' : '');
+      li.innerHTML = s.text;
+      stepsEl.appendChild(li);
+    });
+  }
+
+  function insertAt(pos, data) {
+    var addr = freshAddr();
+    var steps = [];
+    var node = { addr: addr, data: data, next: UNSET, prev: UNSET, _new: true };
+    var before = pos > 0 ? st.nodes[pos - 1] : null;
+    var after = pos < st.nodes.length ? st.nodes[pos] : null;
+
+    steps.push({
+      text: 'Create a node at <b>' + addr + '</b> holding &#8220;' + esc(data) + '&#8221;.',
+      run: function () {
+        st.nodes.splice(pos, 0, node);
+        render({});
+        say('A new node is created at memory location <code>' + addr + '</code>. Its pointer' +
+            (st.type === 'double' ? 's are' : ' is') + ' not set yet &#8212; nothing points at it, and it points at nothing.',
+            'match');
+      }
+    });
+
+    steps.push({
+      text: 'Set the pointer of <b>' + addr + '</b> to <b>' + (after ? after.addr : NUL) + '</b>.',
+      run: function () {
+        node.next = after ? after.addr : NUL;
+        if (st.type === 'double') node.prev = before ? before.addr : NUL;
+        render({ cells: cellMap(addr, 'next'), link: addr });
+        say('The new node&#8217;s <b>' + (st.type === 'double' ? 'next ' : '') + 'pointer</b> is set to <code>' +
+            node.next + '</code>' + (st.type === 'double'
+              ? ', and its <b>previous</b> pointer to <code>' + node.prev + '</code>.'
+              : '.'),
+            'match',
+            'A node is created at memory location ' + addr + '. Its pointer is set to ' + node.next + '.');
+      }
+    });
+
+    if (before) {
+      steps.push({
+        text: 'Change the ' + (st.type === 'double' ? 'next ' : '') + 'pointer of <b>' + before.addr +
+              '</b> from <b>' + (after ? after.addr : NUL) + '</b> to <b>' + addr + '</b>.',
+        run: function () {
+          before.next = addr;
+          render({ cells: cellMap(before.addr, 'next'), link: before.addr });
+          say('The ' + (st.type === 'double' ? '<b>next</b> ' : '') + 'pointer of node <code>' + before.addr +
+              '</code> now holds <code>' + addr + '</code>, so the list reaches the new node.', 'match',
+              'The pointer of the node at memory location ' + before.addr + ' is changed from ' +
+              (after ? after.addr : NUL) + ' to ' + addr + '.');
+        }
+      });
+    } else {
+      steps.push({
+        text: 'Change the <b>head</b> to <b>' + addr + '</b>.',
+        run: function () {
+          st.head = addr;
+          render({ head: true });
+          say('The <b>head</b> now holds <code>' + addr + '</code>, so the list starts at the new node.', 'match',
+              'The head is changed to point to memory location ' + addr + '.');
+        }
+      });
+    }
+
+    if (st.type === 'double' && after) {
+      steps.push({
+        text: 'Change the previous pointer of <b>' + after.addr + '</b> from <b>' +
+              (before ? before.addr : NUL) + '</b> to <b>' + addr + '</b>.',
+        run: function () {
+          after.prev = addr;
+          render({ cells: cellMap(after.addr, 'prev'), linkBack: after.addr });
+          say('The <b>previous</b> pointer of node <code>' + after.addr + '</code> now holds <code>' + addr +
+              '</code>, so the list also reaches the new node going <b>backwards</b>.', 'match',
+              'The previous pointer of the node at ' + after.addr + ' is changed from ' +
+              (before ? before.addr : NUL) + ' to ' + addr + '.');
+        }
+      });
+    }
+
+    steps.push({ text: 'The list is joined up again &#8212; and <b>no data item has moved</b>.', run: function () { finishOp(node); } });
+    return steps;
+  }
+
+  function cellMap(addr, which) { var m = {}; m[addr] = which; return m; }
+
+  function deleteSelected() {
+    var i = idxOf(st.sel), node = st.nodes[i];
+    var before = i > 0 ? st.nodes[i - 1] : null;
+    var after = i < st.nodes.length - 1 ? st.nodes[i + 1] : null;
+    var steps = [];
+
+    if (before) {
+      steps.push({
+        text: 'Change the ' + (st.type === 'double' ? 'next ' : '') + 'pointer of <b>' + before.addr +
+              '</b> from <b>' + node.addr + '</b> to <b>' + (after ? after.addr : NUL) + '</b>.',
+        run: function () {
+          before.next = after ? after.addr : NUL;
+          node._dying = true;
+          render({ cells: cellMap(before.addr, 'next'), link: before.addr });
+          say('The ' + (st.type === 'double' ? '<b>next</b> ' : '') + 'pointer of node <code>' + before.addr +
+              '</code> now skips over node <code>' + node.addr + '</code>.', 'match',
+              'The pointer of the node at memory location ' + before.addr + ' is changed from ' +
+              node.addr + ' to ' + (after ? after.addr : NUL) + '.');
+        }
+      });
+    } else {
+      steps.push({
+        text: 'Change the <b>head</b> from <b>' + node.addr + '</b> to <b>' + (after ? after.addr : '&#8212;') + '</b>.',
+        run: function () {
+          st.head = after ? after.addr : null;
+          node._dying = true;
+          render({ head: true });
+          say('The node being removed is the <b>first</b> in the list, so no node&#8217;s pointer changes &#8212; the <b>head</b> does.',
+              'match',
+              'The head is changed to point to memory location ' + (after ? after.addr : 'Null') +
+              ', and the node at ' + node.addr + ' is removed from the list.');
+        }
+      });
+    }
+
+    if (st.type === 'double' && after) {
+      steps.push({
+        text: 'Change the previous pointer of <b>' + after.addr + '</b> from <b>' + node.addr +
+              '</b> to <b>' + (before ? before.addr : NUL) + '</b>.',
+        run: function () {
+          after.prev = before ? before.addr : NUL;
+          render({ cells: cellMap(after.addr, 'prev'), linkBack: after.addr });
+          say('The <b>previous</b> pointer of node <code>' + after.addr + '</code> now skips over it going backwards too.',
+              'match',
+              'The previous pointer of the node at ' + after.addr + ' is changed from ' + node.addr +
+              ' to ' + (before ? before.addr : NUL) + '.');
+        }
+      });
+    }
+
+    steps.push({
+      text: 'Remove node <b>' + node.addr + '</b> and free its memory.',
+      run: function () {
+        var j = idxOf(node.addr);
+        if (j !== -1) st.nodes.splice(j, 1);
+        st.sel = null;
+        render({});
+        var count = st.type === 'double' && after && before ? 'Two pointers changed' : 'One pointer changed';
+        say('Node <code>' + node.addr + '</code> is removed and its memory is freed. <b>' + count +
+            '</b>, and no data item moved.', 'match',
+            'The node at memory location ' + node.addr + ' is removed from the list and its memory is freed.');
+        endOp();
+      }
+    });
+    return steps;
+  }
+
+  function finishOp(node) {
+    delete node._new;
+    render({});
+    say('<b>Operation complete.</b> The list is consistent again &#8212; and notice that <b>no data item moved</b>. ' +
+        'Only pointers were rewritten, however long the list is.', 'match');
+    endOp();
+  }
+
+  function endOp() {
+    st.queue = [];
+    st.qi = 0;
+    stopTimer();
+    $('play').disabled = true;
+    $('step').disabled = true;
+    $('play').innerHTML = '&#9654; Play';
+    stepsEl.className = 'steps idle';
+  }
+
+  /* ── transport ───────────────────────────────────────── */
+  function advance() {
+    if (st.qi >= st.queue.length) return false;
+    var s = st.queue[st.qi];
+    st.qi++;
+    drawSteps();
+    s.run();
+    if (st.qi >= st.queue.length) { stopTimer(); return false; }
+    return true;
+  }
+
+  function stopTimer() { if (st.timer) { clearInterval(st.timer); st.timer = null; } }
+
+  $('step').addEventListener('click', function () {
+    stopTimer(); $('play').innerHTML = '&#9654; Play'; advance();
+  });
+
+  $('play').addEventListener('click', function () {
+    if (st.timer) { stopTimer(); $('play').innerHTML = '&#9654; Play'; return; }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    advance();
+    st.timer = setInterval(function () { if (!advance()) stopTimer(); }, 1500);
+  });
+
+  /* ── operation buttons ───────────────────────────────── */
+  function guard() {
+    if (st.queue.length && st.qi < st.queue.length) {
+      say('Finish the current operation first &#8212; press <b>Step</b> or <b>Play</b>.', 'warn');
+      return false;
+    }
+    return true;
+  }
+
+  $('ins-front').addEventListener('click', function () {
+    if (!guard()) return;
+    queueOp(insertAt(0, nextData()), 'Inserting at the <b>front</b> of the list');
+  });
+
+  $('ins-end').addEventListener('click', function () {
+    if (!guard()) return;
+    queueOp(insertAt(st.nodes.length, nextData()), 'Inserting at the <b>end</b> of the list');
+  });
+
+  $('ins-after').addEventListener('click', function () {
+    if (!guard()) return;
+    if (st.sel === null) { say('Click a node first to say where the new node goes.', 'warn'); return; }
+    queueOp(insertAt(idxOf(st.sel) + 1, nextData()),
+      'Inserting <b>after node ' + st.sel + '</b>, in the middle of the list');
+  });
+
+  $('del-sel').addEventListener('click', function () {
+    if (!guard()) return;
+    if (st.sel === null) { say('Click the node you want to delete first.', 'warn'); return; }
+    if (st.nodes.length === 1) { say('Keep at least one node in the list &#8212; press <b>Reset</b> to start again.', 'warn'); return; }
+    queueOp(deleteSelected(), 'Deleting node <b>' + st.sel + '</b>');
+  });
+
+  /* ── type + reset ────────────────────────────────────── */
+  function setType(t) {
+    stopTimer();
+    st.type = t;
+    build();
+    endOp();
+    stepsEl.innerHTML = '<li>Choose an operation above to see the pointer changes it needs.</li>';
+    stepsEl.className = 'steps idle';
+    $('newdata').value = t === 'single' ? 'Vertigo' : 'forest.jpg';
+    $('t-single').classList.toggle('on', t === 'single');
+    $('t-double').classList.toggle('on', t === 'double');
+    render();
+    say(t === 'single'
+      ? 'A <b>single</b> linked list: every node stores one pointer &#8212; the address of the <b>next</b> node. It can only be traversed forwards.'
+      : 'A <b>double</b> linked list: every node stores <b>two</b> pointers &#8212; the address of the <b>next</b> node and of the <b>previous</b> one, so it can be traversed both ways.',
+      'idle');
+  }
+
+  $('t-single').addEventListener('click', function () { setType('single'); });
+  $('t-double').addEventListener('click', function () { setType('double'); });
+  $('reset').addEventListener('click', function () { setType(st.type); });
+
+  setType('single');
+})();
+
+  /* Report our height to the host page so the iframe grows to fit instead of
+     scrolling internally. Same protocol as the Integration visualisers, which
+     js/nav.js already listens for. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+</script>
+</body>
+</html>
