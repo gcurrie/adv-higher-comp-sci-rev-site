@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 660" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">UML class diagram for the library catalogue example</title>
+  <desc id="d">A UML class diagram with four classes. Library holds private catalogue as an Array of LibraryItem and numItems as Integer, with public methods Library, addItem, findByTitle and countOnLoan. A gold arrow labelled array of objects runs from Library to LibraryItem. LibraryItem, the super-class, holds private title as String, isbn as String and onLoan as Boolean, with public methods LibraryItem, borrow, returnItem, isOnLoan and getLoanPeriod. Below it are two sub-classes. Book holds private author as String and pages as Integer with public methods Book and getAuthor. Dvd holds private director as String and ageRating as Integer with public methods Dvd, getDirector and getLoanPeriod, which is marked as an override because a DVD lends for 7 days. Solid arrows run from Book and Dvd up to LibraryItem, labelled inheritance, the arrow points at the super-class. A note explains that a Book object holds five instance variables, its own author and pages plus title, isbn and onLoan inherited from LibraryItem, and that Dvd redefines getLoanPeriod so the same call behaves differently on each class.</desc>
+  <defs>
+    <marker id="inhArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/>
+    </marker>
+    <marker id="arrObj" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#92750A"/>
+    </marker>
+    <marker id="okArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1B6B45"/>
+    </marker>
+    <marker id="noArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="660" fill="#ffffff"/>
+  <text x="570" y="28" font-size="17" fill="#00442A" text-anchor="middle" font-weight="700">Library catalogue &#8212; UML class diagram</text>
+  <rect x="40" y="66" width="290" height="184" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="40" y="66" width="290" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="185.0" y="89" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Library</text>
+  <text x="54" y="120" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−catalogue: Array of LibraryItem</text>
+  <text x="54" y="138" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−numItems: Integer</text>
+  <line x1="40" y1="148" x2="330" y2="148" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="54" y="168" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+Library()</text>
+  <text x="54" y="186" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+addItem()</text>
+  <text x="54" y="204" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+findByTitle()</text>
+  <text x="54" y="222" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+countOnLoan()</text>
+  <rect x="440" y="66" width="300" height="220" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="440" y="66" width="300" height="34" fill="#00442A" stroke="#00442A" stroke-width="2"/>
+  <text x="590.0" y="89" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">LibraryItem</text>
+  <text x="454" y="120" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−title: String</text>
+  <text x="454" y="138" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−isbn: String</text>
+  <text x="454" y="156" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−onLoan: Boolean</text>
+  <line x1="440" y1="166" x2="740" y2="166" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="454" y="186" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+LibraryItem()</text>
+  <text x="454" y="204" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+borrow()</text>
+  <text x="454" y="222" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+returnItem()</text>
+  <text x="454" y="240" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+isOnLoan()</text>
+  <text x="454" y="258" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getLoanPeriod()</text>
+  <rect x="120" y="400" width="300" height="148" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="120" y="400" width="300" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="270.0" y="423" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Book</text>
+  <text x="134" y="454" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−author: String</text>
+  <text x="134" y="472" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−pages: Integer</text>
+  <line x1="120" y1="482" x2="420" y2="482" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="134" y="502" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+Book()</text>
+  <text x="134" y="520" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getAuthor()</text>
+  <rect x="700" y="400" width="330" height="166" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="700" y="400" width="330" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="865.0" y="423" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Dvd</text>
+  <text x="714" y="454" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−director: String</text>
+  <text x="714" y="472" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−ageRating: Integer</text>
+  <line x1="700" y1="482" x2="1030" y2="482" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="714" y="502" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+Dvd()</text>
+  <text x="714" y="520" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getDirector()</text>
+  <text x="714" y="538" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getLoanPeriod()</text>
+  <text x="756" y="96" font-size="12" fill="#1B6B45" font-style="italic">super-class</text>
+  <text x="756" y="114" font-size="11.5" fill="#555">everything every item</text>
+  <text x="756" y="129" font-size="11.5" fill="#555">has, written once</text>
+  <line x1="334" y1="120" x2="436" y2="120" stroke="#92750A" stroke-width="2.2" marker-end="url(#arrObj)"/>
+  <text x="385" y="108" font-size="11" fill="#92750A" text-anchor="middle" font-weight="700">array of objects</text>
+  <line x1="330" y1="400" x2="470" y2="290" stroke="#1F2937" stroke-width="2" marker-end="url(#inhArr)"/>
+  <line x1="820" y1="400" x2="700" y2="290" stroke="#1F2937" stroke-width="2" marker-end="url(#inhArr)"/>
+  <text x="300" y="350" font-size="11.5" fill="#1F2937" text-anchor="middle" font-style="italic">inheritance &#8212; the arrow</text>
+  <text x="300" y="365" font-size="11.5" fill="#1F2937" text-anchor="middle" font-style="italic">points at the super-class</text>
+  <text x="865" y="350" font-size="11.5" fill="#555" text-anchor="middle">sub-classes add only</text>
+  <text x="865" y="365" font-size="11.5" fill="#555" text-anchor="middle">what makes them different</text>
+  <text x="560" y="500" font-size="11.5" fill="#92750A" text-anchor="middle" font-weight="700">OVERRIDE &#8212; a DVD</text>
+  <text x="560" y="516" font-size="11.5" fill="#92750A" text-anchor="middle">lends for 7 days, not 21</text>
+  <line x1="636" y1="534" x2="696" y2="534" stroke="#92750A" stroke-width="1.8" marker-end="url(#arrObj)"/>
+  <rect x="40" y="570" width="1060" height="66" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="60" y="594" font-size="13" fill="#1F2937">A Book object holds five instance variables &#8212; its own author and pages, plus title, isbn and onLoan inherited from LibraryItem,</text>
+  <text x="60" y="614" font-size="13" fill="#1F2937">without those three being written again. Dvd redefines getLoanPeriod(), so the same call behaves differently on each class.</text>
+</svg>

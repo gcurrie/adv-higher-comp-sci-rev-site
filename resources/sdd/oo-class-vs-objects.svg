@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 540" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">One class, many objects</title>
+  <desc id="d">On the left, a class box headed Book described as a blueprint, listing the instance variables STRING title, STRING author, STRING isbn and BOOLEAN onLoan, with a note that it holds no values yet and only defines the shape. Three green arrows labelled instantiation run from the class to three object boxes on the right. The first, copy1 of Book, holds title Sunset Song, author Lewis Grassic Gibbon and onLoan FALSE. The second, copy2 of Book, holds the same title and author but is highlighted in gold with onLoan TRUE. The third, gatherers of Book, holds title The Cone-Gatherers, author Robin Jenkins and onLoan FALSE. A note explains that copy1 and copy2 hold identical values but are still two separate objects, each with its own onLoan, so one copy can be on loan while the other sits on the shelf.</desc>
+  <defs>
+    <marker id="inhArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/>
+    </marker>
+    <marker id="arrObj" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#92750A"/>
+    </marker>
+    <marker id="okArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1B6B45"/>
+    </marker>
+    <marker id="noArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="540" fill="#ffffff"/>
+  <text x="570" y="32" font-size="20" fill="#00442A" text-anchor="middle" font-weight="800">One class, many objects</text>
+  <text x="570" y="58" font-size="14" fill="#4A5568" text-anchor="middle">The class is written once. Each object made from it has its own copy of the instance variables.</text>
+  <rect x="50" y="110" width="300" height="214" fill="#ffffff" stroke="#00442A" stroke-width="2"/>
+  <rect x="50" y="110" width="300" height="34" fill="#00442A" stroke="#00442A" stroke-width="2"/>
+  <text x="200.0" y="133" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Book</text>
+  <text x="64" y="168" font-size="12" fill="#4A5568" font-style="italic">the class &#8212; a blueprint</text>
+  <text x="64" y="194" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">STRING title</text>
+  <text x="64" y="214" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">STRING author</text>
+  <text x="64" y="234" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">STRING isbn</text>
+  <text x="64" y="254" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">BOOLEAN onLoan</text>
+  <line x1="50" y1="278" x2="350" y2="278" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="64" y="300" font-size="12" fill="#4A5568" font-style="italic">no values yet</text>
+  <text x="64" y="316" font-size="12" fill="#4A5568" font-style="italic">&#8212; it only defines the shape</text>
+  <rect x="560" y="100" width="540" height="96" fill="#E8F5EE" stroke="#1B6B45" stroke-width="2"/>
+  <rect x="560" y="100" width="540" height="28" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="572" y="119" font-size="13" fill="#ffffff" font-weight="700" font-family="Consolas, Menlo, monospace">copy1 : Book</text>
+  <text x="572" y="148" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">title = "Sunset Song"</text>
+  <text x="572" y="166" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">author = "Lewis Grassic Gibbon"</text>
+  <text x="572" y="184" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">onLoan = FALSE</text>
+  <line x1="356" y1="217" x2="554" y2="148.0" stroke="#1B6B45" stroke-width="2" marker-end="url(#okArr)"/>
+  <rect x="560" y="216" width="540" height="96" fill="#FEF3C7" stroke="#C9A227" stroke-width="2"/>
+  <rect x="560" y="216" width="540" height="28" fill="#C9A227" stroke="#C9A227" stroke-width="2"/>
+  <text x="572" y="235" font-size="13" fill="#ffffff" font-weight="700" font-family="Consolas, Menlo, monospace">copy2 : Book</text>
+  <text x="572" y="264" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">title = "Sunset Song"</text>
+  <text x="572" y="282" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">author = "Lewis Grassic Gibbon"</text>
+  <text x="572" y="300" font-size="12.5" fill="#92750A" font-weight="700" font-family="Consolas, Menlo, monospace">onLoan = TRUE</text>
+  <line x1="356" y1="217" x2="554" y2="264.0" stroke="#1B6B45" stroke-width="2" marker-end="url(#okArr)"/>
+  <rect x="560" y="332" width="540" height="96" fill="#E8F5EE" stroke="#1B6B45" stroke-width="2"/>
+  <rect x="560" y="332" width="540" height="28" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="572" y="351" font-size="13" fill="#ffffff" font-weight="700" font-family="Consolas, Menlo, monospace">gatherers : Book</text>
+  <text x="572" y="380" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">title = "The Cone-Gatherers"</text>
+  <text x="572" y="398" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">author = "Robin Jenkins"</text>
+  <text x="572" y="416" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">onLoan = FALSE</text>
+  <line x1="356" y1="217" x2="554" y2="380.0" stroke="#1B6B45" stroke-width="2" marker-end="url(#okArr)"/>
+  <text x="455" y="96" font-size="12.5" fill="#1B6B45" text-anchor="middle" font-weight="700" font-style="italic">instantiation</text>
+  <text x="455" y="112" font-size="11.5" fill="#4A5568" text-anchor="middle">one call to the</text>
+  <text x="455" y="126" font-size="11.5" fill="#4A5568" text-anchor="middle">constructor each</text>
+  <rect x="50" y="452" width="1040" height="62" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="70" y="476" font-size="13.5" fill="#1F2937">copy1 and copy2 hold identical values but are still two separate objects &#8212; each has its own onLoan,</text>
+  <text x="70" y="416" font-size="13.5" fill="#1F2937">so one copy can be on loan while the other sits on the shelf. That independence is the point of an object.</text>
+</svg>

@@ -19,7 +19,7 @@
   <div class="inner">
     <div class="hero-badge">Software Design &amp; Development</div>
     <h1>Object-Oriented Programming</h1>
-    <p>Classes, objects, properties and methods — then encapsulation, inheritance, instantiation and polymorphism, and storing objects in arrays.</p>
+    <p>Classes, objects, instance variables, constructors and methods built up one step at a time — then instantiation, encapsulation, inheritance and polymorphism, in the language the exam expects.</p>
   </div>
 </section>
 <main class="page-content">
@@ -39,11 +39,11 @@
         <div class="sidebar-title">On this page</div>
         <ul>
           <li><a href="#intro">Introduction</a></li>
-          <li><a href="#classes-objects">Classes &amp; Objects</a></li>
-          <li><a href="#constructor">Constructors &amp; Instantiation</a></li>
-          <li><a href="#principles">Encapsulation, Inheritance &amp; Polymorphism</a></li>
+          <li><a href="#build">Building a Class Step by Step</a></li>
+          <li><a href="#principles">The Four Principles</a></li>
           <li><a href="#array-of-objects">Arrays of Objects</a></li>
-          <li><a href="#worked-example">Worked Examples</a></li>
+          <li><a href="#class-diagrams">UML Class Diagrams</a></li>
+          <li><a href="#worked-example">Worked Example</a></li>
           <li><a href="#test-yourself">Test Yourself</a></li>
         </ul>
       </nav>
@@ -51,317 +51,1080 @@
     <div class="content-area">
 
     <article>
-      <h2 id="intro">Why Object-Oriented Programming?</h2>
-      <p>As programs grow, it becomes important to limit how much one part of a program can interfere with the data in another. <strong>Object orientation</strong> separates a program into blocks of related data and the operations that apply to that data. Linking the data and its operations together means they can be treated as a single entity — an <strong>object</strong> — and the data can only be accessed directly by its associated operations.</p>
-      <p>You must be able to <strong>describe, exemplify and implement</strong> every construct on this page: <strong>object</strong>, <strong>property</strong>, <strong>method</strong>, <strong>class</strong>, <strong>sub-class</strong>, <strong>encapsulation</strong>, <strong>inheritance</strong>, <strong>instantiation</strong> and <strong>polymorphism</strong>. Precise use of this terminology is exactly what 'describe' questions reward.</p>
+      <h2 id="intro">Object-Oriented Design &amp; Programming</h2>
+
+      <p>Every program you have written so far has been organised around <strong>what happens</strong> — a sequence of steps, broken into procedures and functions, operating on data that is passed around between them. <strong>Object-oriented</strong> programming organises a program around <strong>what things are</strong> instead.</p>
+
+      <p>The data and the operations that belong to one real-world thing are bundled together into a single unit — an <strong>object</strong>. A library book knows its own title, and knows how to be borrowed. Nothing outside the book needs to reach in and change it. As programs grow, that matters enormously: it limits how far a mistake in one part of a program can spread, and it lets whole categories of thing be described once and reused.</p>
+
+      <p>The pattern is always the same. You write a <strong>class</strong> — a blueprint describing what every thing of that kind knows and can do — and the program then creates as many <strong>objects</strong> from it as it needs. This page builds one class from nothing, then uses it to demonstrate each principle in turn.</p>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Terminology <em>is</em> the marks in this topic.</strong> Advanced Higher questions are routinely worded "<em>using appropriate object-oriented terminology, describe…</em>", and the marking instructions award marks for the <strong>words</strong>: <em>instantiate</em>, <em>object</em>, <em>class</em>, <em>constructor</em>, <em>instance variable</em>, <em>method</em>, <em>sub-class</em>, <em>super-class</em>, <em>override</em>. Saying "it makes a new player and fills in the values" describes the right thing in the wrong language and scores nothing. Say "it <strong>instantiates</strong> an <strong>object</strong> of the <strong>Player class</strong>, and the <strong>constructor</strong> assigns the <strong>instance variables</strong>."</div>
+      </div>
+
+      <p>You must be able to <strong>describe, exemplify and implement</strong> every construct on this page.</p>
 
       <h3>Key Terms</h3>
       <div class="key-terms">
-        <div class="key-term"><div class="term">Class</div><div class="def">A blueprint for an object — defines the instance variables (properties) and methods its objects will have.</div></div>
-        <div class="key-term"><div class="term">Object</div><div class="def">An instance of a class, with its own values for the instance variables.</div></div>
-        <div class="key-term"><div class="term">Property</div><div class="def">Data stored by an object — also called an instance variable.</div></div>
-        <div class="key-term"><div class="term">Method</div><div class="def">A subprogram defined in a class that operates on the object's data.</div></div>
-        <div class="key-term"><div class="term">Constructor</div><div class="def">The special method that creates an object and gives its instance variables initial values.</div></div>
-        <div class="key-term"><div class="term">Instantiation</div><div class="def">The act of creating an object from a class.</div></div>
-        <div class="key-term"><div class="term">Encapsulation</div><div class="def">Bundling data and methods into one unit and restricting direct access with private visibility.</div></div>
-        <div class="key-term"><div class="term">Inheritance</div><div class="def">A sub-class inherits the properties and methods of its super-class.</div></div>
+        <div class="key-term"><div class="term">Class</div><div class="def">A blueprint for a kind of object — it defines the instance variables and methods that every object of that kind will have.</div></div>
+        <div class="key-term"><div class="term">Object</div><div class="def">One instance of a class, holding its own values for the instance variables.</div></div>
+        <div class="key-term"><div class="term">Instance Variable</div><div class="def">A data item belonging to an object. Also called a <em>property</em> or <em>attribute</em>.</div></div>
+        <div class="key-term"><div class="term">Method</div><div class="def">A procedure or function defined inside a class, which operates on that object's own data.</div></div>
+        <div class="key-term"><div class="term">Constructor</div><div class="def">The special method that runs when an object is created, giving its instance variables their initial values.</div></div>
+        <div class="key-term"><div class="term">Instantiation</div><div class="def">The act of creating an object from a class by calling its constructor.</div></div>
+        <div class="key-term"><div class="term">Encapsulation</div><div class="def">Bundling data and the methods that act on it into one unit, and restricting outside access by making instance variables private.</div></div>
+        <div class="key-term"><div class="term">Private (−)</div><div class="def">Accessible only from inside the class that owns it.</div></div>
+        <div class="key-term"><div class="term">Public (+)</div><div class="def">Accessible from anywhere in the program.</div></div>
+        <div class="key-term"><div class="term">Getter / Setter</div><div class="def">A public method that retrieves (getter) or changes (setter) the value of a private instance variable.</div></div>
+        <div class="key-term"><div class="term">Inheritance</div><div class="def">A sub-class automatically receives all the instance variables and methods of its super-class, and adds its own.</div></div>
+        <div class="key-term"><div class="term">Super-class</div><div class="def">The more general class that is inherited <em>from</em> — sometimes called the parent class.</div></div>
+        <div class="key-term"><div class="term">Sub-class</div><div class="def">The more specialised class that inherits — sometimes called the child class.</div></div>
+        <div class="key-term"><div class="term">Overriding</div><div class="def">A sub-class replacing an inherited method with its own version of the same name.</div></div>
         <div class="key-term"><div class="term">Polymorphism</div><div class="def">The same method name behaving differently depending on the class of the object it is called on.</div></div>
+        <div class="key-term"><div class="term">Array of Objects</div><div class="def">An array whose elements are objects — the object-oriented equivalent of an array of records.</div></div>
       </div>
+
+      <h3>Say it the way the marker expects</h3>
+      <p>Before anything else, learn to narrate code in the right register. Every row below describes the <em>same</em> line — only the right-hand column earns marks:</p>
+      <table>
+        <thead><tr><th>Everyday wording — <span style="color:#B91C1C;">no marks</span></th><th>Object-oriented terminology — <span style="color:#1B6B45;">the marks</span></th></tr></thead>
+        <tbody>
+          <tr><td>"It makes a new book."</td><td>It <strong>instantiates</strong> an <strong>object</strong> of the <code>Book</code> <strong>class</strong>.</td></tr>
+          <tr><td>"It fills in the values."</td><td>The <strong>constructor</strong> assigns the values passed as <strong>parameters</strong> to the object's <strong>instance variables</strong>.</td></tr>
+          <tr><td>"Book has stuff in it."</td><td>The <code>Book</code> class defines four <strong>instance variables</strong> and four <strong>methods</strong>.</td></tr>
+          <tr><td>"Dvd copies Book."</td><td><code>Dvd</code> is a <strong>sub-class</strong> that <strong>inherits</strong> the instance variables and methods of the <code>LibraryItem</code> <strong>super-class</strong>.</td></tr>
+          <tr><td>"It uses its own version."</td><td>The sub-class <strong>overrides</strong> the inherited method, which is an example of <strong>polymorphism</strong>.</td></tr>
+          <tr><td>"You can't get at it."</td><td>The instance variable is <strong>private</strong>, so it is <strong>encapsulated</strong> and can only be reached through a <strong>public method</strong>.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="interactive-block">
+        <div class="ib-label">Trainer</div>
+        <p class="ib-title">OO Terminology Trainer</p>
+        <div class="ib-body">
+          <p class="ib-intro">Ten questions on the wording itself. Each shows a line of code and four descriptions of it &mdash; only one uses the terminology that would score. Only your <strong>first</strong> answer counts, and the feedback explains why each of the other three falls short.</p>
+          <iframe src="../resources/sdd/visualisers/oo-terminology-trainer.html"
+                  title="OO Terminology Trainer &mdash; interactive"
+                  loading="lazy"
+                  style="height:860px"></iframe>
+        </div>
+      </div>
+
     </article>
 
     <article>
-      <h2 id="classes-objects">Classes &amp; Objects</h2>
-      <p>A <strong>class</strong> is a blueprint. Once defined, any number of <strong>objects</strong> can be created from it. The class definition describes the data each object needs — its <strong>instance variables</strong> (properties) — and what each object can do — its <strong>methods</strong>.</p>
+      <h2 id="build">Building a Class Step by Step</h2>
+      <p>A local library needs to keep track of its stock. We will build the class it needs from nothing, one idea at a time. Each stage adds only the <span style="background:rgba(201,162,39,.35);padding:0 .25rem;">gold</span> lines.</p>
 
-      <div class="example-block">
-        <div class="example-label">Running example — the music player's Track class</div>
-        <p>A music player needs to store tracks. Each track has a <em>title</em>, an <em>artist</em> and a <em>length</em> — three instance variables — and can display itself — one method, <code>showTrack()</code>.</p>
-      </div>
+      <h3>Stage 1 — the class</h3>
+      <p>Start by asking <em>what kind of thing is this program about?</em> Books. So the program needs a <strong>class</strong> called <code>Book</code>. A class is a <strong>blueprint</strong>: it is not itself a book, it is the description of what every book will be. Writing it down defines the <strong>instance variables</strong> — the data each book must hold:</p>
 
       <div class="code-block">
-        <div class="code-label">SQA Reference Language</div>
-        <pre><code>CLASS Track IS {STRING title, STRING artist, REAL length}
-  METHODS
-  PROCEDURE showTrack()
-      SEND THIS.title &amp; " " &amp; THIS.artist &amp; " " &amp; THIS.length TO DISPLAY
-  END PROCEDURE
-END CLASS</code></pre>
+        <div class="code-label">Stage 1 — the class and its instance variables</div>
+        <pre><code><span class="ln-new">CLASS Book IS { STRING title, STRING author, STRING isbn, BOOLEAN onLoan }</span><span class="ln-new">END CLASS</span></code></pre>
       </div>
-      <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>class Track:
-    def __init__(self, title, artist, length):
-        self.title = title
-        self.artist = artist
-        self.length = length
+      <p>That is a complete, legal class. It holds four <strong>instance variables</strong>, each with a name and a data type. Notice <code>onLoan</code> — a book is not just its printed details, it also has a <em>state</em> that the program needs to track.</p>
 
-    def show_track(self):
-        print(self.title, self.artist, self.length)</code></pre>
-      </div>
+      <h3>Stage 2 — objects</h3>
+      <p>The class exists, but no books do yet. An <strong>object</strong> is one actual book, created from the blueprint and holding its own values. A library with three books on the shelf has <strong>one class and three objects</strong>:</p>
 
-      <p>Two pieces of vocabulary to notice. In reference language, the keyword <code>THIS</code> is used inside a method to access the <strong>current object's</strong> instance variables; Python's equivalent is <code>self</code>. A method is called <em>through an object</em> using dot notation:</p>
-
-      <div class="code-block">
-        <div class="code-label">SQA Reference Language — creating and using an object</div>
-        <pre><code>DECLARE favouriteTrack INITIALLY Track("Telstar", "Tornados", 3.4)
-favouriteTrack.showTrack()   # displays: Telstar Tornados 3.4</code></pre>
-      </div>
-      <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>favourite_track = Track("Telstar", "Tornados", 3.4)
-favourite_track.show_track()   # displays: Telstar Tornados 3.4</code></pre>
-      </div>
-    </article>
-
-    <article>
-      <h2 id="constructor">Constructors &amp; Instantiation</h2>
-      <p>Creating an object from a class is called <strong>instantiation</strong>, and the method that runs when it happens is the <strong>constructor</strong>. The constructor has the <strong>same name as the class</strong> (in Python it is always <code>__init__</code>) and gives initial values to some or all of the instance variables — saving you from initialising them by hand every time an object is created.</p>
-
-      <div class="code-block">
-        <div class="code-label">SQA Reference Language — a PlayList class with a constructor</div>
-        <pre><code>CLASS PlayList IS {ARRAY OF Track tracks, INTEGER next,
-                   INTEGER maxLength, REAL playTime}
-  METHODS
-  CONSTRUCTOR PlayList(INTEGER maxLength)
-      DECLARE THIS.maxLength INITIALLY maxLength
-      DECLARE THIS.tracks INITIALLY Track[maxLength]
-      DECLARE THIS.next INITIALLY 0
-      DECLARE THIS.playTime INITIALLY 0.0
-  END CONSTRUCTOR
-
-  PROCEDURE addTrack(Track newTrack)
-      IF THIS.next = THIS.maxLength THEN
-          SEND "Error - playlist full" TO DISPLAY
-      ELSE
-          SET THIS.tracks[THIS.next] TO newTrack
-          SET THIS.next TO THIS.next + 1
-          SET THIS.playTime TO THIS.playTime + newTrack.length
-      END IF
-  END PROCEDURE
-END CLASS</code></pre>
-      </div>
-      <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>class PlayList:
-    def __init__(self, max_length):
-        self.max_length = max_length
-        self.tracks = []
-        self.play_time = 0.0
-
-    def add_track(self, new_track):
-        if len(self.tracks) == self.max_length:
-            print("Error - playlist full")
-        else:
-            self.tracks.append(new_track)
-            self.play_time = self.play_time + new_track.length</code></pre>
-      </div>
-
-      <div class="code-block">
-        <div class="code-label">Instantiation — both languages</div>
-        <pre><code># Reference language
-DECLARE myTracks INITIALLY PlayList(10)
-myTracks.addTrack(Track("Hey Joe", "Jimi Hendrix", 5.47))
-
-# Python
-my_tracks = PlayList(10)
-my_tracks.add_track(Track("Hey Joe", "Jimi Hendrix", 5.47))</code></pre>
-      </div>
+      <img src="../resources/sdd/oo-class-vs-objects.svg"
+           class="zoomable"
+           alt="On the left, a class box headed Book described as a blueprint, listing the instance variables STRING title, STRING author, STRING isbn and BOOLEAN onLoan, with a note that it holds no values yet and only defines the shape. Three green arrows labelled instantiation run from the class to three object boxes on the right. The first, copy1 of Book, holds title Sunset Song, author Lewis Grassic Gibbon and onLoan FALSE. The second, copy2 of Book, holds the same title and author but is highlighted in gold with onLoan TRUE. The third, gatherers of Book, holds title The Cone-Gatherers, author Robin Jenkins and onLoan FALSE. A note explains that copy1 and copy2 hold identical values but are still two separate objects, each with its own onLoan, so one copy can be on loan while the other sits on the shelf."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
 
       <div class="callout callout-tip">
         <div class="callout-icon">💡</div>
-        <div><strong>Terminology check:</strong> <code>PlayList(10)</code> <em>instantiates</em> a PlayList object by calling its <em>constructor</em> with an <em>actual parameter</em> of 10. Being able to narrate one line of code with that precision is what "explain this code" questions are looking for.</div>
+        <div><strong>The distinction examiners test.</strong> The <strong>class</strong> is written once, by the programmer, and exists in the source code. An <strong>object</strong> is created while the program is <em>running</em>, and there can be thousands of them. Look again at <code>copy1</code> and <code>copy2</code> above: identical values, but two separate objects — because each has its own <code>onLoan</code>, one copy can be out on loan while the other is on the shelf.</div>
       </div>
-    </article>
 
-    <article>
-      <h2 id="principles">The Principles — Encapsulation, Inheritance &amp; Polymorphism</h2>
-
-      <h3>Encapsulation — bundling and protecting data</h3>
-      <p><strong>Encapsulation</strong> is the bundling of methods and instance variables into one unit — the class — which then lets each member be declared <strong>private</strong> or <strong>public</strong>:</p>
-      <ul>
-        <li><strong>Private (−)</strong> — accessible only from inside the owning class;</li>
-        <li><strong>Public (+)</strong> — accessible from any other part of the program.</li>
-      </ul>
-      <p>Good practice is to make instance variables <strong>private</strong> and to reach them only through public <strong>setters</strong> (methods that change a value) and <strong>getters</strong> (methods that retrieve one). This stops other parts of the program updating variables unintentionally — the whole reason OOP exists.</p>
+      <h3>Stage 3 — instance variables and the constructor</h3>
+      <p>Something has to give those instance variables their values at the moment an object is created. That is the job of the <strong>constructor</strong> — a special method that runs automatically during <strong>instantiation</strong>.</p>
+      <p>Two details matter. First, the constructor takes <strong>parameters</strong> for the values that differ from book to book, and assigns them. Second, it can set values that are the <em>same</em> for every new object — every book starts off <em>not</em> on loan, so <code>onLoan</code> is initialised to <code>FALSE</code> rather than being passed in:</p>
 
       <div class="code-block">
-        <div class="code-label">SQA Reference Language — setter and getter for a private variable</div>
-        <pre><code>PROCEDURE setAddress(STRING newAddress)
-    SET THIS.address TO newAddress
-END PROCEDURE
-
-FUNCTION getAddress() RETURNS STRING
-    RETURN THIS.address
-END FUNCTION</code></pre>
-      </div>
-      <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>def set_address(self, new_address):
-    self.__address = new_address     # double underscore marks it private
-
-def get_address(self):
-    return self.__address</code></pre>
+        <div class="code-label">Stage 2 — adding the constructor</div>
+        <pre><code><span class="ln-dim">CLASS Book IS { STRING title, STRING author, STRING isbn, BOOLEAN onLoan }</span><span class="ln-new">  METHODS</span><span class="ln-new">&nbsp;</span><span class="ln-new">  CONSTRUCTOR (STRING title, STRING author, STRING isbn)</span><span class="ln-new">      DECLARE THIS.title INITIALLY title</span><span class="ln-new">      DECLARE THIS.author INITIALLY author</span><span class="ln-new">      DECLARE THIS.isbn INITIALLY isbn</span><span class="ln-new">      DECLARE THIS.onLoan INITIALLY FALSE</span><span class="ln-new">  END CONSTRUCTOR</span><span class="ln-dim">END CLASS</span></code></pre>
       </div>
 
       <div class="callout callout-info">
         <div class="callout-icon">ℹ️</div>
-        <div>In SQA reference language, the assumption is that <strong>all instance variables are private and all methods are public</strong> — but you may still be asked to interpret +/− symbols on a <a href="design.html#class-diagrams">class diagram</a>.</div>
+        <div><strong><code>THIS</code> means "the object this method was called on".</strong> Inside the constructor, <code>title</code> is the parameter that was passed in and <code>THIS.title</code> is the instance variable belonging to the object being built. They are deliberately given the same name, and <code>THIS</code> is what tells them apart. Python's equivalent is <code>self</code>.</div>
       </div>
 
-      <h3>Inheritance — sub-classes and super-classes</h3>
-      <p><strong>Inheritance</strong> lets a <strong>sub-class</strong> inherit all the properties and methods of a <strong>super-class</strong>, then add its own. Common data is written once, in the super-class; the specialised classes only add what makes them different.</p>
+      <h3>Stage 4 — methods</h3>
+      <p>An object that only holds data is just a record. What makes it an object is that it also holds the <strong>methods</strong> that operate on that data. Ask what a book has to be able to <em>do</em>: be borrowed, be returned, and report its details.</p>
+      <p>Methods come in the two forms you already know — a <strong>procedure</strong> when it performs an action and returns nothing, and a <strong>function</strong> when it returns a value:</p>
 
       <div class="code-block">
-        <div class="code-label">SQA Reference Language — ForSale inherits from House</div>
-        <pre><code>CLASS ForSale INHERITS House WITH {REAL askingPrice, BOOLEAN sold}
-  METHODS
-  PROCEDURE updateAskingPrice(REAL newPrice)
-      SET THIS.askingPrice TO newPrice
-  END PROCEDURE
-END CLASS</code></pre>
+        <div class="code-label">Stage 3 — the completed class</div>
+        <pre><code><span class="ln-dim">CLASS Book IS { STRING title, STRING author, STRING isbn, BOOLEAN onLoan }</span><span class="ln-dim">  METHODS</span><span class="ln-dim">&nbsp;</span><span class="ln-dim">  CONSTRUCTOR (STRING title, STRING author, STRING isbn)</span><span class="ln-dim">      DECLARE THIS.title INITIALLY title</span><span class="ln-dim">      DECLARE THIS.author INITIALLY author</span><span class="ln-dim">      DECLARE THIS.isbn INITIALLY isbn</span><span class="ln-dim">      DECLARE THIS.onLoan INITIALLY FALSE</span><span class="ln-dim">  END CONSTRUCTOR</span><span class="ln-new">&nbsp;</span><span class="ln-new">  PROCEDURE borrow()</span><span class="ln-new">      SET THIS.onLoan TO TRUE</span><span class="ln-new">  END PROCEDURE</span><span class="ln-new">&nbsp;</span><span class="ln-new">  PROCEDURE returnItem()</span><span class="ln-new">      SET THIS.onLoan TO FALSE</span><span class="ln-new">  END PROCEDURE</span><span class="ln-new">&nbsp;</span><span class="ln-new">  FUNCTION getTitle() RETURNS STRING</span><span class="ln-new">      RETURN THIS.title</span><span class="ln-new">  END FUNCTION</span><span class="ln-new">&nbsp;</span><span class="ln-new">  FUNCTION isOnLoan() RETURNS BOOLEAN</span><span class="ln-new">      RETURN THIS.onLoan</span><span class="ln-new">  END FUNCTION</span><span class="ln-dim">END CLASS</span></code></pre>
+      </div>
+
+      <p>The same class in Python. The structure is identical — only the syntax changes:</p>
+      <div class="code-block">
+        <div class="code-label">Python — the complete Book class</div>
+        <pre><code>class Book:
+    def __init__(self, title, author, isbn):    # the constructor
+        self.__title = title                    # __ marks it private
+        self.__author = author
+        self.__isbn = isbn
+        self.__on_loan = False
+
+    def borrow(self):
+        self.__on_loan = True
+
+    def return_item(self):
+        self.__on_loan = False
+
+    def get_title(self):
+        return self.__title
+
+    def is_on_loan(self):
+        return self.__on_loan</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Why <code>isOnLoan()</code> rather than just reading <code>onLoan</code>?</strong> Because the instance variables are <strong>private</strong>. Code outside the class cannot touch them, so the class provides a public <strong>getter</strong> to hand the value out safely. That is the next section — and it is the single most commonly examined idea on this page.</div>
+      </div>
+    </article>
+
+    <article>
+      <h2 id="principles">The Four Principles</h2>
+      <p>The class is built. Everything that follows is about <em>using</em> it — and each of the four ideas below is a named, examinable principle.</p>
+
+      <h3>Instantiation — creating an object</h3>
+      <p><strong>Instantiation</strong> is the act of creating an object from a class. One line does it, and being able to narrate that line precisely is worth three marks in the worked example below:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — instantiating and using an object</div>
+        <pre><code>DECLARE copy1 INITIALLY Book("Sunset Song", "Lewis Grassic Gibbon", "9781847674463")
+
+copy1.borrow()                          # calls a method on the object
+SEND copy1.getTitle() TO DISPLAY        # displays: Sunset Song
+SEND copy1.isOnLoan() TO DISPLAY        # displays: TRUE</code></pre>
       </div>
       <div class="code-block">
         <div class="code-label">Python</div>
-        <pre><code>class ForSale(House):
-    def __init__(self, address, town, asking_price):
-        super().__init__(address, town)     # super-class constructor
-        self.asking_price = asking_price
-        self.sold = False
+        <pre><code>copy1 = Book("Sunset Song", "Lewis Grassic Gibbon", "9781847674463")
 
-    def update_asking_price(self, new_price):
-        self.asking_price = new_price</code></pre>
+copy1.borrow()
+print(copy1.get_title())
+print(copy1.is_on_loan())</code></pre>
       </div>
-      <p>A ForSale object now has <em>every</em> House property plus its own two — without House's code being repeated. On a class diagram this is shown by an arrow from the sub-class to the super-class (see <a href="design.html#class-diagrams">Design</a>).</p>
 
-      <h3>Polymorphism — one name, many behaviours</h3>
-      <p><strong>Polymorphism</strong> ("many forms") means the <strong>same method name</strong> can behave differently depending on the <strong>class of the object</strong> it is called on. A sub-class <strong>overrides</strong> an inherited method by providing its own version:</p>
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Narrate that first line properly.</strong> "It <strong>instantiates</strong> an <strong>object</strong> of the <code>Book</code> <strong>class</strong>, referred to by the variable <code>copy1</code>. The <strong>constructor</strong> is called with three <strong>actual parameters</strong>, which it assigns to the <code>title</code>, <code>author</code> and <code>isbn</code> <strong>instance variables</strong>; the remaining instance variable <code>onLoan</code> is initialised to <code>FALSE</code> by the constructor code." That is a full-mark answer, and the exam question is worded almost exactly like this.</div>
+      </div>
+
+      <p>Objects are reached by <strong>dot notation</strong>: the object name, a full stop, then the method being called. Every object made from <code>Book</code> has its own copy of the instance variables, so <code>copy1.borrow()</code> has no effect whatsoever on <code>copy2</code>.</p>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Instantiation Stepper</p>
+        <div class="ib-body">
+          <p class="ib-intro">Step through the <code>Book</code> constructor one line at a time and watch each <strong>instance variable</strong> being assigned &mdash; including <code>onLoan</code>, which is never passed in. Then instantiate a second object and press <code>borrow()</code> on one of them to see how independent the two really are.</p>
+          <iframe src="../resources/sdd/visualisers/oo-instantiation-stepper.html"
+                  title="Instantiation Stepper &mdash; interactive"
+                  loading="lazy"
+                  style="height:1140px"></iframe>
+        </div>
+      </div>
+
+      <h3>Encapsulation — the object protects its own data</h3>
+      <p><strong>Encapsulation</strong> is the bundling of instance variables and the methods that act on them into a single unit — the class — and then <strong>restricting access</strong> to that data from outside:</p>
+      <ul>
+        <li><strong>Private (−)</strong> — reachable only from inside the class that owns it;</li>
+        <li><strong>Public (+)</strong> — reachable from anywhere in the program.</li>
+      </ul>
+      <p>The convention is to make <strong>instance variables private</strong> and <strong>methods public</strong>. The data is then sealed inside the object, and the only way in is through the methods the class chooses to expose:</p>
+
+      <img src="../resources/sdd/oo-encapsulation.svg"
+           class="zoomable"
+           alt="On the left a grey box labelled the rest of the program contains two lines of code: myBook.borrow() shown in green, and SET myBook.onLoan TO TRUE shown in red. On the right a large box represents the object myBook of class Book. Along its top sit four green boxes labelled plus public methods, the way in: borrow, returnItem, getTitle and isOnLoan. Inside the object, a gold box holds the minus private instance variables title, author, isbn and onLoan, annotated as reachable only from inside the class. A green arrow labelled allowed runs from the program to the borrow method and on into the private data. A red dashed arrow labelled blocked, private runs from the program directly at the private data and is marked with a cross. A note explains that a public method may change a private variable because it is defined inside the class, while code outside the class cannot, which is why a line such as SET myBook.onLoan TO TRUE fails."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
 
       <div class="code-block">
-        <div class="code-label">SQA Reference Language</div>
-        <pre><code>CLASS House ...
-  PROCEDURE showDetails()
-      SEND THIS.address &amp; " " &amp; THIS.town TO DISPLAY
+        <div class="code-label">SQA Reference Language — the two routes</div>
+        <pre><code>copy1.borrow()                  # allowed — borrow() is a public method of Book
+                                # and it changes onLoan from inside the class
+
+SET copy1.onLoan TO TRUE        # NOT allowed — onLoan is a private instance
+                                # variable, so code outside Book cannot reach it</code></pre>
+      </div>
+
+      <p>Methods that exist purely to reach private data have names: a <strong>getter</strong> retrieves a value, a <strong>setter</strong> changes one. Writing a setter rather than exposing the variable directly means the class can <strong>validate</strong> the change first:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — a setter that validates</div>
+        <pre><code>PROCEDURE setPages(INTEGER newPages)
+    IF newPages &gt; 0 THEN
+        SET THIS.pages TO newPages
+    END IF
+END PROCEDURE</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python — the double underscore marks a variable private</div>
+        <pre><code>class Book:
+    def __init__(self, title):
+        self.__title = title        # private
+
+    def get_title(self):            # getter — the public way in
+        return self.__title
+
+my_book = Book("Sunset Song")
+print(my_book.get_title())          # allowed
+print(my_book.__title)              # AttributeError — it is private</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Why bother?</strong> Three reasons worth quoting in an answer: the object's data <strong>cannot be changed unintentionally</strong> by unrelated parts of the program; changes can be <strong>validated</strong> in the setter before they are accepted; and the class's internal workings can be rewritten later without breaking any code that uses it, because the outside world only ever depended on the <strong>public methods</strong>.</div>
+      </div>
+
+      <h3>Inheritance — writing shared behaviour once</h3>
+      <p>The library does not only lend books. It also lends DVDs. A DVD has a title, an ISBN and a loan state, exactly as a book does — but instead of an author and a page count it has a director and an age rating.</p>
+      <p>Copying the <code>Book</code> class and editing it would duplicate the shared parts, and any later fix would have to be made twice. <strong>Inheritance</strong> solves this: pull everything shared into a general <strong>super-class</strong>, then define each specialised type as a <strong>sub-class</strong> that inherits it and adds only what is different.</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — the super-class</div>
+        <pre><code>CLASS LibraryItem IS { STRING title, STRING isbn, BOOLEAN onLoan }
+  METHODS
+
+  CONSTRUCTOR (STRING title, STRING isbn)
+      DECLARE THIS.title INITIALLY title
+      DECLARE THIS.isbn INITIALLY isbn
+      DECLARE THIS.onLoan INITIALLY FALSE
+  END CONSTRUCTOR
+
+  PROCEDURE borrow()
+      SET THIS.onLoan TO TRUE
   END PROCEDURE
+
+  PROCEDURE returnItem()
+      SET THIS.onLoan TO FALSE
+  END PROCEDURE
+
+  FUNCTION getTitle() RETURNS STRING
+      RETURN THIS.title
+  END FUNCTION
+
+  FUNCTION getLoanPeriod() RETURNS INTEGER
+      RETURN 21
+  END FUNCTION
+END CLASS</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — two sub-classes</div>
+        <pre><code>CLASS Book INHERITS LibraryItem WITH { STRING author, INTEGER pages }
+  METHODS
+
+  FUNCTION getAuthor() RETURNS STRING
+      RETURN THIS.author
+  END FUNCTION
 END CLASS
 
-CLASS ForSale INHERITS House ...
-  OVERRIDE PROCEDURE showDetails()
-      SEND THIS.address &amp; " offers over " &amp; THIS.askingPrice TO DISPLAY
-  END PROCEDURE
+
+CLASS Dvd INHERITS LibraryItem WITH { STRING director, INTEGER ageRating }
+  METHODS
+
+  FUNCTION getDirector() RETURNS STRING
+      RETURN THIS.director
+  END FUNCTION
 END CLASS</code></pre>
       </div>
       <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>class House:
-    def show_details(self):
-        print(self.address, self.town)
+        <div class="code-label">Python — the sub-class names its super-class in brackets</div>
+        <pre><code>class LibraryItem:
+    def __init__(self, title, isbn):
+        self.__title = title
+        self.__isbn = isbn
+        self.__on_loan = False
 
-class ForSale(House):
-    def show_details(self):                 # overrides the inherited method
-        print(self.address, "offers over", self.asking_price)</code></pre>
-      </div>
-      <p>Calling <code>property.showDetails()</code> now runs <em>whichever version matches the object's class</em> — a House object shows address and town, a ForSale object shows the asking price. The calling code doesn't need to know or care which it has: that is polymorphism.</p>
+    def borrow(self):
+        self.__on_loan = True
 
-      <div class="placeholder-block">
-        <div class="placeholder-icon">🎬</div>
-        <div class="placeholder-text">Animation placeholder — The four ideas in one scene</div>
-        <div class="placeholder-sub">Planned: an animation building the estate-agency program step by step — encapsulating House's data, instantiating objects, extending with sub-classes, then calling showDetails() on a mixed list to demonstrate polymorphism.</div>
+    def get_loan_period(self):
+        return 21
+
+class Book(LibraryItem):
+    def __init__(self, title, isbn, author, pages):
+        super().__init__(title, isbn)       # run the super-class constructor first
+        self.__author = author
+        self.__pages = pages</code></pre>
       </div>
+
+      <p><strong>What a sub-class object actually holds.</strong> A <code>Book</code> object has <strong>five</strong> instance variables — its own <code>author</code> and <code>pages</code>, <em>plus</em> the inherited <code>title</code>, <code>isbn</code> and <code>onLoan</code> — without those three being written again. It can also be sent every inherited method:</p>
+
+      <div class="code-block">
+        <div class="code-label">Inherited methods work on a sub-class object</div>
+        <pre><code>DECLARE copy1 INITIALLY Book("Sunset Song", "9781847674463", "Lewis Grassic Gibbon", 256)
+
+copy1.borrow()                       # inherited from LibraryItem
+SEND copy1.getTitle() TO DISPLAY     # inherited from LibraryItem
+SEND copy1.getAuthor() TO DISPLAY    # Book's own method</code></pre>
+      </div>
+
+      <h3>Polymorphism — one method name, several behaviours</h3>
+      <p>Books are lent for three weeks, but DVDs only for one. <code>getLoanPeriod()</code> is inherited from <code>LibraryItem</code> and returns 21 — correct for a book, wrong for a DVD.</p>
+      <p>The sub-class fixes this by <strong>overriding</strong> the inherited method: defining its own version, with the <em>same name</em>, which replaces the inherited one for objects of that sub-class. In reference language the keyword <code>OVERRIDE</code> marks it explicitly:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — Dvd overrides the inherited method</div>
+        <pre><code>CLASS Dvd INHERITS LibraryItem WITH { STRING director, INTEGER ageRating }
+  METHODS
+
+  OVERRIDE FUNCTION getLoanPeriod() RETURNS INTEGER
+      RETURN 7
+  END FUNCTION
+END CLASS</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python — redefining the method is enough; there is no OVERRIDE keyword</div>
+        <pre><code>class Dvd(LibraryItem):
+    def get_loan_period(self):      # same name — this overrides the inherited version
+        return 7</code></pre>
+      </div>
+
+      <p>Now the <em>same call</em> produces different behaviour depending on the <strong>class of the object</strong> it is sent to — and that is <strong>polymorphism</strong>:</p>
+
+      <div class="code-block">
+        <div class="code-label">The same line, two results</div>
+        <pre><code>DECLARE aBook INITIALLY Book("Sunset Song", "9781847674463", "Lewis Grassic Gibbon", 256)
+DECLARE aDvd  INITIALLY Dvd("Local Hero", "5051892021", "Bill Forsyth", 12)
+
+SEND aBook.getLoanPeriod() TO DISPLAY    # displays 21 — the inherited version
+SEND aDvd.getLoanPeriod() TO DISPLAY     # displays  7 — Dvd's overriding version</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>The power of it is in the calling code.</strong> A procedure that prints a due date can simply call <code>item.getLoanPeriod()</code> on every item it is given, <strong>without knowing or caring</strong> whether each one is a book or a DVD — the correct version runs automatically. That is exactly why polymorphism is worth having, and it is what a "why is this useful" question is fishing for.</div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Overriding vs overloading.</strong> Only <strong>overriding</strong> is required at Advanced Higher — a sub-class replacing an inherited method of the same name. If a question shows <code>OVERRIDE</code>, or shows the same method name in a super-class and a sub-class, the answer it wants is <strong>polymorphism</strong> (marking instructions also accept <em>overriding</em>).</div>
+      </div>
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Polymorphism Dispatcher</p>
+        <div class="ib-body">
+          <p class="ib-intro">One array holds a mixture of <code>Book</code> and <code>Dvd</code> objects. Send the same call to each and watch which class&rsquo;s version runs. Compare an <strong>overridden</strong> method with one that is merely <strong>inherited</strong> &mdash; and see what happens when a method defined only in one sub-class is sent to the other.</p>
+          <iframe src="../resources/sdd/visualisers/oo-polymorphism-dispatcher.html"
+                  title="Polymorphism Dispatcher &mdash; interactive"
+                  loading="lazy"
+                  style="height:1380px"></iframe>
+        </div>
+      </div>
+
     </article>
 
     <article>
       <h2 id="array-of-objects">Arrays of Objects</h2>
-      <p>An <strong>array of objects</strong> is exactly what it sounds like: an array whose elements are objects created from a class. It is the OO equivalent of Higher's array of records — and it is why the <code>PlayList</code> class above declared <code>tracks</code> as <code>ARRAY OF Track</code>.</p>
+
+      <p>One <code>Book</code> object is a single book. A library needs thousands, so the objects are stored in an <strong>array of objects</strong> — an array whose elements are objects created from a class.</p>
+      <p>It is the direct object-oriented equivalent of Higher's <a href="data-structures.html#recap">array of records</a>, and the access pattern is almost identical. The difference is what you find at each index: a record hands you <em>data</em>, an object hands you data <em>and methods</em>.</p>
+
+      <table>
+        <thead><tr><th></th><th>Array of records</th><th>Array of objects</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Element holds</strong></td><td>Named fields of data</td><td>An object — its instance variables <em>and</em> its methods</td></tr>
+          <tr><td><strong>Reading a value</strong></td><td><code>stock[3].price</code> — direct field access</td><td><code>stock[3].getPrice()</code> — through a public method</td></tr>
+          <tr><td><strong>Protection</strong></td><td>Any code can change any field</td><td>Encapsulated — only the class's own methods can change the data</td></tr>
+          <tr><td><strong>Mixed types in one array</strong></td><td>All elements the same record type</td><td>Objects of a super-class <em>and</em> any of its sub-classes can share one array</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Declaring and populating</h3>
+      <p>Declare the array as <code>ARRAY OF</code> the class name. Until objects are put into it, every element holds <code>Null</code> — the array of empty slots exists, but no objects do:</p>
 
       <div class="code-block">
-        <div class="code-label">SQA Reference Language — processing an array of objects</div>
-        <pre><code># display every track in the playlist
-PROCEDURE showTracks()
-    FOR counter FROM 0 TO THIS.next - 1 DO
-        THIS.tracks[counter].showTrack()
-    END FOR
-END PROCEDURE
+        <div class="code-label">SQA Reference Language</div>
+        <pre><code># 500 empty slots, each able to hold a LibraryItem object
+DECLARE catalogue AS ARRAY OF LibraryItem INITIALLY [Null] * 500
+DECLARE numItems INITIALLY 0
 
-# linear search of an array of objects by title
-FUNCTION findTitle(STRING trackTitle) RETURNS INTEGER
-    DECLARE result INITIALLY -1
-    FOR index FROM 0 TO THIS.next - 1 DO
-        IF THIS.tracks[index].title = trackTitle THEN
-            SET result TO index
+# instantiate an object and store it in the array
+SET catalogue[0] TO Book("Sunset Song", "9781847674463", "Lewis Grassic Gibbon", 256)
+SET numItems TO numItems + 1
+
+SET catalogue[1] TO Dvd("Local Hero", "5051892021", "Bill Forsyth", 12)
+SET numItems TO numItems + 1</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Python — a list serves as the array, and grows as needed</div>
+        <pre><code>catalogue = []
+
+catalogue.append(Book("Sunset Song", "9781847674463", "Lewis Grassic Gibbon", 256))
+catalogue.append(Dvd("Local Hero", "5051892021", "Bill Forsyth", 12))</code></pre>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Two separate steps, and questions test both.</strong> <code>DECLARE catalogue AS ARRAY OF LibraryItem …</code> <strong>creates the array</strong>; <code>SET catalogue[0] TO Book(…)</code> <strong>instantiates an object</strong> and <strong>assigns it to an element</strong>. A two-mark "explain the purpose of this code" question is usually one mark for each — exactly as in part (c)(i) of the worked example below.</div>
+      </div>
+
+      <h3>Traversing — calling a method on every object</h3>
+      <p>The pattern is <strong>index selects the object, dot notation selects the method</strong>: <code>catalogue[index].getTitle()</code>. Everything you know about traversing arrays transfers straight across:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — display every item</div>
+        <pre><code>FOR index FROM 0 TO numItems - 1 DO
+    SEND catalogue[index].getTitle() TO DISPLAY
+END FOR</code></pre>
+      </div>
+
+      <p>Because a sub-class object can be stored wherever a super-class object is expected, one array can hold a mixture of <code>Book</code> and <code>Dvd</code> objects — and a single loop then produces the <strong>polymorphic</strong> behaviour from the previous section automatically:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — polymorphism across a mixed array</div>
+        <pre><code># catalogue holds a mixture of Book and Dvd objects
+FOR index FROM 0 TO numItems - 1 DO
+    SEND catalogue[index].getTitle() &amp; " may be kept for " &amp;
+         catalogue[index].getLoanPeriod() &amp; " days" TO DISPLAY
+END FOR
+
+# each element runs the version of getLoanPeriod() belonging to its own class:
+# a Book returns 21, a Dvd returns 7 — the loop never has to ask which it has</code></pre>
+      </div>
+
+      <h3>Counting and searching</h3>
+      <p>A <strong>count occurrences</strong> over an array of objects tests a property by calling its getter:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — how many items are out on loan?</div>
+        <pre><code>DECLARE onLoanCount INITIALLY 0
+
+FOR index FROM 0 TO numItems - 1 DO
+    IF catalogue[index].isOnLoan() = TRUE THEN
+        SET onLoanCount TO onLoanCount + 1
+    END IF
+END FOR
+
+SEND onLoanCount &amp; " items are currently on loan" TO DISPLAY</code></pre>
+      </div>
+
+      <p>A <strong>linear search</strong> stores the <em>index</em> of the object it finds, not a copy of one field — because once you have the index, every method of that object is available to you:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — find an item by title</div>
+        <pre><code>FUNCTION findByTitle(STRING searchTitle) RETURNS INTEGER
+    DECLARE foundAt INITIALLY -1
+    DECLARE index INITIALLY 0
+
+    WHILE index &lt; numItems AND foundAt = -1 DO
+        IF catalogue[index].getTitle() = searchTitle THEN
+            SET foundAt TO index
         END IF
-    END FOR
-    RETURN result
-END FUNCTION</code></pre>
-      </div>
-      <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>def show_tracks(self):
-    for track in self.tracks:
-        track.show_track()
+        SET index TO index + 1
+    END WHILE
 
-def find_title(self, track_title):
-    result = -1
-    for index in range(len(self.tracks)):
-        if self.tracks[index].title == track_title:
-            result = index
-    return result</code></pre>
+    RETURN foundAt
+END FUNCTION
+
+# having the index means having the whole object
+DECLARE position INITIALLY findByTitle("Local Hero")
+IF position &lt;&gt; -1 THEN
+    catalogue[position].borrow()
+END IF</code></pre>
       </div>
-      <p>The access pattern mirrors an array of records — <strong>index selects the object, dot notation selects the property or method</strong>: <code>tracks[index].title</code>. Every <a href="standard-algorithms.html">standard algorithm</a> can be applied to an array of objects by comparing one property of each object.</p>
+
+      <h3>Sorting by a property</h3>
+      <p>Every <a href="standard-algorithms.html">standard algorithm</a> works on an array of objects. The only change is the <strong>comparison</strong>: instead of comparing elements directly, compare the value returned by a <strong>getter</strong>, and swap the <strong>whole objects</strong>:</p>
+
+      <div class="code-block">
+        <div class="code-label">SQA Reference Language — one pass of a bubble sort by loan period</div>
+        <pre><code>FOR index FROM 0 TO numItems - 2 DO
+    IF catalogue[index].getLoanPeriod() &lt; catalogue[index + 1].getLoanPeriod() THEN
+        DECLARE temp INITIALLY catalogue[index]
+        SET catalogue[index] TO catalogue[index + 1]
+        SET catalogue[index + 1] TO temp
+    END IF
+END FOR</code></pre>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The two errors this loses marks for.</strong> First, comparing the objects themselves — <code>IF catalogue[index] &lt; catalogue[index + 1]</code> is meaningless, because an object is not a number; you must compare a <em>property</em>, and with private instance variables that means calling its <strong>getter</strong>. Second, swapping only the sorted-on value instead of the whole object, which detaches every item from its own data. Part (c)(ii) of the worked example below is precisely this question.</div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div>Where the array of objects is itself an instance variable of another class — a <code>Library</code> object holding a <code>catalogue</code> — the methods above become methods of that class, and refer to it as <code>THIS.catalogue[index]</code>. The <a href="#class-diagrams">class diagram below</a> shows exactly that arrangement.</div>
+      </div>
     </article>
 
     <article>
-      <h2 id="worked-example">Worked Examples — 2023 Question 4</h2>
-      <p>This past-paper question walks through a complete OO program — reading a class diagram, explaining constructs, then writing OO code. It is the best single rehearsal of this whole page. Attempt each part before expanding.</p>
+      <h2 id="class-diagrams">UML Class Diagrams</h2>
+      <p>A <strong>UML class diagram</strong> models the <strong>static structure</strong> of an object-oriented program — which classes exist, what each holds and can do, and how they relate. It is the design notation for OO, and it is covered as a design technique on the <a href="design.html#class-diagrams">Design page</a>. This is the recap you need in order to answer the questions below.</p>
 
-      <div class="worked-example">
-        <div class="q-label">OOP — 2023 Question 4, context &amp; part (a)</div>
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-1.png" alt="2023 Question 4 — object-oriented programming context." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <p><strong>Before reading the parts:</strong> study the class definitions. Identify the class names, instance variables (with data types), the constructor, and any inheritance between classes — the answers to nearly every part are in that structure.</p>
+      <p>Each class is a box in three parts:</p>
+      <ul>
+        <li>the <strong>class name</strong>;</li>
+        <li>its <strong>instance variables</strong>, written <code>name: DataType</code>;</li>
+        <li>its <strong>methods</strong>, written <code>name()</code>.</li>
+      </ul>
+      <p>A <strong>−</strong> in front of a member means <strong>private</strong> and a <strong>+</strong> means <strong>public</strong> — so a well-designed class shows <strong>− on the instance variables and + on the methods</strong>. Inheritance is drawn as a solid arrow from the sub-class <strong>pointing at the super-class</strong>.</p>
+
+      <p>Here is the whole library example as one diagram — the same classes built up throughout this page:</p>
+
+      <img src="../resources/sdd/oo-library-class-diagram.svg"
+           class="zoomable"
+           alt="A UML class diagram with four classes. Library holds private catalogue as an Array of LibraryItem and numItems as Integer, with public methods Library, addItem, findByTitle and countOnLoan. A gold arrow labelled array of objects runs from Library to LibraryItem. LibraryItem, the super-class, holds private title as String, isbn as String and onLoan as Boolean, with public methods LibraryItem, borrow, returnItem, isOnLoan and getLoanPeriod. Below it are two sub-classes. Book holds private author as String and pages as Integer with public methods Book and getAuthor. Dvd holds private director as String and ageRating as Integer with public methods Dvd, getDirector and getLoanPeriod, which is marked as an override because a DVD lends for 7 days. Solid arrows run from Book and Dvd up to LibraryItem, labelled inheritance, the arrow points at the super-class. A note explains that a Book object holds five instance variables, its own author and pages plus title, isbn and onLoan inherited from LibraryItem, and that Dvd redefines getLoanPeriod so the same call behaves differently on each class."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <h3>Reading it like an examiner</h3>
+      <p>Four things a class diagram tells you that questions are built on:</p>
+      <ul>
+        <li><strong>Which class is the super-class</strong> — follow the arrowheads. Everything they point at is inherited by everything they point from.</li>
+        <li><strong>How many instance variables an object really has</strong> — a <code>Book</code> object has <strong>five</strong>, not two: its own <code>author</code> and <code>pages</code> plus the three inherited from <code>LibraryItem</code>. Diagrams never repeat inherited members in the sub-class box.</li>
+        <li><strong>Where polymorphism is happening</strong> — the same method name appearing in <em>both</em> a super-class and a sub-class means the sub-class <strong>overrides</strong> it. <code>getLoanPeriod()</code> above is the giveaway.</li>
+        <li><strong>Where an array of objects is</strong> — an instance variable typed <code>Array of &lt;ClassName&gt;</code>, here <code>Library</code>'s <code>catalogue</code>. It means one object <em>contains</em> many objects of another class.</li>
+      </ul>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>A class with no constructor in its box is not a mistake.</strong> If a sub-class adds no instance variables of its own, it needs no constructor — the one it inherits from the super-class already initialises everything there is to initialise. That is a favourite two-mark question, and it appears in the practice section below.</div>
+      </div>
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Class Diagram &harr; Code</p>
+        <div class="ib-body">
+          <p class="ib-intro">Click any class, instance variable or method to see the code it stands for, or click a line of code to find it in the diagram. Switching on <strong>inherited members</strong> reveals what the diagram deliberately leaves out &mdash; and answers &ldquo;how many instance variables does a <code>Book</code> object really have?&rdquo;</p>
+          <iframe src="../resources/sdd/visualisers/oo-diagram-code-toggle.html"
+                  title="Class Diagram &harr; Code &mdash; interactive"
+                  loading="lazy"
+                  style="height:1660px"></iframe>
+        </div>
       </div>
 
-      <div class="worked-example">
-        <div class="q-label">OOP — 2023 Question 4, part (b)</div>
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-2.png" alt="2023 Question 4 part b." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-2_ans.png" alt="Marking instructions for 2023 Question 4 part b." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
+    </article>
+
+    <article>
+      <h2 id="worked-example">Worked Example — 2022 Question 4</h2>
+      <p>A <strong>12-mark</strong> question that works through almost everything on this page: instantiation, implementing a method, an array of objects, sorting objects by a property, inheritance and polymorphism. Each part is <strong>walked through</strong>, then a <strong>full sample answer</strong> is given.</p>
+      <p>Two of the parts below are <strong>not from the original paper</strong> — they are clearly marked, and cover encapsulation and the procedure/function decision, which this scenario sets up perfectly but the paper did not ask about.</p>
 
       <div class="worked-example">
-        <div class="q-label">OOP — 2023 Question 4, part (c)</div>
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-3.png" alt="2023 Question 4 part c." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-3_ans.png" alt="Marking instructions for 2023 Question 4 part c." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
+        <div class="q-label">OOP — 2022 Question 4 (Football Game)</div>
+        <p><strong>The scenario and the Player class diagram:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_oo_q1-1.png" class="zoomable" alt="2022 Question 4. A game is being developed where the player controls a footballer, playing against an online opponent. When the game is played for the first time, a player must provide a nationality and a username. A new player starts with 1 point for their speed, jump, shoot, size and power characteristics. By winning games, players can gain extra points in each of these characteristics. A simplified UML class diagram for a Player object is shown, with private instance variables speed, jump, shoot and size as Integer, power as Real, and nationality and username as String, and public methods updateSpeed, updateJump, updateShoot, updateSize, calcPower, getUsername and getPower." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
 
-      <div class="worked-example">
-        <div class="q-label">OOP — 2023 Question 4, part (d)</div>
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4.png" alt="2023 Question 4 part d." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4-1_ans.png" alt="Marking instructions for 2023 Question 4 part d (first page)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-4-2_ans.png" alt="Marking instructions for 2023 Question 4 part d (second page)." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
+        <p><strong>The class declaration code:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_oo_q1-2.png" class="zoomable" alt="Question 4 continued. The class declaration code reads CLASS Player IS with INTEGER speed, INTEGER jump, INTEGER shoot, INTEGER size, INTEGER real, STRING nationality and STRING username. Under METHODS there is a CONSTRUCTOR taking STRING nationality and STRING username which declares THIS.speed, THIS.jump, THIS.shoot, THIS.size and THIS.power all initially 1, THIS.nationality initially nationality and THIS.username initially username. A PROCEDURE updateSpeed sets THIS.speed to THIS.speed plus 1. A FUNCTION getUsername returns THIS.username as a STRING. A FUNCTION getPower returns THIS.power as a REAL. The listing ends with END CLASS." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
 
-      <div class="worked-example">
-        <div class="q-label">OOP — 2023 Question 4, part (e)</div>
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-5.png" alt="2023 Question 4 part e." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_oo_2023_q4-5_ans.png" alt="Marking instructions for 2023 Question 4 part e." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <p><strong>Orient yourself before reading any part.</strong> Match the class diagram against the code and note three things. The class has <strong>seven instance variables</strong>, all private. It has a <strong>constructor taking only two parameters</strong> — nationality and username — because every other value starts at 1 for a brand-new player. And <code>getUsername()</code> and <code>getPower()</code> are <strong>getters</strong>: the only way anything outside the class can read those private values.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">a</span>
+            <span class="qp-title">Describe the effect of a line of code, using OO terminology</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-3.png" class="zoomable" alt="Question 4(a). Making use of appropriate object-oriented programming terminology, describe the effect of the following line of code. DECLARE newPlayer INITIALLY Player open bracket quote French quote comma quote Player1626 quote close bracket. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Three marks for one line means three separate things to say.</strong> The wording "making use of appropriate object-oriented programming terminology" is the examiner telling you outright that the vocabulary is what is being marked. Work through the line left to right and name what each part does.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>What is being created?</p>
+            <p><code>Player(…)</code> calls the <strong>constructor</strong> of the <code>Player</code> class, so an <strong>object</strong> — an <strong>instance</strong> of that class — is created and referred to by <code>newPlayer</code>. Say <em>instantiates</em>, not "makes".</p>
+
+            <p class="build-step"><span class="bs-num">2</span>What happens to the values in brackets?</p>
+            <p>The two <strong>actual parameters</strong> <code>"French"</code> and <code>"Player1626"</code> are passed to the constructor, which assigns them to the <code>nationality</code> and <code>username</code> <strong>instance variables</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>What about the other five instance variables?</p>
+            <p>This is the mark most candidates miss. Look back at the constructor code: <code>speed</code>, <code>jump</code>, <code>shoot</code>, <code>size</code> and <code>power</code> are not parameters — the constructor <strong>initialises them all to 1</strong>, matching the scenario's statement that a new player starts with 1 point in each characteristic.</p>
+            <p>Note the marking instruction's warning: simply listing the assigned values, with none of the terminology, is capped at <strong>1 mark</strong>.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"This line <strong>instantiates</strong> a new <strong>object</strong> of the <code>Player</code> <strong>class</strong>, which is referred to by the variable <code>newPlayer</code>."</p>
+                <p>"The <strong>constructor</strong> is called with the two <strong>actual parameters</strong> <code>"French"</code> and <code>"Player1626"</code>, which it assigns to the <code>nationality</code> and <code>username</code> <strong>instance variables</strong> of the new object."</p>
+                <p>"The remaining <strong>instance variables</strong> — <code>speed</code>, <code>jump</code>, <code>shoot</code>, <code>size</code> and <code>power</code> — are not passed in; the constructor code initialises each of them to <strong>1</strong>."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-3_ans.png" alt="Marking instructions for 2022 Question 4(a). The answer states that this code is instantiating a new object of the Player class, that it will assign the nationality and username using the parameters provided, and that the constructor code will assign the value 1 to all other properties. Award 1 mark for creation of new object or instance of the Player class, 1 mark for instantiating the object by assigning values, and 1 mark for assignment details. Note: list of assigned values on its own, award 1 mark only." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Implement the calcPower() method</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-4.png" class="zoomable" alt="Question 4(b). A player's power rating is calculated by working out the average of the speed, jump, shoot and size points. Two example player cards are shown: one with speed 4, jump 4, shoot 6 and size 4 giving Power 4.5, and one with speed 12, jump 12, shoot 26 and size 26 giving Power 19. Using a programming language with which you are familiar, write code to implement the calcPower method. 2 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Check the rule against the pictures first.</strong> The average of 4, 4, 6 and 4 is 4.5, and of 12, 12, 26 and 26 is 19. So <code>power</code> is the mean of <em>four</em> characteristics — speed, jump, shoot and size. <code>power</code> itself is not part of the calculation, which is easy to get wrong given it sits in the same list of instance variables.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Procedure or function?</p>
+            <p>Look at the class diagram: <code>calcPower()</code> and <code>getPower()</code> are <strong>both</strong> listed. The class already has a getter, so <code>calcPower()</code> is not there to return the value — it is there to <strong>update the <code>power</code> instance variable</strong>. That makes it a <strong>procedure</strong>, and the marking instructions award a mark specifically for that.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Which variables, and how do you reach them?</p>
+            <p>It is working on the object's own data, so every one is reached through <code>THIS</code>. The result is assigned back to <code>THIS.power</code>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">The single line that does the work</div>
+              <pre><code>SET THIS.power TO (THIS.speed + THIS.jump + THIS.shoot + THIS.size) / 4</code></pre>
+            </div>
+            <p>The brackets are essential — without them only <code>THIS.size</code> is divided by 4. Note also that the marking instructions <strong>accept answers that do not use <code>THIS</code></strong>, so a Python answer using <code>self</code>, or one that names the variables directly, is fine.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block">
+                  <div class="code-label">SQA Reference Language — 2 marks</div>
+                  <pre><code>PROCEDURE calcPower()
+    SET THIS.power TO (THIS.speed + THIS.jump + THIS.shoot + THIS.size) / 4
+END PROCEDURE</code></pre>
+                </div>
+                <p><strong>Where the two marks are:</strong> using the <strong>correct properties</strong> in the calculation and assigning the result, and coding the method as a <strong>procedure</strong>.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-4_ans.png" alt="Marking instructions for 2022 Question 4(b). PROCEDURE calcPower, SET THIS.power TO open bracket THIS.speed plus THIS.jump plus THIS.shoot plus THIS.size close bracket divided by 4, END PROCEDURE. Award 1 mark for use of correct properties in calculation and assignment, and 1 mark for method coded as a procedure. Accept answers that don't make use of THIS." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">c i</span>
+            <span class="qp-title">Explain the purpose of code creating an array of objects</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-5.png" class="zoomable" alt="Question 4(c). Players can join a league with nine other players. The league table is sorted in descending order of power, and a table shows ten usernames from Player1626 with 18.5 down to Player2864 with 9.0. Part (i): Using appropriate object-oriented terminology, explain the purpose of the code below. DECLARE league AS ARRAY OF Player INITIALLY square bracket Null square bracket times 10. SET league at 0 TO newPlayer. 2 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Two lines, two marks — take them one at a time.</strong> Do not blur them into a single sentence such as "it sets up the league", which describes the effect but names none of the mechanism.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The first line</p>
+            <p><code>DECLARE league AS ARRAY OF Player INITIALLY [Null] * 10</code> creates an <strong>array of objects</strong> — ten elements, each able to hold an object of the <code>Player</code> class. The <code>[Null]</code> matters: the array exists but is <strong>empty</strong>, because no objects have been assigned to it yet. Ten, because the scenario says a player joins a league with nine others.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>The second line</p>
+            <p><code>SET league[0] TO newPlayer</code> assigns the <code>newPlayer</code> object — the one instantiated back in part (a) — to the <strong>first element</strong> of that array.</p>
+            <p>Say "the <strong>object</strong> <code>newPlayer</code>", not "the player's details". The array does not store a copy of the data; it stores the object itself, with all of its methods still callable through it — which is exactly what part (c)(ii) then relies on.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"The first line creates an <strong>array of objects</strong> called <code>league</code>, with ten elements, each of which can hold an <strong>object</strong> of the <code>Player</code> <strong>class</strong>. It is initialised to <code>Null</code>, so no objects are stored in it yet."</p>
+                <p>"The second line <strong>assigns</strong> the <code>newPlayer</code> <strong>object</strong> to the <strong>first element</strong> of that array, at index 0."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-5_ans.png" alt="Marking instructions for 2022 Question 4(c)(i). This code creates an array of objects belonging to the Player class and sets the first element of the array to the newPlayer object. Award 1 mark for creation of array of Player objects, and 1 mark for assignment of first element in the array." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">c ii</span>
+            <span class="qp-title">Complete a bubble sort over the array of objects</span>
+            <span class="qp-marks">3 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-6.png" class="zoomable" alt="Question 4(c)(ii). The incomplete code below is used to arrange the league table details in descending order of power by applying a bubble sort algorithm to the league variable defined in part (i). Line 2001 DECLARE numPlayers INITIALLY 9. Line 2002 DECLARE swapped INITIALLY TRUE. Line 2003 WHILE blank. Line 2004 SET swapped TO FALSE. Line 2005 FOR loop FROM 0 TO numPlayers minus 1 DO. Line 2006 IF blank. Line 2007 SET temp TO league at loop. Line 2008 SET league at loop TO league at loop plus 1. Line 2009 SET league at loop plus 1 TO temp. Line 2010 blank. Line 2011 END IF. Line 2012 END FOR. Line 2013 SET numPlayers TO numPlayers minus 1. Line 2014 END WHILE. Using a programming language of your choice, write the code needed to complete Lines 2003, 2006 and 2010. 3 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Read what is already there before writing anything.</strong> Lines 2007–2009 are a standard three-line swap using <code>temp</code>, and lines 2002 and 2004 set up a <code>swapped</code> flag. So this is the <strong>bubble sort with an early exit</strong> from the <a href="standard-algorithms.html">Standard Algorithms</a> page — the only new element is that the array holds <strong>objects</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Line 2003 — the outer loop condition</p>
+            <p><code>swapped</code> is set <code>TRUE</code> before the loop and <code>FALSE</code> at the start of every pass. So the loop should continue <em>while a swap was made on the last pass</em>: <code>WHILE swapped = TRUE DO</code>. Lines 2003 and 2010 are marked <strong>together</strong>, because the flag is useless unless both halves are present.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Line 2010 — set the flag</p>
+            <p>Line 2010 sits immediately after the swap and inside the <code>IF</code>. If a swap has just happened, record it: <code>SET swapped TO TRUE</code>.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>Line 2006 — the comparison, and the object trap</p>
+            <p>Two decisions here, and each is worth its own mark.</p>
+            <p><strong>Direction.</strong> The table is sorted in <strong>descending</strong> order of power, so a swap is needed when the current element is <em>smaller</em> than the next one — <code>&lt;</code>, not <code>&gt;</code>.</p>
+            <p><strong>How to read the power.</strong> <code>league[loop]</code> is an <strong>object</strong>, not a number, and <code>power</code> is a <strong>private instance variable</strong> — so <code>league[loop].power</code> cannot be used. The class provides the public getter <code>getPower()</code>, and that is the only legitimate way in:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Line 2006</div>
+              <pre><code>IF league[loop].getPower() &lt; league[loop + 1].getPower() THEN</code></pre>
+            </div>
+            <p>Note that lines 2007–2009 swap the <strong>whole objects</strong>, not their power values — which is what keeps each username attached to its own rating.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">The three missing lines — 3 marks</div>
+                  <pre><code>Line 2003    WHILE swapped = TRUE DO
+
+Line 2006        IF league[loop].getPower() &lt; league[loop + 1].getPower() THEN
+
+Line 2010            SET swapped TO TRUE</code></pre>
+                </div>
+                <p><strong>Where the three marks are:</strong> lines 2003 and 2010 <strong>both</strong> correct; the <strong>correct comparison</strong> in line 2006; and <strong>correct use of the <code>getPower()</code> method</strong> in line 2006. The marking instructions also accept the equivalent test <code>IF league[loop + 1].getPower() &#8805; league[loop].getPower() THEN</code>, and note that the comparison mark can be earned even if the getter has not been used — but the third mark cannot.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-6_ans.png" alt="Marking instructions for 2022 Question 4(c)(ii). Line 2003 WHILE swapped AND numPlayers greater than or equal to. Line 2006 IF league at loop dot getPower open bracket close bracket less than league at loop plus 1 dot getPower open bracket close bracket THEN. Line 2010 SET swapped TO True. Award 1 mark for Line 2003 and Line 2010 both correct. Award 1 mark for correct comparison in Line 2006, accepting IF league at loop plus 1 dot getPower greater than or equal to league at loop dot getPower THEN as an alternative comparison, and this mark can be awarded if the method has not been used. Award 1 mark for correct use of getPower method in Line 2006." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">d i</span>
+            <span class="qp-title">Explain inheritance by referring to a UML class diagram</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-7.png" class="zoomable" alt="Question 4(d). During the game, players can collect power-ups that allow them to change the type of ball being used. For example, the ball can become bigger or smaller, faster or slower, it can become an unstoppable fire ball or split into multiple balls. The UML class diagram shows three classes. Ball holds private diameter as Integer, speed as Integer, appearance as String and bounce as Boolean, with public methods Ball, makeBig, makeSmall, makeFast, makeSlow and rebound. Fireball has public methods fire and rebound. Multiball holds private numberBalls as Integer with public methods Multiball and cloneBall. Arrows run from Fireball and from Multiball pointing at Ball. Part (i): By referring to details in the UML class diagram above, explain what is meant by inheritance. 1 mark." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>"By referring to details in the diagram" is the whole instruction.</strong> A textbook definition of inheritance on its own will not score — the mark is for applying it to <em>these</em> classes, by name.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Read the arrows</p>
+            <p>Both arrows point <em>at</em> <code>Ball</code>, so <code>Ball</code> is the <strong>super-class</strong> and <code>Fireball</code> and <code>Multiball</code> are its <strong>sub-classes</strong>.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Say what the sub-classes therefore have</p>
+            <p>Each inherits <em>all</em> of <code>Ball</code>'s instance variables (<code>diameter</code>, <code>speed</code>, <code>appearance</code>, <code>bounce</code>) and <em>all</em> of its methods, without any of them being written again — then adds its own. A <code>Multiball</code> object, for example, has five instance variables: <code>numberBalls</code> plus the four it inherits.</p>
+            <p>Name at least one inherited member and one added member. That is what turns a definition into "referring to details in the diagram".</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"Inheritance means a <strong>sub-class</strong> automatically receives all of the instance variables and methods defined in its <strong>super-class</strong>. In this diagram the arrows point at <code>Ball</code>, so <code>Ball</code> is the super-class and <code>Fireball</code> and <code>Multiball</code> are sub-classes of it."</p>
+                <p>"Both sub-classes therefore inherit <code>Ball</code>'s properties <code>diameter</code>, <code>speed</code>, <code>appearance</code> and <code>bounce</code>, and its methods such as <code>makeBig()</code> and <code>makeFast()</code>, without those being redefined — and each then adds what makes it different, for example <code>Multiball</code> adding the <code>numberBalls</code> property and the <code>cloneBall()</code> method."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-7_ans.png" alt="Marking instructions for 2022 Question 4(d)(i). Inheritance is when a hierarchy of classes that share core properties and methods can be defined. The parent or superclass becomes the blueprint for all related subclasses. In this situation the Fireball and Multiball subclasses automatically inherit all properties and methods defined for the Ball superclass, with the Multiball class having 2 additional properties. Award 1 mark for accurately referring the classes in the UML class diagram with superclass Ball with subclasses Fireball and Multiball both inheriting all the properties and methods of the Ball superclass." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">d ii</span>
+            <span class="qp-title">Name the feature of OO programming illustrated</span>
+            <span class="qp-marks">1 mark</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_oo_q1-8.png" class="zoomable" alt="Question 4(d)(ii). The code used to define the rebound method in the Ball and Fireball classes is shown. The Ball method is PROCEDURE rebound, SET THIS.bounce TO TRUE, END PROCEDURE. The Fireball method is OVERRIDE PROCEDURE rebound, SET THIS.bounce TO FALSE, END PROCEDURE. Name the feature of object-oriented programming illustrated by this example. 1 mark." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>One mark, one word — but be sure which word.</strong> Two signals point to the same answer: the <strong>same method name</strong> appears in both a super-class and a sub-class, and the sub-class version carries the <code>OVERRIDE</code> keyword.</p>
+            <p>That is <strong>polymorphism</strong> — the same call, <code>rebound()</code>, behaving differently depending on the class of the object it is sent to. A <code>Ball</code> bounces; a <code>Fireball</code> does not. The marking instructions also accept <strong>overriding</strong>.</p>
+            <p>Do not answer "inheritance". Inheritance is what makes the sub-class <em>have</em> the method at all; this question is about what happens when the sub-class <em>replaces</em> it.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"<strong>Polymorphism</strong> — the <code>Fireball</code> sub-class <strong>overrides</strong> the <code>rebound()</code> method it inherits from <code>Ball</code>, so the same method call behaves differently depending on the class of the object it is called on."</p>
+                <p><em>(The single word "polymorphism" earns the mark; "overriding" is also accepted.)</em></p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_oo_q1-8_ans.png" alt="Marking instructions for 2022 Question 4(d)(ii). Polymorphism. 1 mark. Award 1 mark for polymorphism. Accept also overriding." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">+ e</span>
+            <span class="qp-title">Added — explain why a line of code cannot be executed</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <div class="callout callout-info">
+              <div class="callout-icon">ℹ️</div>
+              <div>This part is <strong>not from the 2022 paper</strong>. It is added here because the <code>Player</code> class sets up an encapsulation question perfectly, and this wording appears regularly in other years.</div>
+            </div>
+            <p>A programmer adds the following line after instantiating <code>newPlayer</code>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Line 3050</div>
+              <pre><code>SET newPlayer.speed TO 5</code></pre>
+            </div>
+            <p>Using appropriate object-oriented terminology, explain why <strong>Line 3050 cannot be executed</strong>, and describe how the program should achieve the same result. <strong>(2 marks)</strong></p>
+
+            <p class="build-step"><span class="bs-num">1</span>Find the evidence in the class diagram</p>
+            <p>Every instance variable in the <code>Player</code> box is prefixed with <strong>−</strong>, which means <strong>private</strong>. Every method is prefixed with <strong>+</strong>, meaning public. That is the whole answer to the first half.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Say why private stops this line</p>
+            <p><code>speed</code> is <strong>encapsulated</strong> within the <code>Player</code> class, so it can only be accessed by code <em>inside</em> that class. Line 3050 sits outside it, so the assignment is not permitted.</p>
+
+            <p class="build-step"><span class="bs-num">3</span>Give the legitimate route</p>
+            <p>The second mark is for the fix, not the diagnosis: the program must call a <strong>public method</strong> of the class. <code>updateSpeed()</code> already exists and adds 1 to <code>speed</code>, so calling it four times would take a new player from 1 to 5; alternatively the class would need a public <strong>setter</strong>, <code>setSpeed(INTEGER newSpeed)</code>, added to it.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"<code>speed</code> is a <strong>private instance variable</strong> of the <code>Player</code> class, shown by the <strong>−</strong> in front of it on the class diagram. It is <strong>encapsulated</strong>, so it can only be accessed by methods defined inside the <code>Player</code> class, and Line 3050 is outside that class."</p>
+                <p>"The value must instead be changed by calling a <strong>public method</strong> on the object — for example <code>newPlayer.updateSpeed()</code>, which adds 1 to <code>speed</code> from inside the class — or by adding a public <strong>setter</strong> method such as <code>setSpeed()</code> to the class."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for identifying <code>speed</code> as a <strong>private</strong> instance variable / <strong>encapsulated</strong> within the class, so it cannot be accessed from outside it.</li>
+                  <li>1 mark for stating that a <strong>public method</strong> of the class must be used instead — accept <code>updateSpeed()</code>, or the addition of a suitable setter method.</li>
+                  <li><em>Note:</em> "it is private" alone, with no reference to access from outside the class, earns 1 mark only.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">+ f</span>
+            <span class="qp-title">Added — explain the choice of procedure over function</span>
+            <span class="qp-marks">2 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <div class="callout callout-info">
+              <div class="callout-icon">ℹ️</div>
+              <div>Also <strong>not from the 2022 paper</strong> — but the marking instructions for part (b) award a mark specifically for coding <code>calcPower()</code> as a <em>procedure</em>, so it is worth understanding why.</div>
+            </div>
+            <p>Using appropriate object-oriented terminology, explain why <code>calcPower()</code> is implemented as a <strong>procedure</strong> while <code>getPower()</code> is implemented as a <strong>function</strong>. <strong>(2 marks)</strong></p>
+
+            <p class="build-step"><span class="bs-num">1</span>What does each one do to the object?</p>
+            <p><code>calcPower()</code> <strong>changes the object's state</strong> — it works out the average and stores it in the <code>power</code> instance variable. It hands nothing back to the caller, so there is no value to return.</p>
+            <p><code>getPower()</code> changes nothing. Its only job is to <strong>return</strong> the value of a private instance variable to code outside the class.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>Name them properly</p>
+            <p>The rule you already know from procedural programming still applies: a <strong>procedure</strong> performs an action and returns no value; a <strong>function</strong> returns a single value. In OO terms, <code>getPower()</code> is a <strong>getter</strong> — the public route to an encapsulated instance variable — which by definition must return something.</p>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <p>"<code>calcPower()</code> is a <strong>procedure</strong> because it does not return a value to the calling code. It calculates the average of the four characteristics and <strong>assigns the result to the <code>power</code> instance variable</strong> of the object, changing the object's own state."</p>
+                <p>"<code>getPower()</code> is a <strong>function</strong> because it must <strong>return a value</strong> — it is a <strong>getter</strong>, providing the only route by which code outside the class can read the <strong>private</strong> <code>power</code> instance variable."</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <ul>
+                  <li>1 mark for explaining that <code>calcPower()</code> <strong>returns no value</strong> and instead <strong>assigns</strong> the calculated result to the <code>power</code> instance variable.</li>
+                  <li>1 mark for explaining that <code>getPower()</code> must <strong>return a value</strong> to the calling code / is a <strong>getter</strong> for a <strong>private</strong> instance variable.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
     </article>
 
     <article>
       <h2 id="test-yourself">Test Yourself</h2>
-      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+      <p>One scenario, seven questions. <strong>Write each answer out in full first</strong> — especially the describe and explain questions, where the marks are in the <em>terminology</em> and reading a model answer always feels easier than producing one.</p>
+
+      <div class="example-block">
+        <div class="example-label">Scenario — the Fife Picture House booking system</div>
+        <p>A small independent cinema is building a booking system. Each <strong>screening</strong> of a film holds the bookings made for it. A booking records a reference, the number of seats and the customer's name.</p>
+        <p>There are two kinds of booking. A <strong>standard</strong> seat costs <strong>£9.50</strong>. A <strong>premium</strong> seat costs <strong>£14.00</strong>, and if the booking includes a drink a further <strong>£3.50 per seat</strong> is added.</p>
+      </div>
+
+      <img src="../resources/sdd/oo-cinema-class-diagram.svg"
+           class="zoomable"
+           alt="A UML class diagram with four classes. Screening holds private film as String, startTime as String, screenNumber as Integer, bookings as an Array of Booking and numBookings as Integer, with public methods Screening, addBooking, getFilm and totalTakings. A gold arrow labelled array of objects runs from Screening to Booking. Booking holds private bookingRef as String, seatCount as Integer and customerName as String, with public methods Booking, calculatePrice, getRef and getSeatCount. Below are two sub-classes joined to Booking by inheritance arrows. StandardBooking has no additional properties and one public method, getBookingType. PremiumBooking holds private includesDrink as Boolean and has public methods PremiumBooking, calculatePrice and getBookingType."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p>Some of the class declaration code is shown below.</p>
+
+      <div class="code-block">
+        <div class="code-label">Class declarations</div>
+        <pre><code>Line 1001   CLASS Booking IS { STRING bookingRef, INTEGER seatCount, STRING customerName }
+Line 1002     METHODS
+Line 1003
+Line 1004     CONSTRUCTOR (STRING bookingRef, INTEGER seatCount, STRING customerName)
+Line 1005         DECLARE THIS.bookingRef INITIALLY bookingRef
+Line 1006         DECLARE THIS.seatCount INITIALLY seatCount
+Line 1007         DECLARE THIS.customerName INITIALLY customerName
+Line 1008     END CONSTRUCTOR
+Line 1009
+Line 1010     FUNCTION calculatePrice() RETURNS REAL
+Line 1011         RETURN THIS.seatCount * 9.50
+Line 1012     END FUNCTION
+Line 1013
+Line 1014     FUNCTION getSeatCount() RETURNS INTEGER
+Line 1015         RETURN THIS.seatCount
+Line 1016     END FUNCTION
+Line 1017   END CLASS
+Line 1018
+Line 1019
+Line 1020   CLASS StandardBooking INHERITS Booking
+Line 1021     METHODS
+Line 1022
+Line 1023     FUNCTION getBookingType() RETURNS STRING
+Line 1024         RETURN "Standard"
+Line 1025     END FUNCTION
+Line 1026   END CLASS
+Line 1027
+Line 1028
+Line 1029   CLASS PremiumBooking INHERITS Booking WITH { BOOLEAN includesDrink }
+Line 1030     METHODS
+Line 1031
+Line 1032     CONSTRUCTOR (STRING bookingRef, INTEGER seatCount, STRING customerName,
+Line 1033                  BOOLEAN includesDrink)
+Line 1034         DECLARE THIS.bookingRef INITIALLY bookingRef
+Line 1035         DECLARE THIS.seatCount INITIALLY seatCount
+Line 1036         DECLARE THIS.customerName INITIALLY customerName
+Line 1037         DECLARE THIS.includesDrink INITIALLY includesDrink
+Line 1038     END CONSTRUCTOR
+Line 1039
+Line 1040     OVERRIDE FUNCTION calculatePrice() RETURNS REAL
+Line 1041         &lt; to be written in question 6 &gt;
+Line 1042     END FUNCTION
+Line 1043
+Line 1044     FUNCTION getBookingType() RETURNS STRING
+Line 1045         RETURN "Premium"
+Line 1046     END FUNCTION
+Line 1047   END CLASS</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">Part of the main program</div>
+        <pre><code>Line 2001   DECLARE tonight INITIALLY Screening("Local Hero", "19:45", 3)
+Line 2002   DECLARE booking1 INITIALLY StandardBooking("FPH1042", 2, "A. Munro")
+Line 2003   DECLARE booking2 INITIALLY PremiumBooking("FPH1043", 4, "K. Shah", TRUE)
+Line 2004   tonight.addBooking(booking1)
+Line 2005   SET booking2.seatCount TO 5</code></pre>
+      </div>
 
       <div class="practice-question">
-        <div class="q-label">Terminology — 3 marks</div>
-        <p>The following line appears in a program:</p>
-        <div class="code-block"><pre><code>DECLARE nextBooking INITIALLY Booking("B107", "2026-03-14", 4)</code></pre></div>
-        <p>Using the correct object-oriented terminology, explain what this line does. Your answer should use the terms <em>class</em>, <em>object</em>, <em>constructor</em> and <em>instantiation</em>. <strong>(3 marks)</strong></p>
+        <div class="q-label">Describing Instantiation — 3 marks</div>
+        <p>Using appropriate object-oriented terminology, describe the effect of <strong>Line 2003</strong>. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — three marks means three things to name.</strong> Work left to right: what is created, what the parameters do, and what happens to anything <em>not</em> passed in.</p>
+            <p><strong>Step 2 — which class?</strong> <code>PremiumBooking(…)</code>, so the object is an instance of the <strong>sub-class</strong>, not of <code>Booking</code>. Saying "a Booking object" throws away a mark — be precise about which class was instantiated.</p>
+            <p><strong>Step 3 — count the instance variables the object ends up with.</strong> Four: the three inherited from <code>Booking</code> plus <code>includesDrink</code>. Lines 1034–1037 show the constructor assigning all four. Mentioning that the inherited ones are included is what lifts this from a two-mark answer.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"Line 2003 <strong>instantiates</strong> an <strong>object</strong> of the <code>PremiumBooking</code> <strong>class</strong>, referred to by the variable <code>booking2</code>."</p>
+            <p>"The <strong>constructor</strong> is called with four <strong>actual parameters</strong> — <code>"FPH1043"</code>, <code>4</code>, <code>"K. Shah"</code> and <code>TRUE</code>."</p>
+            <p>"These are assigned to the object's four <strong>instance variables</strong>: <code>bookingRef</code>, <code>seatCount</code> and <code>customerName</code>, which are <strong>inherited</strong> from the <code>Booking</code> <strong>super-class</strong>, and <code>includesDrink</code>, which <code>PremiumBooking</code> adds itself."</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
-            <p>Award <strong>1 mark</strong> per bullet, to a maximum of 3:</p>
             <ul>
-              <li>An <strong>object</strong> called <code>nextBooking</code> is created (<strong>instantiated</strong>) from the <code>Booking</code> <strong>class</strong>;</li>
-              <li>the <strong>constructor</strong> of the Booking class is called;</li>
-              <li>the three actual parameters ("B107", "2026-03-14", 4) give initial values to the object's instance variables.</li>
+              <li>1 mark for the creation of a new <strong>object / instance</strong> of the <strong><code>PremiumBooking</code> class</strong>.</li>
+              <li>1 mark for the <strong>constructor</strong> being called with the values in brackets as <strong>parameters</strong>.</li>
+              <li>1 mark for those values being <strong>assigned to the instance variables</strong>, including recognition that three are <strong>inherited</strong> from <code>Booking</code>.</li>
+              <li><em>Note:</em> a list of the assigned values with no object-oriented terminology earns 1 mark only.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Constructors and Inheritance — 2 marks</div>
+        <p>Explain, using appropriate object-oriented terminology, why the <code>StandardBooking</code> class does <strong>not</strong> need a constructor method. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — what does a constructor actually do?</strong> It gives the <strong>instance variables</strong> their initial values when an object is instantiated. So the question really is: <em>does this class have any instance variables that are not already dealt with?</em></p>
+            <p><strong>Step 2 — check the class diagram and the code.</strong> <code>StandardBooking</code> is marked "(no additional properties)", and Line 1020 is <code>INHERITS Booking</code> with no <code>WITH { … }</code> clause. It adds nothing.</p>
+            <p><strong>Step 3 — say what happens instead.</strong> The three instance variables it does have are all <strong>inherited</strong> from <code>Booking</code>, and <code>Booking</code>'s constructor (Lines 1004–1008) already initialises every one. A sub-class only needs its own constructor when it has <strong>additional instance variables</strong> to initialise — which is exactly why <code>PremiumBooking</code> does have one, for <code>includesDrink</code>.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<code>StandardBooking</code> is a <strong>sub-class</strong> of <code>Booking</code> that adds <strong>no instance variables of its own</strong>. Every instance variable a <code>StandardBooking</code> object has — <code>bookingRef</code>, <code>seatCount</code> and <code>customerName</code> — is <strong>inherited</strong> from the <code>Booking</code> <strong>super-class</strong>."</p>
+            <p>"It therefore <strong>inherits the super-class constructor</strong> as well, and that constructor already assigns initial values to all three. There is nothing left for a constructor in <code>StandardBooking</code> to do. By contrast <code>PremiumBooking</code> does need one, because it adds the <code>includesDrink</code> instance variable."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for identifying that <code>StandardBooking</code> adds <strong>no additional instance variables / properties</strong> of its own.</li>
+              <li>1 mark for stating that it <strong>inherits</strong> the instance variables <em>and</em> the <strong>constructor</strong> of the <code>Booking</code> super-class, which already initialises them.</li>
+              <li><em>Accept</em> a contrast with <code>PremiumBooking</code> needing a constructor for <code>includesDrink</code> as the second mark.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Methods in Two Classes — 2 marks</div>
+        <p>Explain, using appropriate object-oriented terminology, why the <code>calculatePrice()</code> method appears in <strong>both</strong> the <code>Booking</code> and <code>PremiumBooking</code> classes. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — resist the obvious wrong answer.</strong> This is not "so both classes can work out a price". If that were all, the inherited method would be enough and there would be no reason to write it twice.</p>
+            <p><strong>Step 2 — ask what is different about the two.</strong> The scenario gives it away: standard seats are £9.50, premium seats £14.00 with an optional drink surcharge. The inherited calculation is simply <strong>wrong</strong> for a premium booking.</p>
+            <p><strong>Step 3 — name the mechanism and the principle.</strong> The sub-class <strong>overrides</strong> the inherited method by defining its own version with the same name, which replaces the super-class version for <code>PremiumBooking</code> objects. The same call producing different behaviour depending on the object's class is <strong>polymorphism</strong>. Both words should appear in a two-mark answer.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<code>PremiumBooking</code> <strong>inherits</strong> <code>calculatePrice()</code> from the <code>Booking</code> <strong>super-class</strong>, but that version charges £9.50 per seat, which is not correct for a premium booking. The <strong>sub-class</strong> therefore <strong>overrides</strong> the inherited method by defining its own version with the same name."</p>
+            <p>"When <code>calculatePrice()</code> is called, the version belonging to the <strong>class of the object</strong> runs — the <code>Booking</code> version for a standard booking and the <code>PremiumBooking</code> version for a premium one. This is <strong>polymorphism</strong>."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for identifying that the <strong>sub-class overrides</strong> the method it <strong>inherits</strong> from the super-class, because it needs different behaviour.</li>
+              <li>1 mark for explaining that the version which runs depends on the <strong>class of the object</strong> the method is called on — i.e. <strong>polymorphism</strong>.</li>
+              <li><em>Do not accept</em> "so it can be used in both classes" without reference to overriding or differing behaviour.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">The OVERRIDE Keyword — 2 marks</div>
+        <p>Explain the use of <code>OVERRIDE</code> in the <code>calculatePrice()</code> method of the <code>PremiumBooking</code> class at <strong>Line 1040</strong>. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — separate this from the previous question.</strong> That one asked <em>why the method appears twice</em>; this one asks what the <strong>keyword itself</strong> is for. Answer the keyword.</p>
+            <p><strong>Step 2 — what does it declare?</strong> It states explicitly that this method is <strong>replacing an inherited method of the same name</strong> from the super-class, rather than being a brand-new method that happens to share a name. It is a signal to both the compiler and the reader.</p>
+            <p><strong>Step 3 — what is the effect at run time?</strong> For any <code>PremiumBooking</code> object, this version is the one that executes; the inherited <code>Booking</code> version is not used. Objects of the super-class are unaffected and still run the original.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<code>OVERRIDE</code> declares that this method <strong>replaces a method of the same name inherited</strong> from the <code>Booking</code> <strong>super-class</strong>, rather than defining a new one. It makes clear that <code>calculatePrice()</code> already exists further up the hierarchy."</p>
+            <p>"As a result, when <code>calculatePrice()</code> is called on a <code>PremiumBooking</code> <strong>object</strong>, this version runs instead of the inherited one — while <code>StandardBooking</code> objects continue to use the version defined in <code>Booking</code>. This is how <strong>polymorphism</strong> is achieved."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for stating that <code>OVERRIDE</code> indicates the method <strong>replaces / redefines an inherited method of the same name</strong> from the super-class.</li>
+              <li>1 mark for stating the effect — that this version is executed for objects of <strong>this sub-class</strong>, while the super-class version still runs for other objects.</li>
+              <li><em>Accept</em> reference to polymorphism as part of either mark.</li>
             </ul>
           </div>
         </details>
@@ -369,35 +1132,109 @@ def find_title(self, track_title):
 
       <div class="practice-question">
         <div class="q-label">Encapsulation — 2 marks</div>
-        <p>A programmer makes all the instance variables of a <code>BankAccount</code> class private, and provides public methods <code>deposit()</code>, <code>withdraw()</code> and <code>getBalance()</code>.</p>
-        <p>Explain <strong>one</strong> benefit of this approach, and state the term that describes it. <strong>(2 marks)</strong></p>
+        <p>Explain, using appropriate object-oriented terminology, why <strong>Line 2005</strong> cannot be executed, and state how the program should achieve the same result. <strong>(2 marks)</strong></p>
+        <div class="code-block code-plain">
+          <div class="code-label">Line 2005</div>
+          <pre><code>SET booking2.seatCount TO 5</code></pre>
+        </div>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — find the evidence.</strong> On the class diagram every instance variable of <code>Booking</code> carries a <strong>−</strong>, meaning <strong>private</strong>; every method carries a <strong>+</strong>, meaning public. That is the diagnosis in one symbol.</p>
+            <p><strong>Step 2 — say precisely what private prevents.</strong> Not "it is hidden" — <code>seatCount</code> is <strong>encapsulated</strong> within the <code>Booking</code> class, so it can only be accessed by code <em>inside</em> that class. Line 2005 is in the main program, outside it, so the assignment is not permitted.</p>
+            <p><strong>Step 3 — the second mark is the fix.</strong> The class must expose a <strong>public setter</strong> — there is a <code>getSeatCount()</code> getter at Lines 1014–1016 but no corresponding setter, so one would have to be added to <code>Booking</code> and then called on the object.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<code>seatCount</code> is a <strong>private instance variable</strong> of the <code>Booking</code> class, shown by the <strong>−</strong> against it on the class diagram. It is <strong>encapsulated</strong>, so it can only be accessed by methods defined inside that class — and Line 2005 is in the main program, outside the class."</p>
+            <p>"To change it, the program must call a <strong>public method</strong> on the object. The class currently provides only the getter <code>getSeatCount()</code>, so a public <strong>setter</strong> such as <code>setSeatCount(INTEGER newCount)</code> would need to be added to <code>Booking</code> and then called as <code>booking2.setSeatCount(5)</code>."</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>The balance cannot be changed directly by other parts of the program — it can only be updated through the class's own methods, preventing accidental or invalid changes. <strong>(1 mark)</strong></li>
-              <li>This is <strong>encapsulation</strong>. <strong>(1 mark)</strong></li>
+              <li>1 mark for identifying <code>seatCount</code> as a <strong>private</strong> instance variable / <strong>encapsulated</strong> within <code>Booking</code>, so it cannot be accessed from outside the class.</li>
+              <li>1 mark for stating that a <strong>public method (setter)</strong> must be used instead, and that one would have to be added to the class.</li>
+              <li><em>Note:</em> "it is private" with no reference to access from outside the class earns 1 mark only.</li>
             </ul>
           </div>
         </details>
       </div>
 
       <div class="practice-question">
-        <div class="q-label">Polymorphism — 2 marks</div>
-        <p>A program stores <code>Circle</code>, <code>Square</code> and <code>Triangle</code> objects (all sub-classes of <code>Shape</code>) in one array. The loop below displays the area of every shape:</p>
-        <div class="code-block"><pre><code>FOR index FROM 0 TO length(shapes) - 1 DO
-    SEND shapes[index].area() TO DISPLAY
-END FOR</code></pre></div>
-        <p>Explain how polymorphism makes this loop possible. <strong>(2 marks)</strong></p>
+        <div class="q-label">Implementing an Overriding Method — 3 marks</div>
+        <p>Using a programming language of your choice, write the code needed to complete the <code>calculatePrice()</code> method of the <code>PremiumBooking</code> class at <strong>Line 1041</strong>.</p>
+        <p>Remember: a premium seat costs <strong>£14.00</strong>, and if the booking includes a drink a further <strong>£3.50 per seat</strong> is added. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — read the marks off the rule.</strong> Three marks, three jobs: the base calculation, the <strong>conditional</strong> test on <code>includesDrink</code>, and adding the surcharge and returning the total.</p>
+            <p><strong>Step 2 — it is a function, so it must return.</strong> Line 1040 declares <code>RETURNS REAL</code>. Assigning to an instance variable instead of returning a value would lose the final mark.</p>
+            <p><strong>Step 3 — the surcharge is per seat, not per booking.</strong> The scenario says "£3.50 per seat", so it is <code>seatCount * 3.50</code>. Check it: 4 premium seats with a drink is 4 × 14.00 + 4 × 3.50 = £70.00.</p>
+            <p><strong>Step 4 — reaching the inherited variable.</strong> <code>seatCount</code> is inherited from <code>Booking</code>, and inside the sub-class it is reached as <code>THIS.seatCount</code> — exactly as the SQA's own <code>Fireball</code> example reaches the inherited <code>bounce</code>. Using the inherited getter <code>THIS.getSeatCount()</code> is equally acceptable.</p>
+            <div class="code-block">
+              <div class="code-label">Sample Answer — SQA Reference Language, 3 marks</div>
+              <pre><code>OVERRIDE FUNCTION calculatePrice() RETURNS REAL
+    DECLARE total INITIALLY THIS.seatCount * 14.00
+
+    IF THIS.includesDrink = TRUE THEN
+        SET total TO total + (THIS.seatCount * 3.50)
+    END IF
+
+    RETURN total
+END FUNCTION</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">The same answer in Python</div>
+              <pre><code>def calculate_price(self):
+    total = self.__seat_count * 14.00
+    if self.__includes_drink:
+        total = total + (self.__seat_count * 3.50)
+    return total</code></pre>
+            </div>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>Each sub-class <strong>overrides</strong> <code>area()</code> with its own calculation (πr² for Circle, l² for Square, ½bh for Triangle). <strong>(1 mark)</strong></li>
-              <li>When <code>area()</code> is called, the version that runs is determined by the <strong>class of the object</strong> in that element — so one method name works for every shape without the loop needing to check the type. <strong>(1 mark)</strong></li>
+              <li>1 mark for calculating the base cost as <strong><code>seatCount</code> &times; 14.00</strong>.</li>
+              <li>1 mark for a <strong>conditional statement</strong> testing <code>includesDrink</code>.</li>
+              <li>1 mark for <strong>adding <code>seatCount</code> &times; 3.50</strong> when the condition is true and <strong>returning</strong> the total.</li>
+              <li><em>Accept</em> <code>THIS.seatCount</code>, <code>THIS.getSeatCount()</code> or the variable name alone. Accept any programming language.</li>
             </ul>
           </div>
         </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Reading the Class Diagram — 3 marks</div>
+        <p>(a) State how <strong>inheritance</strong> is shown on the UML class diagram above. <strong>(1 mark)</strong><br />
+        (b) State how many <strong>instance variables</strong> a <code>PremiumBooking</code> object has, and name them. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — for (a), describe the notation, not the concept.</strong> The question says "how is it <em>shown</em>", so the answer is about the drawing: a solid line with an arrowhead, running from each sub-class and <strong>pointing at the super-class</strong>.</p>
+            <p><strong>Step 2 — for (b), remember what diagrams leave out.</strong> The <code>PremiumBooking</code> box lists only <code>includesDrink</code>, because a class diagram never repeats inherited members. But the object still <em>has</em> the inherited ones — this is the standard trap.</p>
+            <p><strong>Step 3 — count.</strong> One of its own plus three inherited from <code>Booking</code> gives <strong>four</strong>.</p>
+            <p><strong>Sample Answer (a):</strong> "By a solid line with an arrowhead drawn from each sub-class to the super-class, with the <strong>arrow pointing at the super-class</strong> — here from both <code>StandardBooking</code> and <code>PremiumBooking</code> to <code>Booking</code>."</p>
+            <p><strong>Sample Answer (b):</strong> "<strong>Four.</strong> Its own <code>includesDrink</code>, plus <code>bookingRef</code>, <code>seatCount</code> and <code>customerName</code>, which it <strong>inherits</strong> from the <code>Booking</code> <strong>super-class</strong>. The diagram does not repeat the inherited ones in the sub-class box."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for an arrow / solid line from the <strong>sub-class pointing at the super-class</strong>.</li>
+              <li>(b) 1 mark for <strong>four</strong>; 1 mark for naming <code>includesDrink</code> plus the three <strong>inherited</strong> from <code>Booking</code>.</li>
+              <li><em>Note:</em> an answer of "one" — reading only the sub-class box — earns no marks for (b).</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Arrays of objects.</strong> The <code>Screening</code> class above holds <code>bookings</code> as an <code>Array of Booking</code> and a <code>totalTakings()</code> method, so this scenario is ready for questions on declaring, populating, traversing and sorting an array of objects. For now, the array-of-objects skills are examined in <a href="#worked-example">worked example parts (c)(i) and (c)(ii)</a>.</div>
       </div>
     </article>
 

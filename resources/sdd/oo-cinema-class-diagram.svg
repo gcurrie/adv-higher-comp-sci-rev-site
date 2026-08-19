@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 560" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">UML class diagram for the cinema booking practice scenario</title>
+  <desc id="d">A UML class diagram with four classes. Screening holds private film as String, startTime as String, screenNumber as Integer, bookings as an Array of Booking and numBookings as Integer, with public methods Screening, addBooking, getFilm and totalTakings. A gold arrow labelled array of objects runs from Screening to Booking. Booking holds private bookingRef as String, seatCount as Integer and customerName as String, with public methods Booking, calculatePrice, getRef and getSeatCount. Below are two sub-classes joined to Booking by inheritance arrows. StandardBooking has no additional properties and one public method, getBookingType. PremiumBooking holds private includesDrink as Boolean and has public methods PremiumBooking, calculatePrice and getBookingType.</desc>
+  <defs>
+    <marker id="inhArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/>
+    </marker>
+    <marker id="arrObj" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#92750A"/>
+    </marker>
+    <marker id="okArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1B6B45"/>
+    </marker>
+    <marker id="noArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="560" fill="#ffffff"/>
+  <text x="570" y="28" font-size="17" fill="#00442A" text-anchor="middle" font-weight="700">Fife Picture House booking system &#8212; UML class diagram</text>
+  <rect x="40" y="66" width="330" height="238" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="40" y="66" width="330" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="205.0" y="89" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Screening</text>
+  <text x="54" y="120" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−film: String</text>
+  <text x="54" y="138" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−startTime: String</text>
+  <text x="54" y="156" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−screenNumber: Integer</text>
+  <text x="54" y="174" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−bookings: Array of Booking</text>
+  <text x="54" y="192" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−numBookings: Integer</text>
+  <line x1="40" y1="202" x2="370" y2="202" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="54" y="222" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+Screening()</text>
+  <text x="54" y="240" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+addBooking()</text>
+  <text x="54" y="258" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getFilm()</text>
+  <text x="54" y="276" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+totalTakings()</text>
+  <rect x="480" y="66" width="300" height="202" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="480" y="66" width="300" height="34" fill="#00442A" stroke="#00442A" stroke-width="2"/>
+  <text x="630.0" y="89" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">Booking</text>
+  <text x="494" y="120" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−bookingRef: String</text>
+  <text x="494" y="138" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−seatCount: Integer</text>
+  <text x="494" y="156" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−customerName: String</text>
+  <line x1="480" y1="166" x2="780" y2="166" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="494" y="186" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+Booking()</text>
+  <text x="494" y="204" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+calculatePrice()</text>
+  <text x="494" y="222" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getRef()</text>
+  <text x="494" y="240" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getSeatCount()</text>
+  <rect x="120" y="400" width="300" height="112" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="120" y="400" width="300" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="270.0" y="423" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">StandardBooking</text>
+  <text x="134" y="454" font-size="12" fill="#4A5568" font-style="italic">(no additional properties)</text>
+  <line x1="120" y1="464" x2="420" y2="464" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="134" y="484" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getBookingType()</text>
+  <rect x="700" y="400" width="330" height="148" fill="#ffffff" stroke="#1F2937" stroke-width="2"/>
+  <rect x="700" y="400" width="330" height="34" fill="#1B6B45" stroke="#1B6B45" stroke-width="2"/>
+  <text x="865.0" y="423" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700">PremiumBooking</text>
+  <text x="714" y="454" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">−includesDrink: Boolean</text>
+  <line x1="700" y1="464" x2="1030" y2="464" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="714" y="484" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+PremiumBooking()</text>
+  <text x="714" y="502" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+calculatePrice()</text>
+  <text x="714" y="520" font-size="12.5" fill="#1F2937" font-family="Consolas, Menlo, monospace">+getBookingType()</text>
+  <line x1="374" y1="122" x2="476" y2="122" stroke="#92750A" stroke-width="2.2" marker-end="url(#arrObj)"/>
+  <text x="425" y="110" font-size="11" fill="#92750A" text-anchor="middle" font-weight="700">array of objects</text>
+  <line x1="330" y1="400" x2="510" y2="280" stroke="#1F2937" stroke-width="2" marker-end="url(#inhArr)"/>
+  <line x1="820" y1="400" x2="720" y2="280" stroke="#1F2937" stroke-width="2" marker-end="url(#inhArr)"/>
+</svg>

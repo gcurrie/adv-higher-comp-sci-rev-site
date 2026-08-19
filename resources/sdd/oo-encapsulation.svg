@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 570" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Encapsulation — an object guards its own data</title>
+  <desc id="d">On the left a grey box labelled the rest of the program contains two lines of code: myBook.borrow() shown in green, and SET myBook.onLoan TO TRUE shown in red. On the right a large box represents the object myBook of class Book. Along its top sit four green boxes labelled plus public methods, the way in: borrow, returnItem, getTitle and isOnLoan. Inside the object, a gold box holds the minus private instance variables title, author, isbn and onLoan, annotated as reachable only from inside the class. A green arrow labelled allowed runs from the program to the borrow method and on into the private data. A red dashed arrow labelled blocked, private runs from the program directly at the private data and is marked with a cross. A note explains that a public method may change a private variable because it is defined inside the class, while code outside the class cannot, which is why a line such as SET myBook.onLoan TO TRUE fails.</desc>
+  <defs>
+    <marker id="inhArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1F2937"/>
+    </marker>
+    <marker id="arrObj" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#92750A"/>
+    </marker>
+    <marker id="okArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#1B6B45"/>
+    </marker>
+    <marker id="noArr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="570" fill="#ffffff"/>
+  <text x="570" y="32" font-size="20" fill="#00442A" text-anchor="middle" font-weight="800">Encapsulation &#8212; the object guards its own data</text>
+  <text x="570" y="58" font-size="14" fill="#4A5568" text-anchor="middle">Instance variables are private. The only way in is through the object&#8217;s public methods.</text>
+  <rect x="40" y="190" width="250" height="150" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="2"/>
+  <text x="165" y="218" font-size="14" fill="#1F2937" text-anchor="middle" font-weight="700">the rest of</text>
+  <text x="165" y="238" font-size="14" fill="#1F2937" text-anchor="middle" font-weight="700">the program</text>
+  <text x="165" y="268" font-size="12.5" fill="#1B6B45" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">myBook.borrow()</text>
+  <text x="165" y="300" font-size="12.5" fill="#B91C1C" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">SET myBook.onLoan</text>
+  <text x="165" y="316" font-size="12.5" fill="#B91C1C" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">TO TRUE</text>
+  <rect x="400" y="110" width="560" height="340" fill="#ffffff" stroke="#00442A" stroke-width="2.5"/>
+  <rect x="400" y="110" width="560" height="32" fill="#00442A" stroke="#00442A" stroke-width="2.5"/>
+  <text x="680.0" y="132" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">myBook : Book object</text>
+  <text x="420" y="170" font-size="12.5" fill="#1B6B45" font-weight="700">+ public methods &#8212; the way in</text>
+  <rect x="420" y="182" width="124" height="34" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.8"/>
+  <text x="482" y="204" font-size="12.5" fill="#00442A" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">borrow()</text>
+  <rect x="553" y="182" width="124" height="34" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.8"/>
+  <text x="615" y="204" font-size="12.5" fill="#00442A" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">returnItem()</text>
+  <rect x="686" y="182" width="124" height="34" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.8"/>
+  <text x="748" y="204" font-size="12.5" fill="#00442A" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">getTitle()</text>
+  <rect x="819" y="182" width="124" height="34" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.8"/>
+  <text x="881" y="204" font-size="12.5" fill="#00442A" text-anchor="middle" font-weight="700" font-family="Consolas, Menlo, monospace">isOnLoan()</text>
+  <rect x="460" y="248" width="440" height="160" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.5"/>
+  <text x="680.0" y="274" font-size="13" fill="#92750A" text-anchor="middle" font-weight="700">&#8722; private instance variables</text>
+  <text x="680.0" y="300" font-size="13" fill="#1F2937" text-anchor="middle" font-family="Consolas, Menlo, monospace">title</text>
+  <text x="680.0" y="322" font-size="13" fill="#1F2937" text-anchor="middle" font-family="Consolas, Menlo, monospace">author</text>
+  <text x="680.0" y="344" font-size="13" fill="#1F2937" text-anchor="middle" font-family="Consolas, Menlo, monospace">isbn</text>
+  <text x="680.0" y="366" font-size="13" fill="#1F2937" text-anchor="middle" font-family="Consolas, Menlo, monospace">onLoan</text>
+  <text x="680.0" y="430" font-size="12" fill="#4A5568" text-anchor="middle" font-style="italic">reachable only from inside the class</text>
+  <line x1="292" y1="240" x2="414" y2="206" stroke="#1B6B45" stroke-width="2.4" marker-end="url(#okArr)"/>
+  <text x="348" y="208" font-size="12" fill="#1B6B45" text-anchor="middle" font-weight="700">allowed</text>
+  <line x1="482" y1="218" x2="500" y2="244" stroke="#1B6B45" stroke-width="2.4" marker-end="url(#okArr)"/>
+  <line x1="292" y1="305" x2="452" y2="308" stroke="#B91C1C" stroke-width="2.4" marker-end="url(#noArr)" stroke-dasharray="7 5"/>
+  <text x="360" y="348" font-size="12" fill="#B91C1C" text-anchor="middle" font-weight="700">blocked</text>
+  <text x="360" y="364" font-size="12" fill="#B91C1C" text-anchor="middle" font-weight="700">&#10007; private</text>
+  <rect x="40" y="480" width="1060" height="62" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="60" y="504" font-size="13.5" fill="#1F2937">A public method may change a private variable, because it is defined inside the class. Code outside the class cannot.</text>
+  <text x="60" y="524" font-size="13.5" fill="#1F2937">That is why an exam line such as SET myBook.onLoan TO TRUE fails &#8212; it reaches past the methods at private data.</text>
+</svg>
