@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Sort Animator — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810; --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --warn:#B91C1C; --warn-bg:#FDECEA;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:880px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85} .chip.ref b{color:var(--match)}
+  .chip.good{border-color:var(--active);background:var(--active-bg)}
+  .chip.good .k{color:var(--active);opacity:.85} .chip.good b{color:var(--active-strong)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .seg{display:flex;border:1px solid var(--line)}
+  .seg button{border:0;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  /* ── the bars ──────────────────────────────────────────── */
+  .stage{position:relative;height:250px;margin:0 auto}
+  .bar{position:absolute;bottom:44px;width:64px;transition:transform .34s cubic-bezier(.4,0,.2,1),background .2s,border-color .2s;
+       border:2px solid var(--active);background:var(--active-bg);display:flex;align-items:flex-start;justify-content:center}
+  .bar .v{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--active-strong);margin-top:5px}
+  .bar.cmp{border-color:var(--match-accent);background:var(--match-bg)}
+  .bar.cmp .v{color:var(--match)}
+  .bar.done{border-color:var(--active);background:var(--tint)}
+  .bar .nm{position:absolute;top:100%;left:-6px;right:-6px;margin-top:5px;font-size:10px;line-height:1.2;text-align:center;color:var(--ink-soft)}
+  .bar .ix{position:absolute;top:100%;left:0;right:0;margin-top:26px;font-family:var(--mono);font-size:10px;text-align:center;color:var(--line)}
+  .stage.records .bar .ix{margin-top:40px}
+  .baseline{position:absolute;left:0;right:0;bottom:43px;border-bottom:1px solid var(--line)}
+
+  /* ── code ──────────────────────────────────────────────── */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+  @media(max-width:860px){.split{grid-template-columns:minmax(0,1fr)}}
+  pre.code{margin:0;background:var(--bar);color:#E8F5EE;padding:14px 0;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.75}
+  pre.code i{display:block;font-style:normal;padding:0 14px 0 8px;border-left:3px solid transparent}
+  pre.code i.on{background:rgba(201,162,39,.22);border-left-color:var(--match-accent)}
+  pre.code .kw{color:#7FD1A8} pre.code .cmt{color:rgba(232,245,238,.4)}
+  pre.code .fld{color:#93B4FF}
+  pre.code .n{color:rgba(232,245,238,.3);display:inline-block;width:20px;text-align:right;margin-right:8px}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate.done{border-left-color:var(--active);background:var(--active-bg)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){.bar{transition:none}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Standard Algorithms</p>
+    <h1>Bubble Sort Animator</h1>
+    <p class="sub">Watch every comparison and every swap, with the matching line of pseudocode highlighted as it runs. Turn the <b>swapped flag</b> off to see how much extra work it saves, and switch to <b>records</b> to see what changes when the array holds more than a number.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">pass</span><b id="c-pass">0</b></div>
+      <div class="chip ref"><span class="k">comparisons</span><b id="c-cmp">0</b></div>
+      <div class="chip"><span class="k">swaps</span><b id="c-swp">0</b></div>
+      <div class="chip good"><span class="k">in place</span><b id="c-done">0</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="play" class="primary">&#9654; Play</button>
+      <button id="step">&#9197; Step</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="controls" style="margin-top:-6px">
+    <div class="btnrow">
+      <span class="lbl">start from</span>
+      <div class="seg">
+        <button data-p="random" class="on">Random</button>
+        <button data-p="nearly">Nearly sorted</button>
+        <button data-p="reverse">Reverse order</button>
+      </div>
+    </div>
+    <div class="btnrow">
+      <span class="lbl">swapped flag</span>
+      <div class="seg">
+        <button id="flag-on" class="on">On</button>
+        <button id="flag-off">Off</button>
+      </div>
+      <span class="lbl" style="margin-left:10px">data</span>
+      <div class="seg">
+        <button id="mode-num" class="on">Numbers</button>
+        <button id="mode-rec">Records</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span id="arrname">list &#8212; 8 VALUES</span><span class="dim">GOLD = BEING COMPARED &#183; SHADED = ALREADY IN PLACE</span></div>
+    <div class="panelbody">
+      <div class="stage" id="stage"><div class="baseline"></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE ALGORITHM</span><span class="dim">THE HIGHLIGHTED LINE IS THE ONE RUNNING</span></div>
+    <div class="panelbody">
+      <div class="split">
+        <div><pre class="code" id="code"></pre></div>
+        <div>
+          <div class="narrate idle" id="narrate">Press <b>Play</b> to run the sort, or <b>Step</b> to move one comparison at a time.</div>
+          <p class="tipnote"><b>Watch for:</b> the largest remaining value reaching the end of every pass, the shaded tail growing from the right, and &#8212; with the flag on &#8212; the sort stopping one pass after the array is actually in order, because that is the pass that proves it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var NAMES = ['A. Rahman', 'C. Fraser', 'E. Docherty', 'L. Boyle',
+               'M. Singh', 'N. Watt', 'P. Gray', 'S. Kerr'];
+  var N = 8, SLOT = 78, BARW = 64;
+
+  var st = { items: [], steps: [], si: -1, timer: null, preset: 'random', flag: true, mode: 'num' };
+
+  function makeItems(preset) {
+    var vals = [];
+    if (preset === 'random') {
+      while (vals.length < N) {
+        var v = 16 + Math.floor(Math.random() * 55);
+        if (vals.indexOf(v) === -1) vals.push(v);
+      }
+    } else {
+      var base = [18, 22, 27, 31, 36, 42, 49, 58];
+      if (preset === 'nearly') { vals = base.slice(); var t = vals[5]; vals[5] = vals[6]; vals[6] = t; }
+      else { vals = base.slice().reverse(); }
+    }
+    return vals.map(function (v, i) { return { id: 'i' + i, val: v, name: NAMES[i] }; });
+  }
+
+  /* ── instrument the algorithm ─────────────────────────── */
+  function build(items, useFlag) {
+    var a = items.slice(), steps = [], cmp = 0, swp = 0, pass = 0;
+    var n = a.length, unsorted = n - 1, swapped = true;
+
+    function snap(line, note, extra) {
+      var s = { order: a.map(function (x) { return x.id; }), line: line, note: note,
+                cmp: cmp, swp: swp, pass: pass, locked: n - 1 - unsorted };
+      if (extra) for (var k in extra) s[k] = extra[k];
+      steps.push(s);
+    }
+
+    snap(1, 'Set up: the unsorted region is the whole array, and <code>swapped</code> starts TRUE so the first pass runs.', { locked: 0 });
+
+    while (useFlag ? swapped : unsorted > 0) {
+      swapped = false;
+      pass++;
+      var cmpAtStart = cmp, swpAtStart = swp;
+      snap(4, 'Start of pass ' + pass + '. <code>swapped</code> is reset to FALSE &#8212; if it is still FALSE at the end of this pass, the array is sorted.', { locked: n - 1 - unsorted });
+
+      for (var i = 0; i < unsorted; i++) {
+        cmp++;
+        var willSwap = a[i].val > a[i + 1].val;
+        snap(6, 'Compare <b>' + a[i].val + '</b> and <b>' + a[i + 1].val + '</b>. ' +
+                (willSwap ? 'The left value is larger, so they are the wrong way round.'
+                          : 'They are already in order, so nothing moves.'),
+             { cmpPair: [i, i + 1], locked: n - 1 - unsorted });
+
+        if (willSwap) {
+          var t = a[i]; a[i] = a[i + 1]; a[i + 1] = t;
+          swp++;
+          snap(7, '<b>Swap.</b> The two values exchange places &#8212; three assignments, using a temporary variable.',
+               { cmpPair: [i, i + 1], locked: n - 1 - unsorted });
+          swapped = true;
+          snap(8, '<code>swapped</code> is set to TRUE, so there will have to be another pass after this one.',
+               { cmpPair: [i, i + 1], locked: n - 1 - unsorted });
+        }
+      }
+
+      unsorted--;
+      var madeCmp = cmp - cmpAtStart, madeSwp = swp - swpAtStart, endNote;
+      if (madeCmp === 0) {
+        endNote = 'The unsorted region is now empty, so pass ' + pass + ' made <b>no comparisons at all</b>. The flag stays FALSE and the loop is about to end.';
+      } else if (madeSwp === 0) {
+        endNote = 'End of pass ' + pass + '. <b>No swaps were made</b>, so nothing was out of order &#8212; the array is already sorted and the loop will stop. This is the pass that proves it.';
+      } else {
+        endNote = 'End of pass ' + pass + '. The largest value in the unsorted region has reached its final place, so the next pass can stop one element earlier.';
+      }
+      snap(11, endNote, { locked: n - 1 - unsorted });
+
+      if (!useFlag && unsorted === 0) break;
+    }
+
+    var reason = useFlag
+      ? 'The last pass made <b>no swaps</b>, so <code>swapped</code> stayed FALSE and the loop ended.'
+      : 'All ' + (n - 1) + ' passes have run. Without the flag the sort cannot stop early, even once the array is in order.';
+    snap(12, '<b>Sorted.</b> ' + reason + ' Total: <b>' + cmp + '</b> comparisons and <b>' + swp + '</b> swaps.',
+         { locked: n, done: true });
+    return steps;
+  }
+
+  /* ── code panel ───────────────────────────────────────── */
+  function codeLines() {
+    var cmpLine = st.mode === 'rec'
+      ? 'IF list[index].finishTime &gt; list[index + 1].finishTime THEN'
+      : 'IF list[index] &gt; list[index + 1] THEN';
+    var swapLine = st.mode === 'rec'
+      ? 'swap the whole records at index and index + 1'
+      : 'swap list[index] and list[index + 1]';
+    return [
+      'SET unsorted TO n - 1',
+      'SET swapped TO TRUE',
+      'WHILE swapped = TRUE DO',
+      '    SET swapped TO FALSE',
+      '    FOR index FROM 0 TO unsorted - 1 DO',
+      '        ' + cmpLine,
+      '            ' + swapLine,
+      '            SET swapped TO TRUE',
+      '        END IF',
+      '    END FOR',
+      '    SET unsorted TO unsorted - 1',
+      'END WHILE'
+    ];
+  }
+
+  function colour(t) {
+    return t.replace(/\b(SET|TO|WHILE|DO|FOR|FROM|IF|THEN|END|TRUE|FALSE)\b/g, '<span class="kw">$1</span>')
+            .replace(/\.(finishTime)\b/g, '.<span class="fld">$1</span>');
+  }
+
+  function renderCode(line) {
+    $('code').innerHTML = codeLines().map(function (l, i) {
+      var num = i + 1;
+      return '<i' + (num === line ? ' class="on"' : '') + '><span class="n">' + num + '</span>' + colour(l) + '</i>';
+    }).join('');
+  }
+
+  /* ── bars ─────────────────────────────────────────────── */
+  function buildBars() {
+    var stage = $('stage');
+    [].slice.call(stage.querySelectorAll('.bar')).forEach(function (b) { b.remove(); });
+    var vals = st.items.map(function (x) { return x.val; });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    st.items.forEach(function (it) {
+      var el = document.createElement('div');
+      el.className = 'bar';
+      el.id = 'bar-' + it.id;
+      el.style.height = (34 + (it.val - lo) / Math.max(1, hi - lo) * 140) + 'px';
+      el.innerHTML = '<span class="v">' + it.val + '</span>' +
+                     '<span class="nm"></span><span class="ix"></span>';
+      stage.appendChild(el);
+    });
+    stage.style.width = (N * SLOT) + 'px';
+  }
+
+  function paint() {
+    var s = st.steps[Math.max(0, st.si)];
+    if (!s) return;
+    var pos = {};
+    s.order.forEach(function (id, i) { pos[id] = i; });
+
+    st.items.forEach(function (it) {
+      var el = $('bar-' + it.id);
+      var i = pos[it.id];
+      el.style.transform = 'translateX(' + (i * SLOT) + 'px)';
+      var inPair = s.cmpPair && (i === s.cmpPair[0] || i === s.cmpPair[1]);
+      var locked = i >= st.items.length - (s.locked || 0);
+      el.className = 'bar' + (inPair ? ' cmp' : '') + (locked && !inPair ? ' done' : '');
+      el.querySelector('.nm').textContent = st.mode === 'rec' ? it.name : '';
+      el.querySelector('.ix').textContent = '[' + i + ']';
+    });
+
+    $('stage').className = 'stage' + (st.mode === 'rec' ? ' records' : '');
+    $('c-pass').textContent = s.pass;
+    $('c-cmp').textContent = s.cmp;
+    $('c-swp').textContent = s.swp;
+    $('c-done').textContent = s.locked || 0;
+    $('arrname').innerHTML = st.mode === 'rec'
+      ? 'resultsArray &#8212; 8 RUNNER RECORDS' : 'list &#8212; 8 VALUES';
+    renderCode(s.line);
+    $('narrate').className = 'narrate ' + (s.done ? 'done' : (s.cmpPair ? 'match' : ''));
+    $('narrate').innerHTML = s.note;
+  }
+
+  /* ── transport ────────────────────────────────────────── */
+  function advance() {
+    if (st.si >= st.steps.length - 1) { stop(); return false; }
+    st.si++;
+    paint();
+    if (st.si >= st.steps.length - 1) { stop(); return false; }
+    return true;
+  }
+
+  function stop() {
+    if (st.timer) { clearInterval(st.timer); st.timer = null; }
+    $('play').innerHTML = '&#9654; Play';
+  }
+
+  function reset(newData) {
+    stop();
+    if (newData) st.items = makeItems(st.preset);
+    st.steps = build(st.items, st.flag);
+    st.si = 0;
+    buildBars();
+    paint();
+    $('narrate').className = 'narrate idle';
+    $('narrate').innerHTML = 'Press <b>Play</b> to run the sort, or <b>Step</b> to move one comparison at a time.';
+  }
+
+  $('step').addEventListener('click', function () { stop(); advance(); });
+  $('play').addEventListener('click', function () {
+    if (st.timer) { stop(); return; }
+    if (st.si >= st.steps.length - 1) { st.si = 0; paint(); }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    advance();
+    st.timer = setInterval(function () { advance(); }, 900);
+  });
+  $('reset').addEventListener('click', function () { reset(true); });
+
+  [].slice.call(document.querySelectorAll('button[data-p]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('button[data-p]').forEach(function (o) { o.classList.remove('on'); });
+      b.classList.add('on');
+      st.preset = b.dataset.p;
+      reset(true);
+    });
+  });
+
+  function segPair(onId, offId, set) {
+    $(onId).addEventListener('click', function () { $(onId).classList.add('on'); $(offId).classList.remove('on'); set(true); });
+    $(offId).addEventListener('click', function () { $(offId).classList.add('on'); $(onId).classList.remove('on'); set(false); });
+  }
+  segPair('flag-on', 'flag-off', function (v) { st.flag = v; reset(false); });
+  segPair('mode-num', 'mode-rec', function (v) { st.mode = v ? 'num' : 'rec'; reset(false); });
+
+  st.items = makeItems('random');
+  reset(false);
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

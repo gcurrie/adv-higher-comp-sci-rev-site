@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insertion Sort Animator — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810; --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:880px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .statebar{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);background:#fff;display:flex;gap:7px;align-items:center}
+  .chip .k{color:var(--ink-soft);letter-spacing:.06em}
+  .chip b{color:var(--ink)}
+  .chip.ref{border-color:var(--match-accent);background:var(--match-bg)}
+  .chip.ref .k{color:var(--match);opacity:.85} .chip.ref b{color:var(--match)}
+  .chip.good{border-color:var(--active);background:var(--active-bg)}
+  .chip.good .k{color:var(--active);opacity:.85} .chip.good b{color:var(--active-strong)}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  .seg{display:flex;border:1px solid var(--line)}
+  .seg button{border:0;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 22px}
+
+  .stage{position:relative;height:320px;margin:0 auto}
+  .bar{position:absolute;bottom:44px;width:64px;transition:transform .34s cubic-bezier(.4,0,.2,1),background .2s,border-color .2s;
+       border:2px solid var(--line);background:#fff;display:flex;align-items:flex-start;justify-content:center}
+  .bar .v{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);margin-top:5px}
+  .bar.sorted{border-color:var(--active);background:var(--active-bg)}
+  .bar.sorted .v{color:var(--active-strong)}
+  .bar.lifted{border-color:var(--match-accent);background:var(--match-bg);box-shadow:0 8px 18px rgba(0,24,16,.16);z-index:3}
+  .bar.lifted .v{color:var(--match)}
+  .bar.look{border-color:var(--match-accent);border-style:dashed}
+  .bar .nm{position:absolute;top:100%;left:-6px;right:-6px;margin-top:5px;font-size:10px;line-height:1.2;text-align:center;color:var(--ink-soft)}
+  .bar .ix{position:absolute;top:100%;left:0;right:0;margin-top:26px;font-family:var(--mono);font-size:10px;text-align:center;color:var(--line)}
+  .stage.records .bar .ix{margin-top:40px}
+  .baseline{position:absolute;left:0;right:0;bottom:43px;border-bottom:1px solid var(--line)}
+  .region{position:absolute;top:6px;height:20px;border-bottom:2px solid var(--active);transition:width .34s;pointer-events:none}
+  .region span{position:absolute;left:0;right:0;top:-2px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--active);text-align:center}
+  .hole{position:absolute;bottom:44px;width:64px;height:34px;border:2px dashed var(--match-accent);background:repeating-linear-gradient(45deg,transparent,transparent 5px,rgba(201,162,39,.13) 5px,rgba(201,162,39,.13) 10px);transition:transform .34s}
+
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+  @media(max-width:860px){.split{grid-template-columns:minmax(0,1fr)}}
+  pre.code{margin:0;background:var(--bar);color:#E8F5EE;padding:14px 0;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.75}
+  pre.code i{display:block;font-style:normal;padding:0 14px 0 8px;border-left:3px solid transparent}
+  pre.code i.on{background:rgba(201,162,39,.22);border-left-color:var(--match-accent)}
+  pre.code .kw{color:#7FD1A8} pre.code .fld{color:#93B4FF}
+  pre.code .n{color:rgba(232,245,238,.3);display:inline-block;width:20px;text-align:right;margin-right:8px}
+
+  .narrate{margin-top:16px;font-size:14.5px;min-height:2.6em;border:1px solid var(--line);border-left:3px solid var(--active);padding:12px 16px;background:var(--active-bg)}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .narrate.match{border-left-color:var(--match-accent);background:var(--match-bg)}
+  .narrate code{font-family:var(--mono);font-size:13.5px;background:rgba(0,0,0,.05);padding:1px 4px}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){.bar,.hole,.region{transition:none}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Standard Algorithms</p>
+    <h1>Insertion Sort Animator</h1>
+    <p class="sub">The current value <b>lifts out</b> of the array and hovers while every larger value slides right, then drops into the gap. Watch the sorted region grow from the left &#8212; and try the <b>nearly sorted</b> preset to see why this algorithm is the one to choose for data that is almost in order.</p>
+  </header>
+
+  <div class="controls">
+    <div class="statebar">
+      <div class="chip"><span class="k">outer pass</span><b id="c-pass">0</b></div>
+      <div class="chip ref"><span class="k">comparisons</span><b id="c-cmp">0</b></div>
+      <div class="chip"><span class="k">shifts</span><b id="c-shf">0</b></div>
+      <div class="chip good"><span class="k">sorted region</span><b id="c-srt">1</b></div>
+    </div>
+    <div class="btnrow">
+      <button id="play" class="primary">&#9654; Play</button>
+      <button id="step">&#9197; Step</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="controls" style="margin-top:-6px">
+    <div class="btnrow">
+      <span class="lbl">start from</span>
+      <div class="seg">
+        <button data-p="random" class="on">Random</button>
+        <button data-p="nearly">Nearly sorted</button>
+        <button data-p="reverse">Reverse order</button>
+      </div>
+    </div>
+    <div class="btnrow">
+      <span class="lbl">data</span>
+      <div class="seg">
+        <button id="mode-num" class="on">Numbers</button>
+        <button id="mode-rec">Records</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span id="arrname">list &#8212; 8 VALUES</span><span class="dim">GOLD = LIFTED OUT &#183; GREEN = SORTED REGION</span></div>
+    <div class="panelbody">
+      <div class="stage" id="stage"><div class="baseline"></div><div class="region" id="region"><span>sorted</span></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE ALGORITHM</span><span class="dim">THE HIGHLIGHTED LINE IS THE ONE RUNNING</span></div>
+    <div class="panelbody">
+      <div class="split">
+        <div><pre class="code" id="code"></pre></div>
+        <div>
+          <div class="narrate idle" id="narrate">Press <b>Play</b> to run the sort, or <b>Step</b> to move one operation at a time.</div>
+          <p class="tipnote"><b>Watch for:</b> a value that is already in the right place causes the inner loop to exit on its <i>first</i> comparison &#8212; no shifting at all. On nearly sorted data almost every value does that, which is the whole efficiency argument.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  var NAMES = ['A. Rahman', 'C. Fraser', 'E. Docherty', 'L. Boyle',
+               'M. Singh', 'N. Watt', 'P. Gray', 'S. Kerr'];
+  var N = 8, SLOT = 78;
+  var st = { items: [], steps: [], si: 0, timer: null, preset: 'random', mode: 'num' };
+
+  function makeItems(preset) {
+    var vals = [];
+    if (preset === 'random') {
+      while (vals.length < N) {
+        var v = 16 + Math.floor(Math.random() * 55);
+        if (vals.indexOf(v) === -1) vals.push(v);
+      }
+    } else {
+      var base = [18, 22, 27, 31, 36, 42, 49, 58];
+      if (preset === 'nearly') { vals = base.slice(); var t = vals[5]; vals[5] = vals[6]; vals[6] = t; }
+      else { vals = base.slice().reverse(); }
+    }
+    return vals.map(function (v, i) { return { id: 'i' + i, val: v, name: NAMES[i] }; });
+  }
+
+  /* ── instrument the algorithm ─────────────────────────── */
+  function build(items) {
+    var slots = items.map(function (x) { return x.id; });
+    var byId = {}; items.forEach(function (x) { byId[x.id] = x; });
+    var steps = [], cmp = 0, shf = 0;
+    var lifted = null, hole = -1;
+
+    function snap(line, note, extra) {
+      var s = { slots: slots.slice(), line: line, note: note, cmp: cmp, shf: shf,
+                lifted: lifted, hole: hole };
+      if (extra) for (var k in extra) s[k] = extra[k];
+      steps.push(s);
+    }
+
+    snap(1, 'Position 0 counts as a <b>sorted region of one</b>, so there is nothing to insert yet. The outer loop starts at position 1.',
+         { sorted: 1, pass: 0 });
+
+    for (var outer = 1; outer < slots.length; outer++) {
+      var curId = slots[outer];
+      var curVal = byId[curId].val;
+
+      lifted = curId; hole = outer;
+      slots[outer] = null;
+      snap(2, '<b>Lift out</b> the value at position ' + outer + ' (<b>' + curVal + '</b>) into <code>current</code>, leaving a gap.',
+           { sorted: outer, pass: outer });
+      snap(3, '<code>inner</code> starts at ' + outer + ' &#8212; the gap. It will walk left while values need to move right.',
+           { sorted: outer, pass: outer });
+
+      var inner = outer;
+      while (true) {
+        if (inner === 0) {
+          cmp++;
+          snap(4, '<code>inner</code> is 0, so there is nothing further left. The first half of the condition fails and the loop stops &#8212; <b>' +
+                  curVal + '</b> belongs at the very front.',
+               { sorted: outer, pass: outer, look: -1 });
+          break;
+        }
+        var leftId = slots[inner - 1], leftVal = byId[leftId].val;
+        cmp++;
+        var willShift = leftVal > curVal;
+        snap(4, 'Compare <b>' + leftVal + '</b> with <code>current</code> = <b>' + curVal + '</b>. ' +
+                (willShift ? 'It is larger, so it must move right.'
+                           : 'It is <b>not</b> larger, so the loop stops here and the gap is where <code>current</code> belongs.'),
+             { sorted: outer, pass: outer, look: inner - 1 });
+        if (!willShift) break;
+
+        slots[inner] = leftId; slots[inner - 1] = null;
+        hole = inner - 1; shf++;
+        snap(5, '<b>Shift.</b> ' + leftVal + ' slides one place right into the gap &#8212; a single assignment, not a three-line swap.',
+             { sorted: outer, pass: outer });
+        inner--;
+        snap(6, '<code>inner</code> moves one place left, to ' + inner + '. The gap has moved with it.',
+             { sorted: outer, pass: outer });
+      }
+
+      slots[hole] = curId; lifted = null;
+      var was = hole; hole = -1;
+      snap(8, '<b>Insert.</b> <code>current</code> (' + curVal + ') drops into the gap at position ' + was +
+              '. The sorted region is now ' + (outer + 1) + ' values long.',
+           { sorted: outer + 1, pass: outer });
+    }
+
+    snap(9, '<b>Sorted.</b> Every value has been inserted into the sorted region. Total: <b>' + cmp +
+            '</b> comparisons and <b>' + shf + '</b> shifts.',
+         { sorted: slots.length, pass: slots.length - 1, done: true });
+    return steps;
+  }
+
+  /* ── code panel ───────────────────────────────────────── */
+  function codeLines() {
+    var lift = st.mode === 'rec' ? 'SET current TO resultsArray[outer]' : 'SET current TO list[outer]';
+    var cond = st.mode === 'rec'
+      ? 'WHILE inner &gt; 0 AND resultsArray[inner - 1].finishTime &gt; current.finishTime DO'
+      : 'WHILE inner &gt; 0 AND list[inner - 1] &gt; current DO';
+    var shift = st.mode === 'rec' ? 'SET resultsArray[inner] TO resultsArray[inner - 1]' : 'SET list[inner] TO list[inner - 1]';
+    var ins = st.mode === 'rec' ? 'SET resultsArray[inner] TO current' : 'SET list[inner] TO current';
+    return ['FOR outer FROM 1 TO n - 1 DO', '    ' + lift, '    SET inner TO outer',
+            '    ' + cond, '        ' + shift, '        SET inner TO inner - 1',
+            '    END WHILE', '    ' + ins, 'END FOR'];
+  }
+
+  function colour(t) {
+    return t.replace(/\b(SET|TO|WHILE|DO|FOR|FROM|AND|END|IF|THEN)\b/g, '<span class="kw">$1</span>')
+            .replace(/\.(finishTime)\b/g, '.<span class="fld">$1</span>');
+  }
+
+  function renderCode(line) {
+    $('code').innerHTML = codeLines().map(function (l, i) {
+      var num = i + 1;
+      return '<i' + (num === line ? ' class="on"' : '') + '><span class="n">' + num + '</span>' + colour(l) + '</i>';
+    }).join('');
+  }
+
+  /* ── bars ─────────────────────────────────────────────── */
+  function buildBars() {
+    var stage = $('stage');
+    [].slice.call(stage.querySelectorAll('.bar,.hole')).forEach(function (b) { b.remove(); });
+    var vals = st.items.map(function (x) { return x.val; });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    st.items.forEach(function (it) {
+      var el = document.createElement('div');
+      el.className = 'bar';
+      el.id = 'bar-' + it.id;
+      el.style.height = (34 + (it.val - lo) / Math.max(1, hi - lo) * 140) + 'px';
+      el.innerHTML = '<span class="v">' + it.val + '</span><span class="nm"></span><span class="ix"></span>';
+      stage.appendChild(el);
+    });
+    var h = document.createElement('div');
+    h.className = 'hole'; h.id = 'hole';
+    stage.appendChild(h);
+    stage.style.width = (N * SLOT) + 'px';
+  }
+
+  function paint() {
+    var s = st.steps[st.si];
+    if (!s) return;
+    var pos = {};
+    s.slots.forEach(function (id, i) { if (id) pos[id] = i; });
+
+    st.items.forEach(function (it) {
+      var el = $('bar-' + it.id);
+      var cls = 'bar';
+      var x;
+      if (s.lifted === it.id) {
+        x = s.hole * SLOT;
+        cls += ' lifted';
+        el.style.transform = 'translate(' + x + 'px,-92px)';
+      } else {
+        var i = pos[it.id];
+        if (i === undefined) i = 0;
+        x = i * SLOT;
+        if (i < s.sorted && s.lifted === null) cls += ' sorted';
+        else if (i < s.sorted) cls += ' sorted';
+        if (s.look === i) cls += ' look';
+        el.style.transform = 'translate(' + x + 'px,0)';
+      }
+      el.className = cls;
+      el.querySelector('.nm').textContent = st.mode === 'rec' ? it.name : '';
+      var shown = (s.lifted === it.id) ? s.hole : pos[it.id];
+      el.querySelector('.ix').textContent = (s.lifted === it.id) ? 'current' : '[' + shown + ']';
+    });
+
+    var hole = $('hole');
+    if (s.hole >= 0) { hole.style.display = 'block'; hole.style.transform = 'translateX(' + (s.hole * SLOT) + 'px)'; }
+    else hole.style.display = 'none';
+
+    var reg = $('region');
+    reg.style.width = Math.max(0, s.sorted * SLOT - 14) + 'px';
+    reg.style.display = s.sorted > 0 ? 'block' : 'none';
+
+    $('stage').className = 'stage' + (st.mode === 'rec' ? ' records' : '');
+    $('c-pass').textContent = s.pass;
+    $('c-cmp').textContent = s.cmp;
+    $('c-shf').textContent = s.shf;
+    $('c-srt').textContent = s.sorted;
+    $('arrname').innerHTML = st.mode === 'rec' ? 'resultsArray &#8212; 8 RUNNER RECORDS' : 'list &#8212; 8 VALUES';
+    renderCode(s.line);
+    $('narrate').className = 'narrate ' + (s.done ? '' : (s.lifted ? 'match' : ''));
+    $('narrate').innerHTML = s.note;
+  }
+
+  function advance() {
+    if (st.si >= st.steps.length - 1) { stop(); return false; }
+    st.si++; paint();
+    if (st.si >= st.steps.length - 1) { stop(); return false; }
+    return true;
+  }
+  function stop() { if (st.timer) { clearInterval(st.timer); st.timer = null; } $('play').innerHTML = '&#9654; Play'; }
+
+  function reset(newData) {
+    stop();
+    if (newData) st.items = makeItems(st.preset);
+    st.steps = build(st.items);
+    st.si = 0;
+    buildBars(); paint();
+    $('narrate').className = 'narrate idle';
+    $('narrate').innerHTML = 'Press <b>Play</b> to run the sort, or <b>Step</b> to move one operation at a time.';
+  }
+
+  $('step').addEventListener('click', function () { stop(); advance(); });
+  $('play').addEventListener('click', function () {
+    if (st.timer) { stop(); return; }
+    if (st.si >= st.steps.length - 1) { st.si = 0; paint(); }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    advance();
+    st.timer = setInterval(function () { advance(); }, 900);
+  });
+  $('reset').addEventListener('click', function () { reset(true); });
+
+  [].slice.call(document.querySelectorAll('button[data-p]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('button[data-p]').forEach(function (o) { o.classList.remove('on'); });
+      b.classList.add('on'); st.preset = b.dataset.p; reset(true);
+    });
+  });
+  $('mode-num').addEventListener('click', function () {
+    $('mode-num').classList.add('on'); $('mode-rec').classList.remove('on'); st.mode = 'num'; paint();
+  });
+  $('mode-rec').addEventListener('click', function () {
+    $('mode-rec').classList.add('on'); $('mode-num').classList.remove('on'); st.mode = 'rec'; paint();
+  });
+
+  st.items = makeItems('random');
+  reset(false);
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble vs Insertion — Advanced Higher Computing Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A1A; --ink-soft:#4A5568; --bg:#F8F7F2; --panel:#ffffff; --line:#D1D5DB;
+    --active:#1B6B45; --active-bg:#E8F5EE; --active-strong:#00442A; --bar:#001810; --tint:#C7DED2;
+    --match:#92750A; --match-accent:#C9A227; --match-bg:#FEF3C7;
+    --blue:#1E40AF; --blue-bg:#EFF6FF;
+    --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:'Public Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;padding:clamp(10px,1.5vw,18px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  header h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-.025em;color:var(--active-strong);margin:0 0 8px}
+  header p.sub{margin:0;color:var(--ink-soft);font-size:15px;max-width:900px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--active);font-weight:700;margin:0 0 10px}
+
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px 18px;margin:18px 0 14px}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--active-strong);transition:background .15s,border-color .15s}
+  button:hover:not(:disabled){border-color:var(--active);background:var(--active-bg)}
+  button:focus-visible{outline:3px solid var(--active-bg);outline-offset:1px}
+  button.primary{background:var(--match-accent);border-color:var(--match-accent);color:#002D1C}
+  button.primary:hover:not(:disabled){filter:brightness(1.06);background:var(--match-accent)}
+  button.on{background:var(--active-bg);border-color:var(--active);color:var(--active-strong)}
+  .seg{display:flex;border:1px solid var(--line)}
+  .seg button{border:0;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px}
+
+  .panel{border:1px solid var(--line);background:var(--panel);margin-bottom:14px}
+  .panelbar{background:var(--bar);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .panelbar span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--match-accent)}
+  .panelbar .dim{color:rgba(255,255,255,.45);letter-spacing:.12em}
+  .panelbody{padding:18px 20px}
+
+  .race{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:820px){.race{grid-template-columns:1fr}}
+  .side{border:1px solid var(--line);background:#fff}
+  .side h3{margin:0;padding:10px 14px;font-size:14px;font-weight:800;color:#fff;background:var(--active);display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .side.ins h3{background:var(--blue)}
+  .side h3 .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;padding:3px 7px;background:rgba(255,255,255,.18)}
+  .side .body{padding:14px}
+  .counts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .cnt{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);padding:5px 9px;display:flex;gap:6px}
+  .cnt .k{color:var(--ink-soft)} .cnt b{color:var(--ink)}
+  .cnt.hi{border-color:var(--match-accent);background:var(--match-bg)}
+  .cnt.hi .k{color:var(--match)} .cnt.hi b{color:var(--match)}
+  .stage{position:relative;height:150px}
+  .bar{position:absolute;bottom:20px;width:44px;transition:transform .3s cubic-bezier(.4,0,.2,1),background .2s,border-color .2s;
+       border:2px solid var(--line);background:#fff}
+  .side.bub .bar.act{border-color:var(--match-accent);background:var(--match-bg)}
+  .side.ins .bar.act{border-color:var(--match-accent);background:var(--match-bg)}
+  .bar.fin{border-color:var(--active);background:var(--active-bg)}
+  .baseline{position:absolute;left:0;right:0;bottom:19px;border-bottom:1px solid var(--line)}
+  .fin-banner{margin-top:10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+              padding:7px 10px;border:1px solid var(--active);background:var(--active-bg);color:var(--active-strong);display:none}
+  .fin-banner.show{display:block}
+
+  .verdict{border:1px solid var(--match-accent);background:var(--match-bg);padding:14px 18px;margin-top:14px;font-size:14.5px;display:none}
+  .verdict.show{display:block}
+  .verdict b{color:var(--match)}
+  .narrate{margin-top:14px;font-size:14px;border:1px solid var(--line);border-left:3px solid var(--active);padding:11px 15px;background:var(--active-bg);min-height:2.4em}
+  .narrate.idle{border-left-color:var(--line);background:var(--bg);color:var(--ink-soft)}
+  .tipnote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6}
+
+  @media(prefers-reduced-motion:reduce){.bar{transition:none}}
+  @media(max-width:760px){.controls{flex-direction:column;align-items:stretch}.panelbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Advanced Higher &#183; SDD &#183; Standard Algorithms</p>
+    <h1>Bubble Sort vs Insertion Sort</h1>
+    <p class="sub">The same eight values, the same starting order, both sorts running one <b>comparison</b> at a time. Change the starting order and watch which one wins &#8212; and by how much. This is the evidence behind every &#8220;which algorithm would you choose&#8221; answer.</p>
+  </header>
+
+  <div class="controls">
+    <div class="btnrow">
+      <span class="lbl">starting order</span>
+      <div class="seg">
+        <button data-p="random" class="on">Random</button>
+        <button data-p="nearly">Nearly sorted</button>
+        <button data-p="reverse">Reverse order</button>
+        <button data-p="sorted">Already sorted</button>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button id="play" class="primary">&#9654; Race</button>
+      <button id="step">&#9197; Step</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panelbar"><span>THE RACE</span><span class="dim">ONE TICK = ONE COMPARISON FOR EACH ALGORITHM</span></div>
+    <div class="panelbody">
+      <div class="race">
+        <div class="side bub">
+          <h3>Bubble sort <span class="tag" id="tag-b">ready</span></h3>
+          <div class="body">
+            <div class="counts">
+              <div class="cnt hi"><span class="k">comparisons</span><b id="b-cmp">0</b></div>
+              <div class="cnt"><span class="k">swaps</span><b id="b-swp">0</b></div>
+              <div class="cnt"><span class="k">passes</span><b id="b-pass">0</b></div>
+            </div>
+            <div class="stage" id="stage-b"><div class="baseline"></div></div>
+            <div class="fin-banner" id="fin-b"></div>
+          </div>
+        </div>
+        <div class="side ins">
+          <h3>Insertion sort <span class="tag" id="tag-i">ready</span></h3>
+          <div class="body">
+            <div class="counts">
+              <div class="cnt hi"><span class="k">comparisons</span><b id="i-cmp">0</b></div>
+              <div class="cnt"><span class="k">shifts</span><b id="i-shf">0</b></div>
+              <div class="cnt"><span class="k">outer passes</span><b id="i-pass">0</b></div>
+            </div>
+            <div class="stage" id="stage-i"><div class="baseline"></div></div>
+            <div class="fin-banner" id="fin-i"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict" id="verdict"></div>
+      <div class="narrate idle" id="narrate">Choose a starting order, then press <b>Race</b>.</div>
+      <p class="tipnote"><b>Try each preset.</b> On <i>reverse order</i> the two make the same number of comparisons &#8212; but bubble sort pays for every one with a three-assignment swap, while insertion sort only slides a value along. On <i>nearly sorted</i> data the gap opens up properly: insertion sort's inner loop exits on its first comparison almost every time.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var N = 8, SLOT = 52;
+  var st = { vals: [], b: [], i: [], si: 0, timer: null, preset: 'random' };
+
+  function makeVals(preset) {
+    var base = [18, 22, 27, 31, 36, 42, 49, 58];
+    if (preset === 'sorted') return base.slice();
+    if (preset === 'reverse') return base.slice().reverse();
+    if (preset === 'nearly') { var v = base.slice(); var t = v[5]; v[5] = v[6]; v[6] = t; return v; }
+    var out = [];
+    while (out.length < N) {
+      var x = 16 + Math.floor(Math.random() * 55);
+      if (out.indexOf(x) === -1) out.push(x);
+    }
+    return out;
+  }
+
+  /* one recorded state per VALUE COMPARISON, so the two are directly comparable */
+  function buildBubble(vals) {
+    var a = vals.slice(), steps = [], cmp = 0, swp = 0, pass = 0;
+    var n = a.length, unsorted = n - 1, swapped = true;
+    while (swapped && unsorted > 0) {
+      swapped = false; pass++;
+      for (var i = 0; i < unsorted; i++) {
+        cmp++;
+        if (a[i] > a[i + 1]) { var t = a[i]; a[i] = a[i + 1]; a[i + 1] = t; swp++; swapped = true; }
+        steps.push({ arr: a.slice(), cmp: cmp, mv: swp, pass: pass, act: [i, i + 1], fin: n - 1 - unsorted });
+      }
+      unsorted--;
+    }
+    steps.push({ arr: a.slice(), cmp: cmp, mv: swp, pass: pass, act: [], fin: n, done: true });
+    return steps;
+  }
+
+  function buildInsertion(vals) {
+    var a = vals.slice(), steps = [], cmp = 0, shf = 0;
+    var n = a.length;
+    for (var outer = 1; outer < n; outer++) {
+      var cur = a[outer], inner = outer;
+      while (inner > 0 && a[inner - 1] > cur) {
+        cmp++;
+        a[inner] = a[inner - 1]; inner--; shf++;
+        steps.push({ arr: a.slice(), cmp: cmp, mv: shf, pass: outer, act: [inner, inner + 1], fin: outer });
+      }
+      if (inner > 0) {          // the comparison that stopped the loop
+        cmp++;
+        steps.push({ arr: a.slice(), cmp: cmp, mv: shf, pass: outer, act: [inner - 1, inner], fin: outer });
+      }
+      a[inner] = cur;
+    }
+    steps.push({ arr: a.slice(), cmp: cmp, mv: shf, pass: n - 1, act: [], fin: n, done: true });
+    return steps;
+  }
+
+  function buildBars(stageId, vals) {
+    var stage = $(stageId);
+    [].slice.call(stage.querySelectorAll('.bar')).forEach(function (b) { b.remove(); });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    for (var i = 0; i < vals.length; i++) {
+      var el = document.createElement('div');
+      el.className = 'bar';
+      el.dataset.k = i;
+      el.style.height = (20 + (vals[i] - lo) / Math.max(1, hi - lo) * 100) + 'px';
+      stage.appendChild(el);
+    }
+    stage.style.width = (vals.length * SLOT) + 'px';
+  }
+
+  function paintSide(stageId, steps, k, pre) {
+    var s = steps[Math.min(k, steps.length - 1)];
+    var bars = $(stageId).querySelectorAll('.bar');
+    var lo = Math.min.apply(null, st.vals), hi = Math.max.apply(null, st.vals);
+    for (var i = 0; i < s.arr.length; i++) {
+      var el = bars[i];
+      el.style.height = (20 + (s.arr[i] - lo) / Math.max(1, hi - lo) * 100) + 'px';
+      el.style.transform = 'translateX(' + (i * SLOT) + 'px)';
+      var act = s.act.indexOf(i) !== -1;
+      var fin = i >= s.arr.length - (s.fin || 0) || (pre === 'i' && i < (s.fin || 0));
+      el.className = 'bar' + (act ? ' act' : (s.done ? ' fin' : (fin && !act ? ' fin' : '')));
+    }
+    return s;
+  }
+
+  function paint() {
+    var sb = paintSide('stage-b', st.b, st.si, 'b');
+    var si = paintSide('stage-i', st.i, st.si, 'i');
+    $('b-cmp').textContent = sb.cmp; $('b-swp').textContent = sb.mv; $('b-pass').textContent = sb.pass;
+    $('i-cmp').textContent = si.cmp; $('i-shf').textContent = si.mv; $('i-pass').textContent = si.pass;
+
+    var bDone = st.si >= st.b.length - 1, iDone = st.si >= st.i.length - 1;
+    $('tag-b').textContent = bDone ? 'finished' : 'sorting';
+    $('tag-i').textContent = iDone ? 'finished' : 'sorting';
+    $('fin-b').className = 'fin-banner' + (bDone ? ' show' : '');
+    $('fin-i').className = 'fin-banner' + (iDone ? ' show' : '');
+    $('fin-b').textContent = 'Sorted in ' + st.b[st.b.length - 1].cmp + ' comparisons, ' + st.b[st.b.length - 1].mv + ' swaps';
+    $('fin-i').textContent = 'Sorted in ' + st.i[st.i.length - 1].cmp + ' comparisons, ' + st.i[st.i.length - 1].mv + ' shifts';
+
+    if (bDone && iDone) showVerdict();
+  }
+
+  function showVerdict() {
+    var bc = st.b[st.b.length - 1], ic = st.i[st.i.length - 1];
+    var msg;
+    if (ic.cmp < bc.cmp) {
+      msg = '<b>Insertion sort wins</b> &#8212; ' + ic.cmp + ' comparisons against ' + bc.cmp +
+            '. Most values were already in place, so its inner loop exited on the first comparison and no shifting was needed. ' +
+            'A bubble sort still has to walk the whole array to discover the same thing.';
+    } else if (ic.cmp > bc.cmp) {
+      msg = '<b>Bubble sort made fewer comparisons this time</b> &#8212; ' + bc.cmp + ' against ' + ic.cmp +
+            '. But look at the movement: ' + bc.mv + ' swaps (three assignments each) against ' + ic.mv +
+            ' shifts (one assignment each). Comparisons are not the whole cost.';
+    } else if (bc.mv === ic.mv) {
+      msg = '<b>A dead heat</b> &#8212; ' + bc.cmp + ' comparisons each and no data moved at all. ' +
+            'The array was already in order, so both algorithms did the minimum possible work: one pass of ' + bc.cmp +
+            ' comparisons. Note that bubble sort only manages this <b>because of the swapped flag</b> &#8212; without it, it would grind through every remaining pass.';
+    } else {
+      msg = '<b>A dead heat on comparisons</b> &#8212; ' + bc.cmp + ' each. The difference is in the movement: ' +
+            bc.mv + ' <b>swaps</b> for bubble sort, at three assignments apiece, against ' + ic.mv +
+            ' <b>shifts</b> for insertion sort, at one. That is why insertion sort is the cheaper of the two on the same data.';
+    }
+    $('verdict').className = 'verdict show';
+    $('verdict').innerHTML = msg;
+  }
+
+  function advance() {
+    var max = Math.max(st.b.length, st.i.length) - 1;
+    if (st.si >= max) { stop(); return false; }
+    st.si++; paint();
+    if (st.si >= max) { stop(); return false; }
+    return true;
+  }
+  function stop() { if (st.timer) { clearInterval(st.timer); st.timer = null; } $('play').innerHTML = '&#9654; Race'; }
+
+  function reset(newData) {
+    stop();
+    if (newData) st.vals = makeVals(st.preset);
+    st.b = buildBubble(st.vals);
+    st.i = buildInsertion(st.vals);
+    st.si = 0;
+    buildBars('stage-b', st.vals);
+    buildBars('stage-i', st.vals);
+    $('verdict').className = 'verdict';
+    paint();
+    $('narrate').className = 'narrate idle';
+    $('narrate').innerHTML = 'Press <b>Race</b> to run both at once, or <b>Step</b> to advance one comparison each.';
+  }
+
+  $('step').addEventListener('click', function () { stop(); advance(); });
+  $('play').addEventListener('click', function () {
+    if (st.timer) { stop(); return; }
+    var max = Math.max(st.b.length, st.i.length) - 1;
+    if (st.si >= max) { st.si = 0; $('verdict').className = 'verdict'; paint(); }
+    $('play').innerHTML = '&#10074;&#10074; Pause';
+    advance();
+    st.timer = setInterval(function () { advance(); }, 420);
+  });
+  $('reset').addEventListener('click', function () { reset(true); });
+
+  [].slice.call(document.querySelectorAll('button[data-p]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('button[data-p]').forEach(function (o) { o.classList.remove('on'); });
+      b.classList.add('on'); st.preset = b.dataset.p; reset(true);
+    });
+  });
+
+  st.vals = makeVals('random');
+  reset(false);
+
+  /* Report height to the host page — same protocol as the other visualisers. */
+  var sentH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.body.scrollHeight) + 6;
+    if (h > sentH || h < sentH - 24) {
+      sentH = h;
+      window.parent.postMessage({ type: "embed-height", height: h }, "*");
+      requestAnimationFrame(postHeight);
+    }
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  if ("ResizeObserver" in window) { new ResizeObserver(postHeight).observe(document.body); }
+  postHeight();
+})();
+</script>
+</body>
+</html>
