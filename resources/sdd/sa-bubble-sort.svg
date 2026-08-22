@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 590" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">One pass of a bubble sort</title>
+  <desc id="d">The array 5, 1, 4, 2, 8 undergoing one pass of a bubble sort. First 5 and 1 are compared, are in the wrong order and are swapped, giving 1, 5, 4, 2, 8. Then 5 and 4 are compared and swapped, giving 1, 4, 5, 2, 8. Then 5 and 2 are compared and swapped, giving 1, 4, 2, 5, 8. Finally 5 and 8 are compared and are already in order, so no swap is made. After one pass the largest value, 8, has bubbled to the end and is in its final place. A note explains that the next pass need only go as far as the second-last element, and that if a whole pass makes no swaps the array is already sorted, which is what the swapped flag detects.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#92750A"/>
+    </marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1E40AF"/>
+    </marker>
+    <marker id="arn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1B6B45"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="590" fill="#ffffff"/>
+  <text x="570" y="36" font-size="20" fill="#00442A" text-anchor="middle" font-weight="800">Bubble sort &#8212; one pass, four comparisons</text>
+  <text x="570" y="62" font-size="14" fill="#4A5568" text-anchor="middle">Each pass compares every <tspan font-weight='700'>adjacent pair</tspan> and swaps them if they are the wrong way round.</text>
+  <rect x="150" y="100" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="189.0" y="131" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="228" y="100" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="267.0" y="131" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <rect x="306" y="100" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="345.0" y="131" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="384" y="100" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="423.0" y="131" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="462" y="100" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="501.0" y="131" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">8</text>
+  <path d="M202,92 C202,74 254,74 254,92" fill="none" stroke="#92750A" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="570" y="131" font-size="13.5" fill="#1A1A1A">compare 5 and 1 &#8212; wrong order, so <tspan font-weight='700'>swap</tspan></text>
+  <rect x="150" y="176" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="189.0" y="207" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <rect x="228" y="176" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="267.0" y="207" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="306" y="176" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="345.0" y="207" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="384" y="176" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="423.0" y="207" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="462" y="176" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="501.0" y="207" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">8</text>
+  <path d="M280,168 C280,150 332,150 332,168" fill="none" stroke="#92750A" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="570" y="207" font-size="13.5" fill="#1A1A1A">compare 5 and 4 &#8212; wrong order, so <tspan font-weight='700'>swap</tspan></text>
+  <rect x="150" y="252" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="189.0" y="283" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <rect x="228" y="252" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="267.0" y="283" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="306" y="252" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="345.0" y="283" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="384" y="252" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="423.0" y="283" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="462" y="252" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="501.0" y="283" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">8</text>
+  <path d="M358,244 C358,226 410,226 410,244" fill="none" stroke="#92750A" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="570" y="283" font-size="13.5" fill="#1A1A1A">compare 5 and 2 &#8212; wrong order, so <tspan font-weight='700'>swap</tspan></text>
+  <rect x="150" y="328" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="189.0" y="359" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <rect x="228" y="328" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="267.0" y="359" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="306" y="328" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="345.0" y="359" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="384" y="328" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="423.0" y="359" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="462" y="328" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="501.0" y="359" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">8</text>
+  <text x="570" y="359" font-size="13.5" fill="#4A5568">compare 5 and 8 &#8212; already in order, so <tspan font-weight='700'>no swap</tspan></text>
+  <rect x="150" y="418" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="189.0" y="449" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <rect x="228" y="418" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="267.0" y="449" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="306" y="418" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="345.0" y="449" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="384" y="418" width="78" height="48" fill="#ffffff" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="423.0" y="449" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="462" y="418" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="2.4"/>
+  <text x="501.0" y="449" font-size="16" fill="#00442A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">8</text>
+  <text x="570" y="444" font-size="13.5" fill="#00442A">after one pass the largest value, 8, has</text>
+  <text x="570" y="462" font-size="13.5" fill="#00442A">&#8220;bubbled&#8221; to the end and is now in place</text>
+  <rect x="150" y="500" width="890" height="66" fill="#F8F7F2" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="170" y="526" font-size="13.5" fill="#1A1A1A">The next pass need only go as far as the second-last element, and the one after that one fewer again.</text>
+  <text x="170" y="548" font-size="13.5" fill="#1A1A1A">If a whole pass makes no swaps at all, the array is already sorted &#8212; which is what the swapped flag detects.</text>
+</svg>

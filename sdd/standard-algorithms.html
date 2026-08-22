@@ -19,7 +19,7 @@
   <div class="inner">
     <div class="hero-badge">Software Design &amp; Development</div>
     <h1>Standard Algorithms</h1>
-    <p>Binary search, bubble sort and insertion sort — implementing them, and arguing their advantages, disadvantages and efficiency.</p>
+    <p>Binary search, bubble sort and insertion sort — how each one works, how to implement it on every data structure the exam uses, and how to argue about efficiency.</p>
   </div>
 </section>
 <main class="page-content">
@@ -42,8 +42,7 @@
           <li><a href="#binary-search">Binary Search</a></li>
           <li><a href="#bubble-sort">Bubble Sort</a></li>
           <li><a href="#insertion-sort">Insertion Sort</a></li>
-          <li><a href="#comparison">Comparing the Algorithms</a></li>
-          <li><a href="#worked-example">Worked Examples</a></li>
+          <li><a href="#comparison">Bubble vs Insertion</a></li>
           <li><a href="#test-yourself">Test Yourself</a></li>
         </ul>
       </nav>
@@ -52,289 +51,1186 @@
 
     <article>
       <h2 id="intro">Standard Algorithms at Advanced Higher</h2>
-      <p>The three Higher algorithms (linear search, find min/max, count occurrences) are replaced by three new ones: <strong>binary search</strong>, <strong>bubble sort</strong> and <strong>insertion sort</strong>. You must be able to <strong>describe, exemplify and implement</strong> all three — and just as importantly, discuss their <strong>advantages, disadvantages and efficiency</strong>. Exam questions regularly show you a garbled version and ask you to spot the error, or ask <em>why</em> one algorithm beats another for a given problem, so understanding <em>how</em> they work matters more than memorising lines.</p>
-      <p>Both sorts below sort into <strong>ascending</strong> order; with small changes (flip the comparison) they sort descending.</p>
+
+      <p>A <strong>standard algorithm</strong> is a well-known, reusable method for a common programming job. You already met three at Higher — linear search, find minimum/maximum and count occurrences. Advanced Higher adds three more, and these are the ones examined here:</p>
+      <ul>
+        <li><strong>Binary search</strong> — find an item in a <em>sorted</em> list, fast;</li>
+        <li><strong>Bubble sort</strong> — put a list in order by repeatedly swapping neighbours;</li>
+        <li><strong>Insertion sort</strong> — put a list in order by building up a sorted region one item at a time.</li>
+      </ul>
+
+      <p>You must be able to <strong>describe, exemplify and implement</strong> all three, and — just as heavily examined — <strong>compare their efficiency</strong> and justify choosing one over another. Questions rarely say "write a bubble sort" in isolation. They give you a data structure, ask for the algorithm applied <em>to that structure</em>, and award marks for handling the structure correctly.</p>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The algorithm is the easy half.</strong> In every recent paper the marks are split between the <em>algorithm</em> (the loops and the comparison) and the <em>data structure</em> (reaching the right value, and moving the right amount of data). A bubble sort over an array of objects must call a <strong>getter</strong>; an insertion sort over a 2D array must shift an <strong>entire row</strong>. Get the loops right and the access wrong and you lose half the marks.</div>
+      </div>
 
       <h3>Key Terms</h3>
       <div class="key-terms">
-        <div class="key-term"><div class="term">Binary Search</div><div class="def">Finds a value by repeatedly halving a <em>sorted</em> list until the target is, or is not, found.</div></div>
-        <div class="key-term"><div class="term">Bubble Sort</div><div class="def">Repeatedly swaps adjacent values that are out of order; the largest value "bubbles" to the end each pass.</div></div>
-        <div class="key-term"><div class="term">Insertion Sort</div><div class="def">Takes each value in turn and inserts it into its correct position among the already-sorted values to its left.</div></div>
+        <div class="key-term"><div class="term">Standard Algorithm</div><div class="def">A well-known, reusable method for a common task, which can be adapted to any suitable data structure.</div></div>
+        <div class="key-term"><div class="term">Binary Search</div><div class="def">Repeatedly halves a <em>sorted</em> list until the target is found or the search range is empty.</div></div>
+        <div class="key-term"><div class="term">Bubble Sort</div><div class="def">Repeatedly compares adjacent pairs and swaps those out of order, so the largest value "bubbles" to the end each pass.</div></div>
+        <div class="key-term"><div class="term">Insertion Sort</div><div class="def">Takes each value in turn and inserts it into its correct place among the already-sorted values to its left.</div></div>
         <div class="key-term"><div class="term">Pass</div><div class="def">One complete traversal of the array by a sorting algorithm.</div></div>
-        <div class="key-term"><div class="term">Swapped Flag</div><div class="def">Boolean in bubble sort — if a whole pass makes no swaps, the list is sorted and the algorithm stops early.</div></div>
-        <div class="key-term"><div class="term">Efficiency</div><div class="def">How the number of comparisons/swaps grows with the size of the list — the basis for comparing algorithms.</div></div>
+        <div class="key-term"><div class="term">Comparison</div><div class="def">One test of one value against another. Counting comparisons is how algorithms are compared.</div></div>
+        <div class="key-term"><div class="term">Swap</div><div class="def">Exchanging two elements. Needs a <strong>temporary variable</strong> and costs three assignments.</div></div>
+        <div class="key-term"><div class="term">Shift</div><div class="def">Moving one element along by one position — half the work of a swap, and what insertion sort does instead.</div></div>
+        <div class="key-term"><div class="term">Swapped Flag</div><div class="def">A boolean in bubble sort: if a whole pass makes no swaps the list is already sorted, so the algorithm stops early.</div></div>
+        <div class="key-term"><div class="term">Efficiency</div><div class="def">How the work grows as the list grows. The basis of every "which algorithm would you choose" answer.</div></div>
+        <div class="key-term"><div class="term">Ascending / Descending</div><div class="def">Smallest-first or largest-first. Which one you want is decided by a single comparison operator.</div></div>
+      </div>
+
+      <h3 id="access">Reaching a value in each data structure</h3>
+      <p>Every algorithm below appears twice: once on a plain <strong>1D array</strong>, and once on the structure the exam actually gave that year. The <em>logic never changes</em> — only the way you reach the value being compared. Learn these four forms and every variant becomes routine:</p>
+
+      <table>
+        <thead><tr><th>Structure</th><th>Reaching one value</th><th>Example</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>1D array</strong></td>
+            <td><code>arrayName[index]</code></td>
+            <td><code>times[4]</code></td>
+            <td>One index, one value.</td>
+          </tr>
+          <tr>
+            <td><strong>2D array</strong></td>
+            <td><code>arrayName[row][column]</code></td>
+            <td><code>events[4][2]</code></td>
+            <td>Row first, then column. The column number picks the <em>attribute</em>.</td>
+          </tr>
+          <tr>
+            <td><strong>Array of records</strong></td>
+            <td><code>arrayName[index].fieldName</code></td>
+            <td><code>readingsArray[4].rainfall</code></td>
+            <td>The index picks the record, the <strong>field name</strong> picks the value inside it.</td>
+          </tr>
+          <tr>
+            <td><strong>Array of objects</strong></td>
+            <td><code>arrayName[index].getFieldName()</code></td>
+            <td><code>orderList[4].getOrderTotal()</code></td>
+            <td>The instance variable is <strong>private</strong>, so it can only be read through a public <strong>getter</strong>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Records use a dot; objects use a dot <em>and brackets</em>.</strong> That difference is not cosmetic. In an array of records the fields are plain data, so <code>readingsArray[4].rainfall</code> reads one directly. In an array of objects the instance variables are <strong>encapsulated</strong> — <code>orderList[4].orderTotal</code> would be rejected, because code outside the class cannot reach a private variable. You must call the getter the class provides: <code>orderList[4].getOrderTotal()</code>. Marking instructions award a mark for this on its own. See the <a href="oop.html#principles">OOP page</a> for why.</div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>And when you swap, swap the whole thing.</strong> Sorting an array of records or objects means moving <strong>entire records or objects</strong>, not just the field you sorted on — otherwise every runner is detached from their time. In a 2D array the equivalent is moving <strong>every column of the row</strong>, which is why the insertion sort below has three assignment lines where the 1D version has one.</div>
       </div>
     </article>
 
     <article>
       <h2 id="binary-search">Binary Search</h2>
-      <p>A <strong>binary search</strong> finds a value by continually <strong>halving a sorted list</strong> until the target is, or is not, found. It keeps three markers: <strong>low</strong>, <strong>high</strong> and <strong>mid</strong> — initially the first element, the last element, and the midpoint between them. Each iteration makes one of three decisions:</p>
-      <ol>
-        <li>If the middle value <strong>equals</strong> the target — found, stop;</li>
-        <li>If the middle value is <strong>larger</strong> than the target — the target must be in the lower half, so <code>high = mid − 1</code>;</li>
-        <li>If the middle value is <strong>smaller</strong> — the target must be in the upper half, so <code>low = mid + 1</code>.</li>
-      </ol>
-      <p>The loop repeats while the target is not found <strong>and</strong> <code>low &lt;= high</code> — if low passes high, the target is not in the list.</p>
 
-      <div class="code-block">
-        <div class="code-label">SQA Reference Language — binary search (function version)</div>
-        <pre><code>FUNCTION binary_search(list, target) RETURNS BOOLEAN
-    DECLARE low INITIALLY 0
-    DECLARE high INITIALLY length(list) - 1
-    DECLARE mid INITIALLY 0
-    DECLARE found INITIALLY FALSE
-    WHILE NOT found AND low &lt;= high
-        SET mid TO (low + high) / 2
-        IF target = list[mid] THEN
-            SET found TO TRUE
-        ELSE IF target &gt; list[mid] THEN
+      <h3>How it works</h3>
+      <p>A binary search finds a value by repeatedly <strong>halving the part of the list still worth looking at</strong>. It keeps three markers: <strong>low</strong> and <strong>high</strong> mark the range still in play, and <strong>mid</strong> is the element halfway between them.</p>
+      <p>Each time round, it compares the value at <code>mid</code> with the target and does one of three things:</p>
+      <ol>
+        <li>the values are <strong>equal</strong> — found, stop;</li>
+        <li>the target is <strong>greater</strong> — it cannot be in the lower half, so <code>low = mid + 1</code>;</li>
+        <li>the target is <strong>smaller</strong> — it cannot be in the upper half, so <code>high = mid - 1</code>.</li>
+      </ol>
+      <p>The loop continues while the target has not been found <strong>and</strong> <code>low &lt;= high</code>. If <code>low</code> passes <code>high</code> the range is empty, which means the target is not in the list at all.</p>
+
+      <img src="../resources/sdd/sa-binary-search.svg"
+           class="zoomable"
+           alt="A sorted array of eleven values: 3, 8, 12, 17, 23, 31, 44, 56, 68, 79 and 91, with indices 0 to 10, searched for the value 79. Pass 1 has low at index 0 and high at index 10, giving mid at index 5 which holds 31; because 79 is greater than 31 the lower half is discarded and low becomes 6. Pass 2 has low at 6 and high at 10, giving mid at index 8 which holds 68; because 79 is greater than 68 low becomes 9. Pass 3 has low at 9 and high at 10, giving mid at index 9 which holds 79, so the target is found after three comparisons. Discarded elements are greyed out at each pass and the mid element is highlighted in gold. A note explains that a linear search would have checked ten elements to reach 79, while binary search needed three, but only because the array was already sorted."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The precondition is the whole trick.</strong> A binary search only works because the list is <strong>sorted</strong> — that is what makes "the target cannot be in the lower half" a safe conclusion. Any exam question that asks you to binary search will have sorted the data first, and any question that asks <em>why</em> a sort appears in a design is asking about this.</div>
+      </div>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Binary Search Visualiser</p>
+        <div class="ib-body">
+          <p class="ib-intro">Click any value to search for it, then step through. <code>low</code>, <code>mid</code> and <code>high</code> move and the discarded half greys out, with the matching line of pseudocode highlighted &mdash; while a <strong>linear search</strong> runs the same job underneath so the two comparison counters can be watched pulling apart. Try a value near the front, then one near the end, then a value that is not there at all.</p>
+          <iframe src="../resources/sdd/visualisers/sa-binary-search-visualiser.html"
+                  title="Binary Search Visualiser &mdash; interactive"
+                  loading="lazy"
+                  style="height:1215px"></iframe>
+        </div>
+      </div>
+
+      <h3>Top level and refinement</h3>
+      <p>Written as a design, the algorithm is three steps, only one of which needs refining:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Top level</div>
+        <pre><code>1.  set the search range to the whole array, and found to "not yet"
+2.  repeat until the target is found or the range is empty
+3.  report the position found, or that the target is absent</code></pre>
+      </div>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Refinement of step 2</div>
+        <pre><code>2.1  calculate mid, halfway between low and high
+2.2  if the value at mid is the target
+2.3      record that it has been found, at position mid
+2.4  else if the target is greater than the value at mid
+2.5      discard the lower half:  low = mid + 1
+2.6  else
+2.7      discard the upper half:  high = mid - 1</code></pre>
+      </div>
+
+      <h3>On a 1D array</h3>
+      <p>The plain version. Note that it returns the <strong>position</strong> rather than just true or false — the position is what a real program needs, because it is how you get at everything else stored about that item:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — binary search of a 1D array</div>
+        <pre><code>FUNCTION binarySearch(times, target) RETURNS INTEGER
+    SET low TO 0
+    SET high TO length(times) - 1
+    SET found TO -1
+
+    WHILE low &lt;= high AND found = -1 DO
+        SET mid TO (low + high) DIV 2
+
+        IF times[mid] = target THEN
+            SET found TO mid
+        ELSE IF times[mid] &lt; target THEN
             SET low TO mid + 1
         ELSE
             SET high TO mid - 1
         END IF
     END WHILE
+
     RETURN found
 END FUNCTION</code></pre>
       </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Three details worth guarding.</strong> <code>DIV</code> (integer division) throws away the remainder, so <code>mid</code> is always a whole index. <code>found</code> starts at <strong>−1</strong> because that is not a valid index, so it doubles as "not found" and as the answer. And the loop condition needs <strong>both</strong> tests: without <code>low &lt;= high</code> a missing target loops forever.</div>
+      </div>
+
+      <h3>On an array of records</h3>
+      <p>Now the version the exam sets. The array holds <strong>records</strong>, and the search compares one <strong>field</strong> of each record — reached with <code>arrayName[index].fieldName</code>. Everything else is identical:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — binary search of an array of records</div>
+        <pre><code># rainfallArray holds 32 records of {STRING local, INTEGER averageRainfall}
+# sorted into alphabetical order of local
+
+FUNCTION findAuthority(rainfallArray, searchName) RETURNS INTEGER
+    SET low TO 0
+    SET high TO 31
+    SET found TO -1
+
+    WHILE low &lt;= high AND found = -1 DO
+        SET mid TO (low + high) DIV 2
+
+        IF rainfallArray[mid].local = searchName THEN          # field access
+            SET found TO mid
+        ELSE IF rainfallArray[mid].local &lt; searchName THEN
+            SET low TO mid + 1
+        ELSE
+            SET high TO mid - 1
+        END IF
+    END WHILE
+
+    RETURN found
+END FUNCTION</code></pre>
+      </div>
+
+      <p><strong>And this is the payoff.</strong> You searched on one field, but having the position gives you <em>every</em> field of that record:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — using the result</div>
+        <pre><code>SET position TO findAuthority(rainfallArray, "Stirling")
+
+IF position &lt;&gt; -1 THEN
+    SEND rainfallArray[position].local &amp; " had " &amp;
+         rainfallArray[position].averageRainfall &amp; " cm" TO DISPLAY
+ELSE
+    SEND "Local authority not found" TO DISPLAY
+END IF</code></pre>
+      </div>
+
       <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>def binary_search(items, target):
+        <div class="code-label">Python — the same search, records written as a small class</div>
+        <pre><code>class Reading:
+    def __init__(self, local, average_rainfall):
+        self.local = local
+        self.average_rainfall = average_rainfall
+
+def find_authority(rainfall_array, search_name):
     low = 0
-    high = len(items) - 1
-    found = False
-    while not found and low &lt;= high:
-        mid = (low + high) // 2
-        if target == items[mid]:
-            found = True
-        elif target &gt; items[mid]:
+    high = len(rainfall_array) - 1
+
+    while low &lt;= high:
+        mid = (low + high) // 2                       # // is integer division
+
+        if rainfall_array[mid].local == search_name:  # field access
+            return mid
+        elif rainfall_array[mid].local &lt; search_name:
             low = mid + 1
         else:
             high = mid - 1
-    return found</code></pre>
+
+    return -1
+
+position = find_authority(rainfall_array, "Stirling")
+if position != -1:
+    print(rainfall_array[position].local, rainfall_array[position].average_rainfall)</code></pre>
       </div>
 
-      <h3>Efficiency of binary search</h3>
-      <ul>
-        <li>✅ Each comparison <strong>halves</strong> the remaining search area — 1&nbsp;000 items need at most ~10 comparisons; 1&nbsp;000&nbsp;000 need at most ~20. A linear search averages half the list every time.</li>
-        <li>❌ The list <strong>must already be sorted</strong> — if it isn't, the cost of sorting first must be counted. For a single search of unsorted data, a linear search is actually the better choice.</li>
-        <li>❌ For very short lists the overhead isn't worth it — a linear search is simpler and just as fast.</li>
-      </ul>
+      <h3>Efficiency — binary search vs linear search</h3>
+      <p>A <strong>linear search</strong> checks every element from the start until it finds the target or runs out. In the worst case that is <strong>n</strong> comparisons for <em>n</em> items. A binary search throws away half of what remains at every step, so the worst case is the number of times <em>n</em> can be halved before nothing is left — roughly <strong>log₂n</strong>:</p>
 
-      <div class="interactive-block">
-        <div class="ib-label">Interactive — planned</div>
-        <p class="ib-title">Binary Search Visualiser</p>
-        <div class="ib-body">
-          <p class="ib-intro">Placeholder for a visualiser: choose a target, then step through low/mid/high moving across a sorted bar of values, with a live comparison counter next to a linear search doing the same job.</p>
-        </div>
+      <img src="../resources/sdd/sa-search-efficiency.svg"
+           class="zoomable"
+           alt="A horizontal bar chart on a logarithmic scale comparing worst-case comparisons for linear and binary search at four array sizes. For 10 items, linear search needs 10 comparisons and binary search 4. For 100 items, linear needs 100 and binary 7. For 1000 items, linear needs 1000 and binary 10. For 1000000 items, linear needs 1000000 and binary 20. Linear search bars are red and binary search bars are green. A note explains that for a million items it is a million comparisons against twenty, and that every doubling of the data adds just one comparison to a binary search."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <table>
+        <thead><tr><th></th><th>Linear search</th><th>Binary search</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Data must be sorted?</strong></td><td>No — works on anything</td><td><strong>Yes</strong>, always</td></tr>
+          <tr><td><strong>Worst case</strong></td><td><em>n</em> comparisons</td><td>about log₂<em>n</em> comparisons</td></tr>
+          <tr><td><strong>1000 items</strong></td><td>up to 1000</td><td>up to 10</td></tr>
+          <tr><td><strong>Growth</strong></td><td>Double the data, double the work</td><td>Double the data, <strong>one</strong> extra comparison</td></tr>
+          <tr><td><strong>Best for</strong></td><td>Small or unsorted lists; a one-off search</td><td>Large sorted lists, searched repeatedly</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>The answer examiners want is not simply "binary is faster".</strong> It is faster <em>per search</em>, but it requires sorted data, and sorting is far more expensive than a single linear search. So: for <strong>one</strong> search of unsorted data, a linear search wins outright. Binary search pays for itself when the data is <strong>already sorted</strong>, or when it will be <strong>searched many times</strong> so the one-off cost of sorting is spread across all of them.</div>
+      </div>
+
+      <h3>Worked Example — binary search in the exam</h3>
+      <p>This is <strong>2023 Question 5(b)</strong>, worth <strong>6 marks</strong>. The same question is built up as a <em>design</em> problem on the <a href="design.html#design-worked">Design page</a>, and examined for its <em>data structure</em> on the <a href="data-structures.html#recap">Data Structures page</a>. Here the focus is the <strong>algorithm</strong> itself.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Binary Search — 2023 Question 5 (EnviroScot Climate Tracker)</div>
+        <p><strong>The scenario:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_sa_q3-1.png" class="zoomable" alt="2023 Question 5. EnviroScot has set up 500 weather stations across Scotland to track the effect of climate change. Several weather stations have been placed in each of the 32 local authorities. The rainfall in centimetres for 28 February 2023 from all 500 weather stations has been stored in a CSV file. A structure diagram shows the Climate Tracker program with five modules: read weather data from file, extract unique local authority names, insertion sort local authority names, calculate average rainfall for each local authority, and compare local authority data. The data is read into an array of 500 records called readingsArray with the record structure RECORD reading IS open brace STRING place, STRING authority, INTEGER rainfall close brace." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <p><strong>Read the structure diagram before the question.</strong> Module 3 is an <strong>insertion sort of the local authority names</strong>. That is not decoration — it is there precisely so that module 5 can binary search them. A question that gives you a sort and then a search is telling you the two are connected.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b</span>
+            <span class="qp-title">Design an algorithm using binary search and display the results</span>
+            <span class="qp-marks">6 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_sa_q3-2.png" class="zoomable" alt="Question 5(b). The program is required to compare the average rainfall for four local authorities. Users should be able to enter the names of four local authorities. The program will then use the binary search algorithm to find each local authority and its associated average rainfall. The output will be a diagram showing the average rainfall for each of the four local authorities, with sample output showing Borders, Inverclyde, Stirling and Highlands each followed by a row of asterisks. Using pseudocode, design an algorithm to enter the names of the local authorities requested by the user, apply the binary search algorithm to find the rainfall data for each, and display the diagram with one asterisk representing 1 cm of average rainfall. 6 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Six marks, and the marking instructions split them almost line by line.</strong> Read the bullet points in the question as a to-do list: get four names, search for each one, display a row of asterisks for each. So the shape is a loop of four, containing a search, containing a display.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop and the heading</p>
+            <p>Four authorities means a <strong>fixed loop</strong> of four, and the sample output has a heading above the bars:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — ask four times</div>
+              <pre><code><span class="ln-new">display "Average rainfall (cm) for the requested local authorities"</span><span class="ln-new">for entry = 0 to 3</span><span class="ln-new">   receive searchName from keyboard</span><span class="ln-new">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Set the search up — <em>inside</em> the loop</p>
+            <p>The four binary search variables must be <strong>reset for every name</strong>. Initialise them outside the loop and the second search starts with a range already collapsed by the first — a classic way to lose two marks:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — low, high, found</div>
+              <pre><code><span class="ln-dim">for entry = 0 to 3</span><span class="ln-dim">   receive searchName from keyboard</span><span class="ln-new">   set low = 0</span><span class="ln-new">   set high = 31</span><span class="ln-new">   set found = false</span><span class="ln-dim">end for</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>The search loop itself</p>
+            <p>Halve the range each time, comparing the <code>local</code> <strong>field</strong> of the record at <code>mid</code>. Note this is a <strong>conditional</strong> loop — you cannot know in advance how many halvings it will take:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the binary search</div>
+              <pre><code><span class="ln-dim">   set found = false</span><span class="ln-new">   while low &lt;= high and found = false</span><span class="ln-new">      set mid = round down of (low + high) / 2</span><span class="ln-new">      if rainfallArray[mid].local = searchName then</span><span class="ln-new">         set found = true</span><span class="ln-new">      else if rainfallArray[mid].local &lt; searchName then</span><span class="ln-new">         set low = mid + 1</span><span class="ln-new">      else</span><span class="ln-new">         set high = mid - 1</span><span class="ln-new">      end if</span><span class="ln-new">   end while</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>Use the result &#8212; the other field of the record</p>
+            <p>When the search succeeds, <code>mid</code> is the position of the record. Display its <code>local</code> field, then loop once per centimetre of its <code>averageRainfall</code> field printing an asterisk. Guarding the display with <code>if found</code> is what turns "I did a search" into "I used the result of the search", and it carries a mark of its own:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — the bar chart</div>
+              <pre><code><span class="ln-dim">   end while</span><span class="ln-new">   if found = true then</span><span class="ln-new">      display rainfallArray[mid].local followed by a space</span><span class="ln-new">      for star = 1 to rainfallArray[mid].averageRainfall</span><span class="ln-new">         display "*" on the same line</span><span class="ln-new">      end for</span><span class="ln-new">      start a new line</span><span class="ln-new">   end if</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 6 marks</div>
+                  <pre><code>display "Average rainfall (cm) for the requested local authorities"
+
+for entry = 0 to 3
+   receive searchName from keyboard
+
+   set low = 0
+   set high = 31
+   set found = false
+
+   while low &lt;= high and found = false
+      set mid = round down of (low + high) / 2
+      if rainfallArray[mid].local = searchName then
+         set found = true
+      else if rainfallArray[mid].local &lt; searchName then
+         set low = mid + 1
+      else
+         set high = mid - 1
+      end if
+   end while
+
+   if found = true then
+      display rainfallArray[mid].local followed by a space
+      for star = 1 to rainfallArray[mid].averageRainfall
+         display "*" on the same line
+      end for
+      start a new line
+   end if
+end for</code></pre>
+                </div>
+                <p><strong>Where the six marks are:</strong> asking for four authorities and displaying the heading; initialising and updating <code>found</code> and <code>mid</code>; the <strong>conditional loop</strong> for the search; initialising and updating <code>low</code> and <code>high</code>; using the <strong>result</strong> of the search in the display; and displaying the name together with the asterisks.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_sa_q3-2_ans.png" alt="Marking instructions for 2023 Question 5(b). 1 mark for asking the user to enter 4 local authorities and displaying the bar chart heading. 1 mark for correctly initialising and updating found and mid needed for the binary search. 1 mark for the conditional loop needed for the binary search. 1 mark for correctly initialising and updating low and high needed for the binary search. 1 mark for using the result of the binary search in the display. 1 mark for displaying the location name together with stars used to represent the average rainfall." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
     </article>
 
     <article>
       <h2 id="bubble-sort">Bubble Sort</h2>
-      <p>A <strong>bubble sort</strong> continually swaps values in <strong>adjacent</strong> elements until the entire list is in order. After one pass through the array, the largest value has always "bubbled" to the end; after two passes the second-largest is in place, and so on. Two refinements make it respectable:</p>
+
+      <h3>How it works</h3>
+      <p>A bubble sort walks along the list comparing every <strong>adjacent pair</strong>. If a pair is the wrong way round it <strong>swaps</strong> them. One walk from end to end is a <strong>pass</strong>.</p>
+      <p>Because a large value keeps getting swapped rightwards until something larger stops it, the biggest value in the list always ends up at the far right by the end of the first pass. The second pass leaves the second-biggest in place, and so on — the sorted region grows from the <strong>right-hand end</strong>:</p>
+
+      <img src="../resources/sdd/sa-bubble-sort.svg"
+           class="zoomable"
+           alt="The array 5, 1, 4, 2, 8 undergoing one pass of a bubble sort. First 5 and 1 are compared, are in the wrong order and are swapped, giving 1, 5, 4, 2, 8. Then 5 and 4 are compared and swapped, giving 1, 4, 5, 2, 8. Then 5 and 2 are compared and swapped, giving 1, 4, 2, 5, 8. Finally 5 and 8 are compared and are already in order, so no swap is made. After one pass the largest value, 8, has bubbled to the end and is in its final place. A note explains that the next pass need only go as far as the second-last element, and that if a whole pass makes no swaps the array is already sorted, which is what the swapped flag detects."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <p>Two refinements make it respectable, and both earn marks:</p>
       <ul>
-        <li>the <strong>swapped flag</strong> — if a whole pass completes with no swaps, the list is sorted and the outer loop stops early;</li>
-        <li>shrinking the pass — each pass fixes one more value at the end, so the inner loop can run one element shorter each time (<code>n = n − 1</code>).</li>
+        <li><strong>Shorten each pass.</strong> After pass 1 the last element is finished, after pass 2 the last two are, and so on — so each pass can stop one element earlier than the last.</li>
+        <li><strong>The swapped flag.</strong> If an entire pass makes <em>no</em> swaps, nothing was out of order, so the list is already sorted and the algorithm can stop immediately instead of grinding through the remaining passes.</li>
       </ul>
 
-      <div class="code-block">
-        <div class="code-label">SQA Reference Language — bubble sort</div>
-        <pre><code>PROCEDURE bubble_sort(list)
-    DECLARE n INITIALLY length(list)
-    DECLARE swapped INITIALLY TRUE
-    WHILE swapped
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Bubble Sort Animator</p>
+        <div class="ib-body">
+          <p class="ib-intro">Every comparison and every swap, with the matching line of pseudocode highlighted as it runs. Turn the <strong>swapped flag</strong> off to see how much extra work it saves on nearly sorted data, and switch to <strong>records</strong> to see what changes when the array holds more than a number.</p>
+          <iframe src="../resources/sdd/visualisers/sa-bubble-sort-animator.html"
+                  title="Bubble Sort Animator &mdash; interactive"
+                  loading="lazy"
+                  style="height:1315px"></iframe>
+        </div>
+      </div>
+
+      <h3>Top level and refinement</h3>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Top level</div>
+        <pre><code>1.  keep making passes until a pass makes no swaps
+2.  on each pass, compare every adjacent pair and swap those out of order
+3.  after each pass, shorten the next one by one element</code></pre>
+      </div>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Refinement of step 2</div>
+        <pre><code>2.1  assume no swaps will happen this pass
+2.2  for each adjacent pair in the unsorted part
+2.3      if the left value is greater than the right value
+2.4          swap them, using a temporary variable
+2.5          record that a swap happened</code></pre>
+      </div>
+
+      <h3>On a 1D array</h3>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — bubble sort of a 1D array, ascending</div>
+        <pre><code>PROCEDURE bubbleSort(times)
+    SET unsorted TO length(times) - 1
+    SET swapped TO TRUE
+
+    WHILE swapped = TRUE DO
         SET swapped TO FALSE
-        FOR i = 0 TO n - 2 DO
-            IF list[i] &gt; list[i+1] THEN
-                SET temp TO list[i]
-                SET list[i] TO list[i+1]
-                SET list[i+1] TO temp
+
+        FOR index FROM 0 TO unsorted - 1 DO
+            IF times[index] &gt; times[index + 1] THEN
+                SET temp TO times[index]                    # the three-line swap
+                SET times[index] TO times[index + 1]
+                SET times[index + 1] TO temp
                 SET swapped TO TRUE
             END IF
         END FOR
-        SET n TO n - 1
+
+        SET unsorted TO unsorted - 1                        # shorten the next pass
     END WHILE
 END PROCEDURE</code></pre>
       </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Change one character to sort the other way.</strong> <code>&gt;</code> sorts <strong>ascending</strong>; <code>&lt;</code> sorts <strong>descending</strong>. Exam questions very often ask for descending — "the three most expensive orders", "strongest earthquake first" — so read the required order before writing the comparison.</div>
+      </div>
+
+      <h3>On an array of objects</h3>
+      <p>Same algorithm, two changes — and both are worth marks. The comparison must go through a <strong>getter</strong>, because the instance variable is private. And the swap must move the <strong>whole objects</strong>, not the values being compared:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — bubble sort of an array of objects, descending</div>
+        <pre><code># orderList holds Order objects; orderTotal is private, so getOrderTotal() reads it
+
+PROCEDURE bubbleSort(orderList)
+    SET unsorted TO length(orderList) - 1
+    SET swapped TO TRUE
+
+    WHILE swapped = TRUE DO
+        SET swapped TO FALSE
+
+        FOR index FROM 0 TO unsorted - 1 DO
+            IF orderList[index].getOrderTotal() &lt; orderList[index + 1].getOrderTotal() THEN
+                SET temp TO orderList[index]                  # swap the OBJECTS,
+                SET orderList[index] TO orderList[index + 1]  # not their totals
+                SET orderList[index + 1] TO temp
+                SET swapped TO TRUE
+            END IF
+        END FOR
+
+        SET unsorted TO unsorted - 1
+    END WHILE
+END PROCEDURE</code></pre>
+      </div>
+
       <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>def bubble_sort(items):
-    n = len(items)
+        <div class="code-label">Python — the same sort</div>
+        <pre><code>def bubble_sort(order_list):
+    unsorted = len(order_list) - 1
     swapped = True
+
     while swapped:
         swapped = False
-        for i in range(n - 1):
-            if items[i] &gt; items[i + 1]:
-                items[i], items[i + 1] = items[i + 1], items[i]
+
+        for index in range(unsorted):
+            # getter, because order_total is private to the Order class
+            if order_list[index].get_order_total() &lt; order_list[index + 1].get_order_total():
+                # swapping whole objects keeps every order with its own total
+                order_list[index], order_list[index + 1] = order_list[index + 1], order_list[index]
                 swapped = True
-        n = n - 1</code></pre>
+
+        unsorted = unsorted - 1</code></pre>
       </div>
 
-      <div class="example-block">
-        <div class="example-label">Trace — first pass over [45, 23, 99, 7]</div>
-        <p>Compare 45 &amp; 23 → swap → [23, 45, 99, 7]. Compare 45 &amp; 99 → no swap. Compare 99 &amp; 7 → swap → [23, 45, 7, <strong>99</strong>]. The largest value (99) has bubbled to the end after one pass — and <code>swapped</code> is TRUE, so another pass is needed.</p>
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Two ways to throw the marks away here.</strong> Writing <code>orderList[index].orderTotal</code> instead of the getter — rejected, because a private instance variable cannot be read from outside its class. And swapping only the totals, so the objects keep their positions while their totals move: the array ends up sorted by a number that no longer belongs to the order beside it. If you find yourself writing <code>SET temp TO orderList[index].getOrderTotal()</code>, stop.</div>
       </div>
 
-      <h3>Efficiency of bubble sort</h3>
-      <ul>
-        <li>✅ Simple to implement and to trace — and with the swapped flag, an <strong>already-sorted list is detected in a single pass</strong> (its best case).</li>
-        <li>❌ In general it is <strong>inefficient</strong>: values move only <strong>one position per pass</strong>, so a value far from its final place needs many passes, and nearly every pass re-compares the whole unsorted region. For n items the worst case is roughly n passes of n comparisons.</li>
-      </ul>
+      <h3>Worked Example — bubble sort in the exam</h3>
+      <p><strong>2023 Question 3(f)</strong>, worth <strong>4 marks</strong> — a bubble sort over an <strong>array of objects</strong>, which then has to display the top three.</p>
+
+      <div class="worked-example">
+        <div class="q-label">Bubble Sort — 2023 Question 3 (FlavourFusion Cafe)</div>
+        <p><strong>The scenario and its class diagram:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_sa_q1-1.png" class="zoomable" alt="2023 Question 3. FlavourFusion Cafe is creating an ordering system handling sit-in, delivery and collection orders, implemented in an object-oriented language. An order can contain a maximum of 50 items, all items for delivery and collection orders must be added when the order is made, extra items can be added to sit-in orders during the meal, and all delivery orders have a delivery charge. A simplified UML class diagram shows an Order class with private orderNumber as integer, orderItems as an array of OrderItem, orderStatus as string, orderTotal as real and numberItems as integer, and public methods addItem, updateOrderStatus, calcOrderTotal, getOrderTotal and getOrderNumber. An OrderItem class holds private itemName as string and itemCost as real with public methods OrderItem, getItemCost, setItemName and setItemCost. Three sub-classes inherit from Order: SitIn with numCust, tableNum and staffName; Delivery with orderTime, driver and deliveryCharge, which overrides calcOrderTotal; and Collection with orderTime and collectTime." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <p><strong>Note what the class diagram gives you.</strong> <code>orderTotal</code> is <strong>private</strong> (the <code>−</code>), and there is a public <code>getOrderTotal()</code>. That pairing is the question telling you which one to use.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">f</span>
+            <span class="qp-title">Design a bubble sort and display the three most expensive orders</span>
+            <span class="qp-marks">4 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_sa_q1-2.png" class="zoomable" alt="Question 3(f). At the end of each day the owners want to view details of the three most expensive orders for that day. Sample data in the orderList array is shown in a table with columns orderNumber, orderItems, orderStatus, orderTotal and numberItems, listing orders 34 with total 45.97, 35 with 56.87, 36 with 23.34 and 37 with 73.29, each holding an array of OrderItem and a status of Complete. Using pseudocode, design the procedure bubbleSort of orderList. This procedure will sort the orderList array and display the orderNumber and orderTotal of the three most expensive orders in the sorted array. Your procedure should make use of the bubble sort algorithm. 4 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Read the four marks off the task.</strong> The marking instructions want: the two loops; the comparison in <strong>descending</strong> order using the getter; the swap of whole objects; and the display of the top three, again using getters. Note the procedure does <em>two</em> jobs — sort, then display — so it needs a second loop after the sort finishes.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>Which order, and therefore which operator?</p>
+            <p>"The three most expensive" and a sorted array means sort <strong>descending</strong>, so the largest totals sit at the start. That makes the comparison <code>&lt;</code>: swap when the left order is <em>cheaper</em> than the right one.</p>
+
+            <p class="build-step"><span class="bs-num">2</span>The two loops</p>
+            <p>An outer <strong>conditional</strong> loop driven by the swapped flag, and an inner <strong>fixed</strong> loop over the adjacent pairs:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — the loops</div>
+              <pre><code><span class="ln-new">procedure bubbleSort(orderList)</span><span class="ln-new">   start conditional loop</span><span class="ln-new">      set swapped = false</span><span class="ln-new">      start fixed loop from 0 to length of orderList - 2</span><span class="ln-new">      end fixed loop</span><span class="ln-new">   end conditional loop when swapped = false</span><span class="ln-new">end procedure</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>The comparison and the swap</p>
+            <p>Compare through <code>getOrderTotal()</code>, and swap the <strong>objects</strong>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — compare and swap</div>
+              <pre><code><span class="ln-dim">      start fixed loop from 0 to length of orderList - 2</span><span class="ln-new">         if orderList[loop].getOrderTotal() &lt; orderList[loop + 1].getOrderTotal() then</span><span class="ln-new">            swap the two order objects</span><span class="ln-new">            set swapped = true</span><span class="ln-new">         end if</span><span class="ln-dim">      end fixed loop</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>The display, after the sort</p>
+            <p>Once sorted descending, the three most expensive are simply positions 0, 1 and 2 — a fixed loop of three, again reading through getters:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — the top three</div>
+              <pre><code><span class="ln-dim">   end conditional loop when swapped = false</span><span class="ln-new">   start fixed loop from 0 to 2</span><span class="ln-new">      display orderList[loop].getOrderNumber() and orderList[loop].getOrderTotal()</span><span class="ln-new">   end fixed loop</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 4 marks</div>
+                  <pre><code>procedure bubbleSort(orderList)
+
+   start conditional loop
+      set swapped = false
+
+      start fixed loop from 0 to length of orderList - 2
+         if orderList[loop].getOrderTotal() &lt; orderList[loop + 1].getOrderTotal() then
+            swap the two order objects
+            set swapped = true
+         end if
+      end fixed loop
+   end conditional loop when swapped = false
+
+   start fixed loop from 0 to 2
+      display orderList[loop].getOrderNumber() and orderList[loop].getOrderTotal()
+   end fixed loop
+
+end procedure</code></pre>
+                </div>
+                <p><strong>Where the four marks are:</strong> the inner fixed and outer conditional loops correct; sorting in <strong>descending</strong> order using the getter; <strong>swapping the objects</strong>; and displaying the top three afterwards, again using getters. The marking instructions add that sorting <em>ascending</em> and then displaying the <em>last</em> three in reverse can still gain full marks.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_sa_q1-2_ans.png" alt="Marking instructions for 2023 Question 3(f). Award 1 mark for inner fixed and outer conditional loops correct. Award 1 mark for sorting in descending order indicating correct use of getters. Award 1 mark for swap objects. Award 1 mark for displaying top three after the sort, indicating correct use of getters. Note: if the candidate has sorted in ascending order and displays the last three elements in descending order, a maximum of 4 marks can still be awarded. A sample solution is given as a numbered procedure bubbleSort of orderList with a conditional loop, swapped flag, fixed loop from 0 to length minus 2, a comparison of orderList at loop dot getOrderTotal with orderList at loop plus 1 dot getOrderTotal, a swap of the two order objects, and a final fixed loop from 0 to 2 displaying the order number and order total." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
     </article>
 
     <article>
       <h2 id="insertion-sort">Insertion Sort</h2>
-      <p>An <strong>insertion sort</strong> traverses the array from the <strong>second element to the last</strong>. Each element is stored in a temporary variable, then compared against the elements before it, working <strong>backwards</strong>: every larger value is <strong>copied one place to the right</strong>, and when a smaller value (or the start of the list) is reached, the temporary value is copied into the gap. Everything to the left of the current element is always <em>already sorted</em> — think of how you sort playing cards in your hand.</p>
 
-      <div class="code-block">
-        <div class="code-label">SQA Reference Language — insertion sort</div>
-        <pre><code>PROCEDURE insertion_sort(list)
-    DECLARE value INITIALLY 0
-    DECLARE index INITIALLY 0
-    FOR i = 1 TO length(list) - 1 DO
-        SET value TO list[i]
-        SET index TO i
-        WHILE (index &gt; 0) AND (value &lt; list[index - 1]) DO
-            SET list[index] TO list[index - 1]
-            SET index TO index - 1
+      <h3>How it works</h3>
+      <p>An insertion sort builds a <strong>sorted region</strong> at the left-hand end of the list and grows it by one element at a time. It is exactly how most people sort a hand of playing cards.</p>
+      <p>The first element counts as a sorted region of one. Then, for each remaining element in turn:</p>
+      <ol>
+        <li><strong>lift it out</strong> into a temporary variable — call it <code>current</code>;</li>
+        <li><strong>shift right</strong> every value in the sorted region that is larger than <code>current</code>, opening a gap;</li>
+        <li><strong>drop <code>current</code> into the gap</strong>.</li>
+      </ol>
+
+      <img src="../resources/sdd/sa-insertion-sort.svg"
+           class="zoomable"
+           alt="Three steps of an insertion sort on the array 5, 2, 4, 6, 1. A band above the array marks the sorted region on the left and the not-yet-sorted region on the right. In the first step the current value is 2; 5 is larger so it shifts one place right and 2 is inserted in front of it, giving 2, 5, 4, 6, 1. In the second step the current value is 4; 5 is larger so it shifts right, but 2 is not, so 4 is inserted after it, giving 2, 4, 5, 6, 1. In the third step the current value is 1; everything is larger, so all four values shift right and 1 goes to the front. A note explains that the sorted region on the left grows by one each time until the whole array is sorted."
+           style="width:100%;max-width:1120px;margin:1.25rem auto;display:block;" />
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Shifts, not swaps — and that is the point.</strong> Bubble sort exchanges pairs, and each exchange costs three assignments. Insertion sort <em>slides</em> values one place right and writes <code>current</code> down once at the end, so a run of five shifts costs six assignments rather than fifteen. That is the source of its efficiency advantage, and it is what a comparison question is looking for.</div>
+      </div>
+
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Insertion Sort Animator</p>
+        <div class="ib-body">
+          <p class="ib-intro">The current value <strong>lifts out</strong> of the array and hovers while every larger value slides right, then drops into the gap, with the sorted region growing from the left. Try the <strong>nearly sorted</strong> preset and watch the inner loop exit on its first comparison almost every time.</p>
+          <iframe src="../resources/sdd/visualisers/sa-insertion-sort-animator.html"
+                  title="Insertion Sort Animator &mdash; interactive"
+                  loading="lazy"
+                  style="height:1320px"></iframe>
+        </div>
+      </div>
+
+      <h3>Top level and refinement</h3>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Top level</div>
+        <pre><code>1.  treat the first element as a sorted region of one
+2.  for each remaining element in turn, insert it into the sorted region
+3.  stop when every element has been inserted</code></pre>
+      </div>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Refinement of step 2</div>
+        <pre><code>2.1  lift the element out into current
+2.2  start looking at the position just to its left
+2.3  while there is still sorted data to the left AND that value is larger than current
+2.4      shift that value one place right
+2.5      step one place further left
+2.6  put current into the gap that has opened up</code></pre>
+      </div>
+
+      <h3>On a 1D array</h3>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — insertion sort of a 1D array, ascending</div>
+        <pre><code>PROCEDURE insertionSort(times)
+    FOR outer FROM 1 TO length(times) - 1 DO          # element 0 is the sorted region
+        SET current TO times[outer]                    # lift it out
+        SET inner TO outer
+
+        WHILE inner &gt; 0 AND times[inner - 1] &gt; current DO
+            SET times[inner] TO times[inner - 1]       # shift right
+            SET inner TO inner - 1
         END WHILE
-        SET list[index] TO value
+
+        SET times[inner] TO current                    # drop into the gap
     END FOR
 END PROCEDURE</code></pre>
       </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>The condition needs both halves, in that order.</strong> <code>inner &gt; 0</code> stops the search running off the front of the array; <code>times[inner - 1] &gt; current</code> stops it as soon as a smaller value is met. Drop the first and the program crashes on the smallest element; drop the second and every element travels all the way to the front. Marking instructions describe this as the "conditional loop with a <strong>complex condition</strong>" and give it a mark of its own.</div>
+      </div>
+
+      <h3>On a 2D array</h3>
+      <p>Here the "element" being sorted is a whole <strong>row</strong>. You sort on one column, but every column of the row must travel with it — so <code>current</code> becomes several variables, and each shift becomes several assignments:</p>
+
+      <div class="code-block code-plain">
+        <div class="code-label">Pseudocode — insertion sort of a 2D array, descending by column 2</div>
+        <pre><code># events is a 14 x 3 array: column 0 latitude, column 1 longitude, column 2 magnitude
+
+PROCEDURE insertionSort(events)
+    FOR outer FROM 1 TO 13 DO
+        SET currentLat TO events[outer][0]             # lift out the WHOLE row
+        SET currentLong TO events[outer][1]
+        SET currentMag TO events[outer][2]
+
+        SET inner TO outer
+
+        WHILE inner &gt; 0 AND events[inner - 1][2] &lt; currentMag DO
+            SET events[inner][0] TO events[inner - 1][0]    # shift the WHOLE row
+            SET events[inner][1] TO events[inner - 1][1]
+            SET events[inner][2] TO events[inner - 1][2]
+            SET inner TO inner - 1
+        END WHILE
+
+        SET events[inner][0] TO currentLat             # drop the WHOLE row in
+        SET events[inner][1] TO currentLong
+        SET events[inner][2] TO currentMag
+    END FOR
+END PROCEDURE</code></pre>
+      </div>
+
       <div class="code-block">
-        <div class="code-label">Python</div>
-        <pre><code>def insertion_sort(items):
-    for i in range(1, len(items)):
-        value = items[i]
-        index = i
-        while index &gt; 0 and value &lt; items[index - 1]:
-            items[index] = items[index - 1]
-            index = index - 1
-        items[index] = value</code></pre>
+        <div class="code-label">Python — the same sort, using a whole row as one value</div>
+        <pre><code>def insertion_sort(events):
+    for outer in range(1, len(events)):
+        current = events[outer]              # a whole row: [lat, long, magnitude]
+        inner = outer
+
+        # column 2 is magnitude; &lt; sorts descending
+        while inner &gt; 0 and events[inner - 1][2] &lt; current[2]:
+            events[inner] = events[inner - 1]     # shift the whole row right
+            inner = inner - 1
+
+        events[inner] = current</code></pre>
       </div>
 
-      <div class="example-block">
-        <div class="example-label">Trace — [45, 23, 99, 7]</div>
-        <p><strong>i = 1:</strong> temp = 23. 45 &gt; 23 so 45 copies right → [45, 45, 99, 7]; start reached, 23 drops in → [<strong>23, 45</strong>, 99, 7].<br />
-        <strong>i = 2:</strong> temp = 99. 45 &lt; 99 — already in place, no copies → [<strong>23, 45, 99</strong>, 7].<br />
-        <strong>i = 3:</strong> temp = 7. 99, 45, 23 all copy right; start reached, 7 drops into index 0 → [<strong>7, 23, 45, 99</strong>]. Sorted.</p>
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Python makes this shorter than the reference language does.</strong> A row of a Python 2D list is itself a list, so it can be lifted and dropped as one value — no need for three separate variables. The reference language version spells out every column, which is what the marking instructions expect. Both are correct; write whichever matches the language you are answering in, but make sure the <strong>whole row</strong> moves either way.</div>
       </div>
 
-      <h3>Efficiency of insertion sort</h3>
-      <ul>
-        <li>✅ Generally <strong>more efficient than bubble sort</strong>: values <strong>shift</strong> (one copy) rather than <strong>swap</strong> (three assignments), and the inner loop stops as soon as the insertion point is found rather than comparing the whole region.</li>
-        <li>✅ Excellent on <strong>nearly-sorted</strong> data — each element barely moves.</li>
-        <li>❌ Still a comparison sort with roughly n²-style growth on random data — for very large lists, neither of the Advanced Higher sorts is what real systems use.</li>
-      </ul>
+      <h3>Worked Example — insertion sort in the exam</h3>
+      <p><strong>2024 Question 4(b)(i)</strong>, worth <strong>4 marks</strong> — an insertion sort over a <strong>2D array</strong>, sorting on one column.</p>
 
-      <div class="interactive-block">
-        <div class="ib-label">Interactive — planned</div>
-        <p class="ib-title">Sort Race — Bubble vs Insertion</p>
-        <div class="ib-body">
-          <p class="ib-intro">Placeholder for an animation: the same shuffled list sorted side by side by bubble sort and insertion sort, with live counters for comparisons and swaps/shifts — and a "nearly sorted" preset to show why the swapped flag and early-exit inner loop matter.</p>
-        </div>
+      <div class="worked-example">
+        <div class="q-label">Insertion Sort — 2024 Question 4 (Earthquake Tracker)</div>
+        <p><strong>The scenario and its data:</strong></p>
+        <img src="../resources/sdd/worked-examples/ah_sa_q2-1.png" class="zoomable" alt="2024 Question 4. A program is being developed to help scientists track and analyse earthquake activity around the world. Data is stored about the latitude, longitude and magnitude of all earthquakes; the latitude and longitude identify the location and the magnitude indicates the strength. The data is stored in a 2-dimensional array of real numbers called events, holding 14 earthquake events. A table lists the fourteen rows of latitude, longitude and magnitude values, beginning 34.1, minus 116.8, 0.81 and ending 38.8, minus 122.9, 0.78." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+        <p><strong>Establish the shape of the array before anything else.</strong> 14 rows, 3 columns. Row = one earthquake; column 0 = latitude, column 1 = longitude, <strong>column 2 = magnitude</strong>. That last one is the sort key, and identifying it is the first thing your answer has to demonstrate.</p>
+
+        <div class="q-parts-heading">Question parts</div>
+
+        <details class="q-part">
+          <summary>
+            <span class="qp-letter">b i</span>
+            <span class="qp-title">Sort the 2D array by magnitude using an insertion sort</span>
+            <span class="qp-marks">4 marks</span>
+            <span class="qp-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="qp-body">
+            <img src="../resources/sdd/worked-examples/ah_sa_q2-2.png" class="zoomable" alt="Question 4(b). The insertion sort algorithm will be used to sort the events array in descending order of magnitude. Part (i): Using a programming language of your choice, write the code needed to sort the events array using the insertion sort algorithm. 4 marks." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .8rem;" />
+
+            <p><strong>Four marks, and the marking instructions name them:</strong> the fixed loop from the second element to the last; the conditional loop with its complex condition; <strong>moving up the entire row</strong>; and <strong>storing and inserting the entire row</strong>. Two of the four are purely about handling the 2D structure.</p>
+
+            <p class="build-step"><span class="bs-num">1</span>The outer loop starts at 1, not 0</p>
+            <p>Element 0 is already a sorted region of one, so there is nothing to insert on the first pass. 14 rows means indices 0 to 13, so the loop runs <strong>1 to 13</strong>:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 1 — the fixed loop</div>
+              <pre><code><span class="ln-new">FOR outer FROM 1 TO 13</span><span class="ln-new">END FOR</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">2</span>Lift out the whole row, not just the magnitude</p>
+            <p>This is where most marks are lost. You are sorting <em>on</em> magnitude, but the latitude and longitude belong to that earthquake and must travel with it. Three columns, three variables:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 2 — store the row</div>
+              <pre><code><span class="ln-dim">FOR outer FROM 1 TO 13</span><span class="ln-new">    SET currentLat TO events[outer][0]</span><span class="ln-new">    SET currentLong TO events[outer][1]</span><span class="ln-new">    SET currentMag TO events[outer][2]</span><span class="ln-new">    SET inner TO outer</span><span class="ln-dim">END FOR</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">3</span>The conditional loop, with its complex condition</p>
+            <p>Descending order means shift while the value to the left is <strong>smaller</strong> than <code>currentMag</code>. Both halves of the condition are needed:</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 3 — shift while larger magnitudes are to the left</div>
+              <pre><code><span class="ln-dim">    SET inner TO outer</span><span class="ln-new">    WHILE (inner &gt; 0) AND (events[inner - 1][2] &lt; currentMag) DO</span><span class="ln-new">        SET events[inner][0] TO events[inner - 1][0]</span><span class="ln-new">        SET events[inner][1] TO events[inner - 1][1]</span><span class="ln-new">        SET events[inner][2] TO events[inner - 1][2]</span><span class="ln-new">        SET inner TO inner - 1</span><span class="ln-new">    END WHILE</span></code></pre>
+            </div>
+
+            <p class="build-step"><span class="bs-num">4</span>Drop the row into the gap</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Stage 4 — insert the row</div>
+              <pre><code><span class="ln-dim">    END WHILE</span><span class="ln-new">    SET events[inner][0] TO currentLat</span><span class="ln-new">    SET events[inner][1] TO currentLong</span><span class="ln-new">    SET events[inner][2] TO currentMag</span></code></pre>
+            </div>
+
+            <details class="q-answer">
+              <summary>Sample Answer</summary>
+              <div class="answer-body">
+                <div class="code-block code-plain">
+                  <div class="code-label">Pseudocode — 4 marks</div>
+                  <pre><code>FOR outer FROM 1 TO 13
+    SET currentLat TO events[outer][0]
+    SET currentLong TO events[outer][1]
+    SET currentMag TO events[outer][2]
+
+    SET inner TO outer
+
+    WHILE (inner &gt; 0) AND (events[inner - 1][2] &lt; currentMag) DO
+        SET events[inner][0] TO events[inner - 1][0]
+        SET events[inner][1] TO events[inner - 1][1]
+        SET events[inner][2] TO events[inner - 1][2]
+        SET inner TO inner - 1
+    END WHILE
+
+    SET events[inner][0] TO currentLat
+    SET events[inner][1] TO currentLong
+    SET events[inner][2] TO currentMag
+END FOR</code></pre>
+                </div>
+                <p><strong>Where the four marks are:</strong> the <strong>fixed loop</strong> from the second element to the last; the <strong>conditional loop with a complex condition</strong>; <strong>moving up the entire row</strong>; and <strong>storing and inserting the entire row</strong>. A Python answer that lifts and drops <code>events[outer]</code> as a single row earns the same marks.</p>
+              </div>
+            </details>
+            <details class="q-answer">
+              <summary>Marking Instructions</summary>
+              <div class="answer-body">
+                <img src="../resources/sdd/worked-examples/ah_sa_q2-2_ans.png" alt="Marking instructions for 2024 Question 4(b)(i). Award 1 mark for fixed loop from 2nd element to last element of array. Award 1 mark for conditional loop with complex condition. Award 1 mark for moving up entire row. Award 1 mark for storing and inserting entire row. The sample solution loops outer from 1 to 13, sets currentLat, currentLong and currentMag from the row at outer, sets inner to outer, then while inner is greater than 0 and the magnitude of the previous row is less than currentMag it copies all three columns of the previous row into the current row and decrements inner, before finally writing currentLat, currentLong and currentMag into the row at inner." style="display:block;max-width:100%;height:auto;" />
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
     </article>
 
     <article>
-      <h2 id="comparison">Comparing the Algorithms</h2>
+      <h2 id="comparison">Bubble Sort vs Insertion Sort</h2>
+
+      <p>Both sorts do the same job and both are, in the worst case, roughly <strong>n²</strong> algorithms — double the list and you roughly quadruple the work. So a comparison question is never about one being "faster" outright. It is about <strong>what they do differently</strong>, and about <strong>what the data looks like</strong>.</p>
+
       <table>
-        <thead><tr><th>Algorithm</th><th>Advantages</th><th>Disadvantages / inefficiencies</th></tr></thead>
+        <thead><tr><th></th><th>Bubble sort</th><th>Insertion sort</th></tr></thead>
         <tbody>
-          <tr>
-            <td><strong>Binary search</strong></td>
-            <td>Halves the search area each comparison — dramatically fewer comparisons than linear search on large lists</td>
-            <td>Requires the list to be <strong>sorted first</strong>; overkill for small lists</td>
-          </tr>
-          <tr>
-            <td><strong>Bubble sort</strong></td>
-            <td>Simple; swapped flag detects an already-sorted list in one pass</td>
-            <td>Values move one position per pass — many passes and many swaps on random data; each swap is three assignments</td>
-          </tr>
-          <tr>
-            <td><strong>Insertion sort</strong></td>
-            <td>Shifts instead of swaps; inner loop exits early; very fast on nearly-sorted data</td>
-            <td>Still compares against many elements on random data; shifting is costly when elements belong near the start</td>
-          </tr>
+          <tr><td><strong>Method</strong></td><td>Repeatedly swaps adjacent pairs</td><td>Inserts each value into a growing sorted region</td></tr>
+          <tr><td><strong>Sorted region grows</strong></td><td>From the right-hand end</td><td>From the left-hand end</td></tr>
+          <tr><td><strong>Data movement</strong></td><td><strong>Swaps</strong> — three assignments each</td><td><strong>Shifts</strong> — one assignment each, plus one write at the end</td></tr>
+          <tr><td><strong>Worst case</strong> (reverse order)</td><td>~n²/2 comparisons, ~n²/2 swaps</td><td>~n²/2 comparisons, ~n²/2 shifts</td></tr>
+          <tr><td><strong>Best case</strong> (already sorted)</td><td>n − 1 comparisons, 0 swaps — <em>if</em> the swapped flag is used</td><td>n − 1 comparisons, 0 shifts</td></tr>
+          <tr><td><strong>Nearly sorted data</strong></td><td>Still needs a full pass to notice; one value far from home forces many passes</td><td><strong>Very fast</strong> — each inner loop exits almost immediately</td></tr>
+          <tr><td><strong>Adding one item to a sorted list</strong></td><td>Requires a full pass or more</td><td><strong>One insertion</strong> — the natural fit</td></tr>
+          <tr><td><strong>Writing it</strong></td><td>Simplest to write and to explain</td><td>Slightly trickier — the complex loop condition catches people out</td></tr>
         </tbody>
       </table>
+
+      <h3>Which would you choose?</h3>
+      <p>Exam answers need a reason tied to the data, not a preference. The three that score:</p>
+      <ul>
+        <li><strong>Nearly sorted data → insertion sort.</strong> If most items are already in place, each one is compared once or twice and left alone, so the sort runs in close to <em>n</em> operations. This is the strongest and most commonly rewarded justification.</li>
+        <li><strong>Data arriving one item at a time → insertion sort.</strong> A leaderboard that takes one new result at a time only needs that result inserted into an already-sorted list — which is precisely what one pass of an insertion sort does.</li>
+        <li><strong>Randomly ordered data, small list, simplicity matters → bubble sort.</strong> There is little between them on random data, and bubble sort is the easier of the two to write correctly and to explain.</li>
+      </ul>
+
       <div class="callout callout-tip">
         <div class="callout-icon">💡</div>
-        <div><strong>The exam's favourite combination:</strong> "the program sorts the data then searches it repeatedly — justify the design." Answer: sorting once (insertion sort) makes every subsequent search a <strong>binary search</strong>, and the cost of the single sort is repaid by the huge saving on every search that follows.</div>
-      </div>
-    </article>
-
-    <article>
-      <h2 id="worked-example">Worked Examples</h2>
-      <p>Attempt each question yourself first, then expand to check your reasoning against the marking instructions.</p>
-
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — 2024 Question 1</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q1.png" alt="2024 Question 1 — standard algorithms." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <p><strong>Approach:</strong> identify which algorithm the code implements from its shape — low/high/mid markers mean binary search; adjacent comparisons with a temp swap mean bubble sort; a backwards inner while-loop means insertion sort. Then trace with the values given.</p>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q1_ans.png" alt="Marking instructions for 2024 Question 1." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+        <div><strong>Say what the algorithm does, not just its name.</strong> "Insertion sort is more efficient" earns nothing on its own. "The data is nearly sorted, so each value is compared with only one or two others before the inner loop stops — insertion sort therefore does far less work than a bubble sort, which must still complete a full pass to discover that nothing needs swapping" earns the marks, because it names the <em>mechanism</em>.</div>
       </div>
 
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — 2024 Question 6 (a)</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-1.png" alt="2024 Question 6 part a." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-1_ans.png" alt="Marking instructions for 2024 Question 6 part a." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      <div class="callout callout-info">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Both are chosen for teaching, not for speed.</strong> Real programs use library sorts that are far faster on large data. What Advanced Higher is testing is whether you can read an algorithm, adapt it to a data structure, and reason about its cost — not whether you would ship it.</div>
       </div>
 
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — 2024 Question 6 (b)</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-2.png" alt="2024 Question 6 part b." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-2_ans.png" alt="Marking instructions for 2024 Question 6 part b." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
+      <div class="interactive-block">
+        <div class="ib-label">Interactive</div>
+        <p class="ib-title">Bubble Sort vs Insertion Sort</p>
+        <div class="ib-body">
+          <p class="ib-intro">The same eight values and the same starting order, both sorts running one <strong>comparison</strong> at a time. Switch between random, nearly sorted, reverse and already sorted data and watch which one wins &mdash; and where the two tie on comparisons but not on the cost of moving the data.</p>
+          <iframe src="../resources/sdd/visualisers/sa-sort-race.html"
+                  title="Bubble Sort vs Insertion Sort &mdash; interactive"
+                  loading="lazy"
+                  style="height:1140px"></iframe>
+        </div>
       </div>
 
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — 2024 Question 6 (c)</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-3.png" alt="2024 Question 6 part c." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-3_ans.png" alt="Marking instructions for 2024 Question 6 part c." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
-
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — 2024 Question 6 (d)</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-4.png" alt="2024 Question 6 part d." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_stnd_algo_2024_q6-4_ans.png" alt="Marking instructions for 2024 Question 6 part d." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
-
-      <div class="worked-example">
-        <div class="q-label">Standard Algorithms — Specimen Question 2</div>
-        <img src="../resources/sdd/questions/sdd_stnd_algo_specimen_q2.png" alt="Specimen paper Question 2 — standard algorithms." style="display:block;max-width:100%;height:auto;margin:.2rem 0 .6rem;" />
-        <img src="../resources/sdd/questions/sdd_stnd_algo_specimen_q2_ans.png" alt="Marking instructions for specimen Question 2." style="display:block;max-width:100%;height:auto;margin:.6rem 0 0;" />
-      </div>
     </article>
 
     <article>
       <h2 id="test-yourself">Test Yourself</h2>
-      <p>Attempt each question first, then expand the marking instructions to check your answer.</p>
+      <p>One scenario, eight questions. <strong>Write each answer out in full first</strong> — particularly the three implementations, where reading a solution always feels easier than producing one.</p>
+
+      <div class="example-block">
+        <div class="example-label">Scenario — Bellahouston parkrun</div>
+        <p>A 5&nbsp;km parkrun records the result of every finisher. The results for one week are read into an array of <strong>250 records</strong>:</p>
+        <div class="code-block code-plain">
+          <div class="code-label">The data structure</div>
+          <pre><code>RECORD runner IS { STRING name, STRING club, REAL finishTime }
+
+DECLARE resultsArray AS ARRAY OF runner INITIALLY [ ] * 250
+DECLARE numRunners INITIALLY 250</code></pre>
+        </div>
+        <p>A sample of the data held in <code>resultsArray</code>:</p>
+        <table style="max-width:520px;">
+          <thead><tr><th>name</th><th>club</th><th>finishTime</th></tr></thead>
+          <tbody>
+            <tr><td>Aisha Rahman</td><td>Bellahouston Road Runners</td><td>19.42</td></tr>
+            <tr><td>Callum Fraser</td><td>Unattached</td><td>22.15</td></tr>
+            <tr><td>Erin Docherty</td><td>Garscube Harriers</td><td>18.07</td></tr>
+            <tr><td>Liam Boyle</td><td>Bellahouston Road Runners</td><td>25.33</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Implementing the algorithms</h3>
 
       <div class="practice-question">
-        <div class="q-label">Binary Search Trace — 2 marks</div>
-        <p>A sorted array holds: <code>[2, 5, 8, 10, 11, 14, 17, 25, 30]</code> (indices 0–8). A binary search looks for the target <strong>8</strong>.</p>
-        <p>State the values of <code>mid</code> checked, in order, until the target is found. <strong>(2 marks)</strong></p>
+        <div class="q-label">Bubble Sort — 4 marks</div>
+        <p>Using pseudocode, design a procedure <code>sortByTime(resultsArray)</code> which uses the <strong>bubble sort</strong> algorithm to sort <code>resultsArray</code> into <strong>ascending order of finish time</strong>, so that the winner is at position 0. <strong>(4 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — which order, so which operator?</strong> Ascending, fastest first. A lower <code>finishTime</code> is better, so swap when the left runner's time is <strong>greater</strong> than the right runner's: <code>&gt;</code>.</p>
+            <p><strong>Step 2 — the two loops.</strong> An outer <strong>conditional</strong> loop controlled by the swapped flag, and an inner <strong>fixed</strong> loop over the adjacent pairs. Shorten the inner loop by one after each pass, since the largest time is now parked at the end.</p>
+            <p><strong>Step 3 — compare a field, swap a record.</strong> This is where the marks separate. The comparison reads one <strong>field</strong>: <code>resultsArray[index].finishTime</code>. The swap moves the <strong>whole record</strong>: <code>SET temp TO resultsArray[index]</code>, not <code>resultsArray[index].finishTime</code>. Swap the times alone and every runner ends up attached to somebody else's result.</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Sample Answer — pseudocode, 4 marks</div>
+              <pre><code>PROCEDURE sortByTime(resultsArray)
+    SET unsorted TO numRunners - 1
+    SET swapped TO TRUE
+
+    WHILE swapped = TRUE DO
+        SET swapped TO FALSE
+
+        FOR index FROM 0 TO unsorted - 1 DO
+            IF resultsArray[index].finishTime &gt; resultsArray[index + 1].finishTime THEN
+                SET temp TO resultsArray[index]                       # whole record
+                SET resultsArray[index] TO resultsArray[index + 1]
+                SET resultsArray[index + 1] TO temp
+                SET swapped TO TRUE
+            END IF
+        END FOR
+
+        SET unsorted TO unsorted - 1
+    END WHILE
+END PROCEDURE</code></pre>
+            </div>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>First check: low = 0, high = 8 → mid = 4 → value 11. 11 &gt; 8 so high = 3. <strong>(1 mark)</strong></li>
-              <li>Second check: low = 0, high = 3 → mid = 1 → value 5. 5 &lt; 8 so low = 2. Third check: mid = 2 → value <strong>8</strong> — found. <strong>(1 mark)</strong></li>
+              <li>1 mark for an outer <strong>conditional</strong> loop and an inner <strong>fixed</strong> loop over adjacent pairs.</li>
+              <li>1 mark for comparing the correct <strong>field</strong> of adjacent records, in <strong>ascending</strong> order.</li>
+              <li>1 mark for swapping the <strong>whole records</strong> using a temporary variable.</li>
+              <li>1 mark for correctly initialising <em>and</em> updating the <strong>swapped flag</strong>.</li>
+              <li><em>Note:</em> swapping only the <code>finishTime</code> values scores no marks for the swap.</li>
             </ul>
           </div>
         </details>
       </div>
 
       <div class="practice-question">
-        <div class="q-label">Why the Swapped Flag? — 2 marks</div>
-        <p>Explain the purpose of the boolean variable <code>swapped</code> in the bubble sort algorithm, and describe the situation in which it improves efficiency the most. <strong>(2 marks)</strong></p>
+        <div class="q-label">Insertion Sort — 4 marks</div>
+        <p>The results must also be produced in <strong>alphabetical order of name</strong> for the club noticeboard.</p>
+        <p>Using pseudocode, design a procedure <code>sortByName(resultsArray)</code> which uses the <strong>insertion sort</strong> algorithm to sort <code>resultsArray</code> into ascending order of <code>name</code>. <strong>(4 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — the outer loop starts at 1.</strong> Position 0 is already a sorted region of one, so there is nothing to insert on the first pass.</p>
+            <p><strong>Step 2 — lift out the whole record.</strong> <code>current</code> holds an entire <code>runner</code> record, not just a name. Its name is then reached as <code>current.name</code> in the comparison.</p>
+            <p><strong>Step 3 — the complex condition.</strong> Keep shifting while there is still sorted data to the left <em>and</em> that record's name comes after <code>current</code>'s: <code>inner &gt; 0 AND resultsArray[inner - 1].name &gt; current.name</code>. Both halves are needed — drop <code>inner &gt; 0</code> and the run of shifts falls off the front of the array.</p>
+            <p><strong>Step 4 — strings compare like numbers.</strong> <code>&gt;</code> on two strings means "comes after alphabetically", so the same algorithm sorts names with no other change.</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Sample Answer — pseudocode, 4 marks</div>
+              <pre><code>PROCEDURE sortByName(resultsArray)
+    FOR outer FROM 1 TO numRunners - 1 DO
+        SET current TO resultsArray[outer]                # whole record
+        SET inner TO outer
+
+        WHILE inner &gt; 0 AND resultsArray[inner - 1].name &gt; current.name DO
+            SET resultsArray[inner] TO resultsArray[inner - 1]     # shift the record
+            SET inner TO inner - 1
+        END WHILE
+
+        SET resultsArray[inner] TO current                # drop into the gap
+    END FOR
+END PROCEDURE</code></pre>
+            </div>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li>If a complete pass makes <strong>no swaps</strong>, the list must already be in order, so the flag ends the conditional loop without further passes. <strong>(1 mark)</strong></li>
-              <li>Greatest benefit when the list is <strong>already sorted (or nearly sorted)</strong> — the sort finishes after a single pass instead of continuing pointlessly. <strong>(1 mark)</strong></li>
+              <li>1 mark for a <strong>fixed loop</strong> running from the second element to the last.</li>
+              <li>1 mark for <strong>storing</strong> the current record before the inner loop and <strong>inserting</strong> it afterwards.</li>
+              <li>1 mark for the <strong>conditional loop with a complex condition</strong> — both <code>inner &gt; 0</code> and the name comparison.</li>
+              <li>1 mark for <strong>shifting whole records</strong> one place right inside the loop.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Binary Search — 5 marks</div>
+        <p>A runner can look up their own result. The program asks for a name, uses a <strong>binary search</strong> to find that runner, and displays their club and finish time, or a message if the name is not found.</p>
+        <p>(a) State why <code>sortByName()</code> must be run before this search. <strong>(1 mark)</strong><br />
+        (b) Using pseudocode, design the algorithm. <strong>(4 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — part (a) is the precondition.</strong> A binary search discards half the array on the strength of one comparison, and that is only valid if the data is in order of the field being searched. Searching by name therefore needs the array sorted <strong>by name</strong> — sorting it by time would not help.</p>
+            <p><strong>Step 2 — set up three variables.</strong> <code>low</code> at 0, <code>high</code> at <code>numRunners - 1</code>, and something to record the result. Using <code>found = -1</code> lets one variable serve as both the flag and the answer.</p>
+            <p><strong>Step 3 — halve, compare the field, discard.</strong> Compare <code>resultsArray[mid].name</code> with the target and move whichever marker is now wrong.</p>
+            <p><strong>Step 4 — use the position.</strong> Having the index gives you every other field of that record, which is the whole reason for searching. Do not forget the "not found" branch — it carries a mark.</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Sample Answer — pseudocode, 5 marks</div>
+              <pre><code># (a) A binary search only works on data sorted by the field being searched.
+#     Discarding half the array is only safe if the names are in order, so
+#     resultsArray must be sorted by name before this algorithm is used.
+
+# (b)
+RECEIVE searchName FROM KEYBOARD
+
+SET low TO 0
+SET high TO numRunners - 1
+SET found TO -1
+
+WHILE low &lt;= high AND found = -1 DO
+    SET mid TO (low + high) DIV 2
+
+    IF resultsArray[mid].name = searchName THEN
+        SET found TO mid
+    ELSE IF resultsArray[mid].name &lt; searchName THEN
+        SET low TO mid + 1
+    ELSE
+        SET high TO mid - 1
+    END IF
+END WHILE
+
+IF found &lt;&gt; -1 THEN
+    SEND resultsArray[found].name &amp; " (" &amp; resultsArray[found].club &amp;
+         ") finished in " &amp; resultsArray[found].finishTime TO DISPLAY
+ELSE
+    SEND "No runner of that name was found" TO DISPLAY
+END IF</code></pre>
+            </div>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for stating that a binary search requires the data to be <strong>sorted on the field being searched</strong>, because it discards half the array at each comparison. <strong>(1 mark)</strong></li>
+              <li>(b) 1 mark for initialising <code>low</code>, <code>high</code> and a found flag/position.</li>
+              <li>(b) 1 mark for the <strong>conditional loop</strong> with both the range test and the found test.</li>
+              <li>(b) 1 mark for calculating <code>mid</code> and comparing the correct <strong>field</strong>, updating <code>low</code> or <code>high</code> appropriately.</li>
+              <li>(b) 1 mark for displaying the other fields of the found record <strong>and</strong> handling the not-found case.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <h3>Reading, tracing and fixing algorithms</h3>
+
+      <div class="practice-question">
+        <div class="q-label">Complete the Algorithm — 3 marks</div>
+        <p>The partially complete algorithm below is intended to bubble sort <code>resultsArray</code> into ascending order of finish time.</p>
+        <div class="code-block code-plain">
+          <div class="code-label">Incomplete bubble sort</div>
+          <pre><code>Line 1001   SET unsorted TO numRunners - 1
+Line 1002   SET swapped TO TRUE
+Line 1003   WHILE ____________________________ DO
+Line 1004       SET swapped TO FALSE
+Line 1005       FOR index FROM 0 TO unsorted - 1 DO
+Line 1006           IF ____________________________ THEN
+Line 1007               SET temp TO resultsArray[index]
+Line 1008               SET resultsArray[index] TO resultsArray[index + 1]
+Line 1009               SET resultsArray[index + 1] TO temp
+Line 1010               ____________________________
+Line 1011           END IF
+Line 1012       END FOR
+Line 1013       SET unsorted TO unsorted - 1
+Line 1014   END WHILE</code></pre>
+        </div>
+        <p>Write the code needed to complete <strong>Lines 1003, 1006 and 1010</strong>. <strong>(3 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — work out what each gap is for by reading around it.</strong> Line 1002 sets <code>swapped</code> to TRUE and line 1004 resets it to FALSE at the start of every pass. So <code>swapped</code> is the flag that keeps the outer loop going, and line 1003 must test it.</p>
+            <p><strong>Step 2 — lines 1007 to 1009 are a three-line swap of whole records.</strong> So line 1006 is the decision about <em>whether</em> to swap: compare the <code>finishTime</code> field of the two adjacent records. Ascending order means swap when the left one is greater.</p>
+            <p><strong>Step 3 — line 1010 sits inside the IF, right after the swap.</strong> The only thing left to do when a swap has happened is record it, so the outer loop knows to run again. Without it, <code>swapped</code> stays FALSE and the sort stops after a single pass.</p>
+            <div class="code-block code-plain">
+              <div class="code-label">Sample Answer — 3 marks</div>
+              <pre><code>Line 1003   WHILE swapped = TRUE DO
+
+Line 1006           IF resultsArray[index].finishTime &gt; resultsArray[index + 1].finishTime THEN
+
+Line 1010               SET swapped TO TRUE</code></pre>
+            </div>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for Line 1003 testing the <strong>swapped flag</strong>. Accept <code>WHILE swapped</code> or <code>WHILE swapped = TRUE</code>.</li>
+              <li>1 mark for Line 1006 comparing the <code>finishTime</code> <strong>field</strong> of adjacent records with <code>&gt;</code>.</li>
+              <li>1 mark for Line 1010 setting <code>swapped</code> to TRUE.</li>
+              <li><em>Note:</em> comparing the records themselves rather than a field scores nothing for Line 1006.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Binary Search Trace — 2 marks</div>
+        <p>parkrun venues are held in the following alphabetically sorted list:</p>
+        <div class="code-block code-plain">
+          <div class="code-label">The list</div>
+          <pre><code>Aberdeen, Bellahouston, Camperdown, Drumchapel, Edinburgh, Falkirk, Glasgow</code></pre>
+        </div>
+        <p>(a) State the comparisons needed to locate <strong>Edinburgh</strong> using a binary search. <strong>(1 mark)</strong><br />
+        (b) State the maximum number of comparisons a binary search would need on a list of <strong>250</strong> runners. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — number the list first.</strong> Aberdeen 0, Bellahouston 1, Camperdown 2, Drumchapel 3, Edinburgh 4, Falkirk 5, Glasgow 6.</p>
+            <p><strong>Step 2 — track low, high and mid, one line each.</strong> Do not try to do this in your head:</p>
+            <table style="max-width:520px;">
+              <thead><tr><th>low</th><th>high</th><th>mid</th><th>compared with</th><th>result</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>6</td><td>3</td><td>Drumchapel</td><td>Edinburgh is later &#8594; low = 4</td></tr>
+                <tr><td>4</td><td>6</td><td>5</td><td>Falkirk</td><td>Edinburgh is earlier &#8594; high = 4</td></tr>
+                <tr><td>4</td><td>4</td><td>4</td><td>Edinburgh</td><td><strong>found</strong></td></tr>
+              </tbody>
+            </table>
+            <p><strong>Sample Answer (a):</strong> "Three comparisons: <strong>Drumchapel</strong>, then <strong>Falkirk</strong>, then <strong>Edinburgh</strong>."</p>
+            <p><strong>Step 3 — for (b), count the halvings.</strong> Each comparison halves what is left: 250 &#8594; 125 &#8594; 63 &#8594; 32 &#8594; 16 &#8594; 8 &#8594; 4 &#8594; 2 &#8594; 1. That is <strong>8</strong> comparisons.</p>
+            <p><strong>Sample Answer (b):</strong> "8 comparisons — 250 can be halved eight times before only one item remains."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for <strong>Drumchapel, Falkirk, Edinburgh</strong>, in that order. Do not accept a count alone without the values compared.</li>
+              <li>(b) 1 mark for <strong>8</strong>. Accept any working that halves 250 down to 1.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Counting Passes and Comparisons — 3 marks</div>
+        <p>A bubble sort with a swapped flag is applied to the following five finish times, sorting into ascending order:</p>
+        <div class="code-block code-plain">
+          <div class="code-label">The data</div>
+          <pre><code>5    8    2    9    4</code></pre>
+        </div>
+        <p>(a) State the number of comparisons made during the <strong>first pass</strong>. <strong>(1 mark)</strong><br />
+        (b) State the contents of the array <strong>after the first pass</strong>. <strong>(1 mark)</strong><br />
+        (c) State how many passes are made in total before the algorithm stops. <strong>(1 mark)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — for (a), count the pairs, not the values.</strong> Five values sit in four adjacent pairs, so the first pass makes <strong>4</strong> comparisons. In general the first pass of a bubble sort makes <em>n − 1</em> comparisons.</p>
+            <p><strong>Step 2 — for (b), walk the pass one pair at a time.</strong> Only compare, do not look ahead:</p>
+            <table style="max-width:520px;">
+              <thead><tr><th>compare</th><th>action</th><th>array becomes</th></tr></thead>
+              <tbody>
+                <tr><td>5 and 8</td><td>in order</td><td>5 &nbsp;8 &nbsp;2 &nbsp;9 &nbsp;4</td></tr>
+                <tr><td>8 and 2</td><td><strong>swap</strong></td><td>5 &nbsp;2 &nbsp;8 &nbsp;9 &nbsp;4</td></tr>
+                <tr><td>8 and 9</td><td>in order</td><td>5 &nbsp;2 &nbsp;8 &nbsp;9 &nbsp;4</td></tr>
+                <tr><td>9 and 4</td><td><strong>swap</strong></td><td>5 &nbsp;2 &nbsp;8 &nbsp;4 &nbsp;<strong>9</strong></td></tr>
+              </tbody>
+            </table>
+            <p><strong>Sample Answer (b):</strong> <code>5&nbsp;&nbsp;2&nbsp;&nbsp;8&nbsp;&nbsp;4&nbsp;&nbsp;9</code> — the largest value, 9, has reached its final position.</p>
+            <p><strong>Step 3 — for (c), remember the flag needs a clean pass to stop.</strong> Pass 2 gives 2 5 4 8 9; pass 3 gives 2 4 5 8 9, which is sorted; but the algorithm cannot know that until <strong>pass 4</strong> completes with no swaps. So <strong>4 passes</strong>.</p>
+            <p>This is the standard trap in this question: the array is in order after three passes, but a bubble sort always needs one further pass to <em>detect</em> that.</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>(a) 1 mark for <strong>4</strong>.</li>
+              <li>(b) 1 mark for <strong>5 2 8 4 9</strong>.</li>
+              <li>(c) 1 mark for <strong>4</strong>. Accept 3 only if the candidate explicitly states the sort is complete after 3 passes but the flag requires a fourth to confirm it.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="practice-question">
+        <div class="q-label">Identify the Error — 2 marks</div>
+        <p>A programmer writes the following insertion sort to order <code>resultsArray</code> by finish time. It works for most data, but crashes whenever the fastest runner is not already at position 0.</p>
+        <div class="code-block code-plain">
+          <div class="code-label">The faulty algorithm</div>
+          <pre><code>Line 2001   FOR outer FROM 1 TO numRunners - 1 DO
+Line 2002       SET current TO resultsArray[outer]
+Line 2003       SET inner TO outer
+Line 2004       WHILE resultsArray[inner - 1].finishTime &gt; current.finishTime DO
+Line 2005           SET resultsArray[inner] TO resultsArray[inner - 1]
+Line 2006           SET inner TO inner - 1
+Line 2007       END WHILE
+Line 2008       SET resultsArray[inner] TO current
+Line 2009   END FOR</code></pre>
+        </div>
+        <p>Identify the error and explain why it causes the program to crash. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — use the clue in the question.</strong> "Crashes whenever the fastest runner is not already at position 0" means the fault appears when a value has to travel <em>all the way to the front</em>. So look at what stops the inner loop.</p>
+            <p><strong>Step 2 — trace the extreme case.</strong> Suppose the fastest time is at position 3. Every value to its left is larger, so the loop shifts and decrements: <code>inner</code> goes 3, 2, 1, then <strong>0</strong>. The condition is tested again and evaluates <code>resultsArray[-1].finishTime</code> — an index outside the array.</p>
+            <p><strong>Step 3 — name the fix.</strong> Line 2004 is missing the <code>inner &gt; 0</code> half of the condition, which is what stops the loop at the front of the array.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<strong>Line 2004</strong> is missing the first half of the loop condition. It should read <code>WHILE inner &gt; 0 AND resultsArray[inner - 1].finishTime &gt; current.finishTime DO</code>."</p>
+            <p>"Without the <code>inner &gt; 0</code> test, a value that must move to the front keeps shifting until <code>inner</code> reaches 0. The condition is then evaluated once more and attempts to read <code>resultsArray[-1]</code>, which is outside the bounds of the array, so the program crashes with an out-of-range error."</p>
+          </div>
+        </details>
+        <details class="marking-instructions">
+          <summary>Marking Instructions</summary>
+          <div class="answer-body">
+            <ul>
+              <li>1 mark for identifying <strong>Line 2004</strong> and stating that the <strong><code>inner &gt; 0</code></strong> test is missing from the condition.</li>
+              <li>1 mark for explaining that <code>inner</code> reaches 0 and the array is then indexed at <strong>−1</strong>, outside its bounds.</li>
+              <li><em>Note:</em> "the loop does not stop" alone earns 1 mark; the second mark needs the out-of-range consequence.</li>
             </ul>
           </div>
         </details>
@@ -342,13 +1238,26 @@ END PROCEDURE</code></pre>
 
       <div class="practice-question">
         <div class="q-label">Choosing an Algorithm — 2 marks</div>
-        <p>A program stores 500&nbsp;000 sorted membership numbers and must check thousands of numbers against the list every day. Justify which search algorithm should be used. <strong>(2 marks)</strong></p>
+        <p>The club keeps a season-best table, already sorted into ascending order of time. Each week the handful of runners who improved on their season best have their times updated, and the table is then re-sorted.</p>
+        <p>State which sorting algorithm would be more efficient for this task, and justify your answer. <strong>(2 marks)</strong></p>
+        <details class="marking-instructions">
+          <summary>Walkthrough &amp; Sample Answer</summary>
+          <div class="answer-body">
+            <p><strong>Step 1 — describe the data, not the algorithms.</strong> The table starts <em>already sorted</em> and only a few values change each week. So the data being sorted is <strong>nearly sorted</strong>. That phrase is the whole question.</p>
+            <p><strong>Step 2 — say what each algorithm does with nearly-sorted data.</strong> Insertion sort compares each value with the one to its left; if it is already in place the inner loop exits immediately, so most values cost a single comparison. Bubble sort must still complete a full pass over the array before it can discover that nothing needs swapping — and any one value that has moved a long way forces further passes.</p>
+            <p><strong>Step 3 — do not stop at the name.</strong> The second mark is for the mechanism, not the choice.</p>
+            <p><strong>Sample Answer:</strong></p>
+            <p>"<strong>Insertion sort</strong> would be more efficient."</p>
+            <p>"The table is already in order apart from a few updated times, so the data is <strong>nearly sorted</strong>. In an insertion sort each already-correct value is compared with the one to its left and the inner loop exits straight away, so the sort approaches one comparison per item. A bubble sort would still have to make a complete pass over all the entries to detect that they were in order, and each value that had moved would force additional passes."</p>
+          </div>
+        </details>
         <details class="marking-instructions">
           <summary>Marking Instructions</summary>
           <div class="answer-body">
             <ul>
-              <li><strong>Binary search</strong> — the data is already sorted, which is its precondition. <strong>(1 mark)</strong></li>
-              <li>Each comparison halves the search area, so each lookup takes at most ~19 comparisons instead of up to 500&nbsp;000 with a linear search — a huge saving repeated thousands of times a day. <strong>(1 mark)</strong></li>
+              <li>1 mark for stating <strong>insertion sort</strong>.</li>
+              <li>1 mark for a justification referring to the data being <strong>nearly sorted</strong> and the inner loop <strong>exiting quickly</strong> / far fewer comparisons and shifts than a full bubble sort pass.</li>
+              <li><em>Do not accept</em> "insertion sort is faster" without reference to the state of the data.</li>
             </ul>
           </div>
         </details>

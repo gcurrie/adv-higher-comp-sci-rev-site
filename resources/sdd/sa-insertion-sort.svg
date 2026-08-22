@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 594" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">How an insertion sort grows a sorted region</title>
+  <desc id="d">Three steps of an insertion sort on the array 5, 2, 4, 6, 1. A band above the array marks the sorted region on the left and the not-yet-sorted region on the right. In the first step the current value is 2; 5 is larger so it shifts one place right and 2 is inserted in front of it, giving 2, 5, 4, 6, 1. In the second step the current value is 4; 5 is larger so it shifts right, but 2 is not, so 4 is inserted after it, giving 2, 4, 5, 6, 1. In the third step the current value is 1; everything is larger, so all four values shift right and 1 goes to the front. A note explains that the sorted region on the left grows by one each time until the whole array is sorted.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#92750A"/>
+    </marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1E40AF"/>
+    </marker>
+    <marker id="arn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1B6B45"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="594" fill="#ffffff"/>
+  <text x="570" y="36" font-size="20" fill="#00442A" text-anchor="middle" font-weight="800">Insertion sort &#8212; grow a sorted region one value at a time</text>
+  <text x="570" y="62" font-size="14" fill="#4A5568" text-anchor="middle">Lift out the next value, shift everything larger one place right, then drop it into the gap.</text>
+  <text x="229.0" y="98" font-size="11.5" fill="#1B6B45" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">sorted</text>
+  <text x="424.0" y="98" font-size="11.5" fill="#4A5568" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">not yet sorted</text>
+  <path d="M190,106 L268,106" fill="none" stroke="#1B6B45" stroke-width="2"/>
+  <path d="M268,106 L580,106" fill="none" stroke="#D1D5DB" stroke-width="2"/>
+  <rect x="190" y="132" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="229.0" y="163" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="268" y="132" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="307.0" y="163" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="346" y="132" width="78" height="48" fill="#ffffff" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="385.0" y="163" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="424" y="132" width="78" height="48" fill="#ffffff" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="463.0" y="163" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">6</text>
+  <rect x="502" y="132" width="78" height="48" fill="#ffffff" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="541.0" y="163" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <path d="M307.0,128 L307.0,114" fill="none" stroke="#92750A" stroke-width="2" marker-end="url(#arg)"/>
+  <text x="606" y="163" font-size="13.5" fill="#1A1A1A">current = 2. 5 is larger, so shift 5 right and insert 2 in front of it.</text>
+  <text x="268.0" y="228" font-size="11.5" fill="#1B6B45" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">sorted</text>
+  <text x="463.0" y="228" font-size="11.5" fill="#4A5568" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">not yet sorted</text>
+  <path d="M190,236 L346,236" fill="none" stroke="#1B6B45" stroke-width="2"/>
+  <path d="M346,236 L580,236" fill="none" stroke="#D1D5DB" stroke-width="2"/>
+  <rect x="190" y="262" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="229.0" y="293" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="268" y="262" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="307.0" y="293" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="346" y="262" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="385.0" y="293" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="424" y="262" width="78" height="48" fill="#ffffff" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="463.0" y="293" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">6</text>
+  <rect x="502" y="262" width="78" height="48" fill="#ffffff" stroke="#D1D5DB" stroke-width="1.6"/>
+  <text x="541.0" y="293" font-size="16" fill="#1A1A1A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <path d="M385.0,258 L385.0,244" fill="none" stroke="#92750A" stroke-width="2" marker-end="url(#arg)"/>
+  <text x="606" y="293" font-size="13.5" fill="#1A1A1A">current = 4. 5 is larger so shifts right; 2 is not, so 4 is inserted after it.</text>
+  <text x="346.0" y="358" font-size="11.5" fill="#1B6B45" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">sorted</text>
+  <text x="541.0" y="358" font-size="11.5" fill="#4A5568" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">not yet sorted</text>
+  <path d="M190,366 L502,366" fill="none" stroke="#1B6B45" stroke-width="2"/>
+  <path d="M502,366 L580,366" fill="none" stroke="#D1D5DB" stroke-width="2"/>
+  <rect x="190" y="392" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="229.0" y="423" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">2</text>
+  <rect x="268" y="392" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="307.0" y="423" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <rect x="346" y="392" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="385.0" y="423" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">5</text>
+  <rect x="424" y="392" width="78" height="48" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="463.0" y="423" font-size="16" fill="#00442A" text-anchor="middle" font-weight="600" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">6</text>
+  <rect x="502" y="392" width="78" height="48" fill="#FEF3C7" stroke="#C9A227" stroke-width="2.4"/>
+  <text x="541.0" y="423" font-size="16" fill="#92750A" text-anchor="middle" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1</text>
+  <path d="M541.0,388 L541.0,374" fill="none" stroke="#92750A" stroke-width="2" marker-end="url(#arg)"/>
+  <text x="606" y="423" font-size="13.5" fill="#1A1A1A">current = 1. Everything is larger, so all four shift right and 1 goes to the front.</text>
+  <rect x="190" y="522" width="850" height="46" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="210" y="550" font-size="13.5" fill="#00442A">The sorted region on the left grows by one each time, until the whole array is sorted.</text>
+</svg>

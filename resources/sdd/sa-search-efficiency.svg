@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 506" font-family="'Public Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Linear search compared with binary search</title>
+  <desc id="d">A horizontal bar chart on a logarithmic scale comparing worst-case comparisons for linear and binary search at four array sizes. For 10 items, linear search needs 10 comparisons and binary search 4. For 100 items, linear needs 100 and binary 7. For 1000 items, linear needs 1000 and binary 10. For 1000000 items, linear needs 1000000 and binary 20. Linear search bars are red and binary search bars are green. A note explains that for a million items it is a million comparisons against twenty, and that every doubling of the data adds just one comparison to a binary search.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#92750A"/>
+    </marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1E40AF"/>
+    </marker>
+    <marker id="arn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1B6B45"/>
+    </marker>
+  </defs>
+  <rect width="1140" height="506" fill="#ffffff"/>
+  <text x="570" y="36" font-size="20" fill="#00442A" text-anchor="middle" font-weight="800">Linear search vs binary search &#8212; worst case</text>
+  <text x="570" y="62" font-size="14" fill="#4A5568" text-anchor="middle">Comparisons needed to find an item, or prove it is absent. Note the scale: each step right is ten times more work.</text>
+  <text x="276" y="134" font-size="13.5" fill="#1A1A1A" text-anchor="end" font-weight="700">10 items</text>
+  <rect x="300" y="110" width="112.47040999708831" height="20" fill="#FDECEA" stroke="#B91C1C" stroke-width="1.6"/>
+  <text x="422.4704099970883" y="125" font-size="12.5" fill="#B91C1C" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">10</text>
+  <text x="308" y="125" font-size="10.5" fill="#B91C1C" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">linear</text>
+  <rect x="300" y="136" width="75.48876046829004" height="20" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="385.48876046829" y="151" font-size="12.5" fill="#1B6B45" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">4</text>
+  <text x="308" y="151" font-size="10.5" fill="#1B6B45" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">binary</text>
+  <text x="276" y="216" font-size="13.5" fill="#1A1A1A" text-anchor="end" font-weight="700">100 items</text>
+  <rect x="300" y="192" width="216.46670836852542" height="20" fill="#FDECEA" stroke="#B91C1C" stroke-width="1.6"/>
+  <text x="526.4667083685254" y="207" font-size="12.5" fill="#B91C1C" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">100</text>
+  <text x="308" y="207" font-size="10.5" fill="#B91C1C" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">linear</text>
+  <rect x="300" y="218" width="97.5337185951299" height="20" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="407.5337185951299" y="233" font-size="12.5" fill="#1B6B45" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">7</text>
+  <text x="308" y="233" font-size="10.5" fill="#1B6B45" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">binary</text>
+  <text x="276" y="298" font-size="13.5" fill="#1A1A1A" text-anchor="end" font-weight="700">1&#8201;000 items</text>
+  <rect x="300" y="274" width="324.04688036776645" height="20" fill="#FDECEA" stroke="#B91C1C" stroke-width="1.6"/>
+  <text x="634.0468803677664" y="289" font-size="12.5" fill="#B91C1C" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1&#8201;000</text>
+  <text x="308" y="289" font-size="10.5" fill="#B91C1C" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">linear</text>
+  <rect x="300" y="300" width="112.47040999708831" height="20" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="422.4704099970883" y="315" font-size="12.5" fill="#1B6B45" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">10</text>
+  <text x="308" y="315" font-size="10.5" fill="#1B6B45" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">binary</text>
+  <text x="276" y="380" font-size="13.5" fill="#1A1A1A" text-anchor="end" font-weight="700">1&#8201;000&#8201;000 items</text>
+  <rect x="300" y="356" width="648.0000469037806" height="20" fill="#FDECEA" stroke="#B91C1C" stroke-width="1.6"/>
+  <text x="958.0000469037806" y="371" font-size="12.5" fill="#B91C1C" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">1&#8201;000&#8201;000</text>
+  <text x="308" y="371" font-size="10.5" fill="#B91C1C" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">linear</text>
+  <rect x="300" y="382" width="142.79968383126328" height="20" fill="#E8F5EE" stroke="#1B6B45" stroke-width="1.6"/>
+  <text x="452.7996838312633" y="397" font-size="12.5" fill="#1B6B45" font-weight="800" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">20</text>
+  <text x="308" y="397" font-size="10.5" fill="#1B6B45" font-weight="700" font-family="'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace">binary</text>
+  <rect x="300" y="440" width="740" height="44" fill="#FEF3C7" stroke="#C9A227" stroke-width="1.6"/>
+  <text x="320" y="468" font-size="13.5" fill="#92750A">A million items: 1&#8201;000&#8201;000 comparisons against 20. Every doubling of the data adds just one comparison.</text>
+</svg>
